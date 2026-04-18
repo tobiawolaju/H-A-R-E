@@ -1,20 +1,20 @@
 {
   "playlist": [
     {
-      "songTitle": "MMS",
-      "artistName": "Asake, Wizkid",
-      "albumName": "Lungu Boy",
-      "spotifyTrackUrl": "https://open.spotify.com/track/64r28qX8JpWv7r5OaT53bH",
-      "albumCoverUrl": "https://i.scdn.co/image/ab67616d0000b273a5a73e16421baeb6a862b3ef",
-      "durationMs": 204000
+      "songTitle": "Big Bum, Bum",
+      "artistName": "Kidd Carder,Mavo",
+      "albumName": "Big Bum Bum",
+      "spotifyTrackUrl": "https://open.spotify.com/track/1heVYYJgIbEmeEQ8ye0YFX",
+      "albumCoverUrl": "https://i.scdn.co/image/ab67616d00001e021ee6732ccb8f07bd15b33beb",
+      "durationMs": 141600
     },
     {
-      "songTitle": "Active",
-      "artistName": "Asake, Travis Scott",
-      "albumName": "Lungu Boy",
-      "spotifyTrackUrl": "https://open.spotify.com/track/YOUR_TRACK_ID_HERE",
-      "albumCoverUrl": "https://i.scdn.co/image/YOUR_IMAGE_ID_HERE",
-      "durationMs": 180000
+      "songTitle": "Nzaza",
+      "artistName": "Asake",
+      "albumName": "Mr Money with the vibes ",
+      "spotifyTrackUrl": "https://open.spotify.com/album/0lzPMIAYhhUSD2BPT0VQWI?uid=eae1deaec205497b&uri=spotify%3Atrack%3A0VjzaXw81JQJM61pzWwP8b",
+      "albumCoverUrl": "https://i.scdn.co/image/ab67616d000048511ee6732ccb8f07bd15b33beb",
+      "durationMs": 181800
     }
   ],
   "updateIntervalMinutes": 5
