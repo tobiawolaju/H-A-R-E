@@ -130,13 +130,17 @@ async function runBot() {
                 let streamError = null;
                 
                 try {
+                    let toolCallsMade = 0;
                     const stream = runner.runAsync({ userId: msg.authorId || msg.authorName, sessionId, newMessage: { role: "user", parts: [{ text: aiPrompt }] } });
                     for await (const event of stream) {
                         if (event.errorCode || event.errorMessage) {
                             streamError = new Error(event.errorMessage || `Error ${event.errorCode}`);
                         }
                         if (event.content?.parts) {
-                            for (const part of event.content.parts) if (part.text) fullAiResponse += part.text;
+                            for (const part of event.content.parts) {
+                                if (part.text) fullAiResponse += part.text;
+                                if (part.functionCall) toolCallsMade++;
+                            }
                         }
                     }
                     
@@ -144,7 +148,11 @@ async function runBot() {
                     
                     // If Google's API silently blocks output or returns junk like "null"
                     const trimmed = fullAiResponse.trim();
-                    if (!trimmed || trimmed.toLowerCase() === 'null' || trimmed === 'none') {
+                    const looksEmpty = !trimmed || trimmed.toLowerCase() === 'null' || trimmed === 'none';
+                    
+                    // If it looks empty and NO tools were called, it's a failure.
+                    // If tools WERE called, it might just be the runner finishing a cycle.
+                    if (looksEmpty && toolCallsMade === 0) {
                         throw new Error("EmptyResult");
                     }
                     

@@ -33,7 +33,10 @@ class TelegramTool {
 
                 console.log("[System] Connecting to Telegram MTProto API...");
                 this.client = new TelegramClient(this.stringSession, this.apiId, this.apiHash, {
-                    connectionRetries: 5,
+                    connectionRetries: 10,
+                    useWSS: false, // Standard TCP is often more stable for CLI
+                    floodSleepThreshold: 60,
+                    deviceModel: "Miles Orchestrator",
                 });
 
                 // This will block and prompt the user in terminal if no valid session string exists
@@ -68,6 +71,15 @@ class TelegramTool {
 
                 // Connect to incoming message events
                 this.client.addEventHandler((event) => this.handleIncomingMessage(event), new NewMessage({}));
+                
+                // Keep-Alive Heartbeat (prevent timeouts)
+                setInterval(async () => {
+                    try {
+                        if (this.client && this.client.connected) {
+                            await this.client.getMe().catch(()=>{});
+                        }
+                    } catch(e) {}
+                }, 60000); // Pulse every minute
                 
                 resolve(true);
 
