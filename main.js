@@ -119,7 +119,8 @@ async function runBot() {
             const history = await sheets.getHistory(sessionId, 5);
             const contextStr = history.map(h => `${h.role}: ${h.content}`).join("\n");
 
-            const aiPrompt = `[CONTEXT]\n${contextStr}\n\n[MESSAGE]\nUser ${message.author.username}: "${message.content}"\nChannel: ${message.channel.id}\nMessage: ${message.id}`;
+            const currentDate = new Date().toISOString();
+            const aiPrompt = `[SYSTEM DATE]\n${currentDate}\n\n[CONTEXT]\n${contextStr}\n\n[MESSAGE]\nUser ${message.author.username}: "${message.content}"\nChannel: ${message.channel.id}\nMessage: ${message.id}`;
 
             // Show Miles is thinking (Continuous)
             discord.startTyping(message.channel.id);
@@ -141,6 +142,9 @@ async function runBot() {
                     await discord.replyToMessage(message.channel.id, message.id, fullAiResponse.trim());
                 } else {
                     console.warn(`[System] AI returned an empty response.`);
+                    const fallback = "I hit an internal issue and returned an empty result. Please retry your request in one message and I’ll handle it directly.";
+                    await sheets.logHistory(sessionId, "assistant", fallback);
+                    await discord.replyToMessage(message.channel.id, message.id, fallback);
                 }
             } catch (error) {
                 if (error.message.includes("429") || error.message.includes("Quota")) {
