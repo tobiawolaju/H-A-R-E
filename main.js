@@ -177,7 +177,7 @@ async function runBot() {
 
         const currentDate = new Date().toISOString();
         // HISTORY TRIMMING: Light-weight aiPrompt to avoid 429 Quota errors
-        const aiPrompt = `[SYSTEM]\nDate: ${currentDate}\nMaster: tobiawolaju\nPlatform: ${platform}\n\nUser ${msg.authorName} says: "${msg.content}"\n\n(Remember: Keep it brief. 1-2 sentences unless deep technical work is needed.)`;
+        const aiPrompt = `[SYSTEM]\nDate: ${currentDate}\nMaster: tobiawolaju\nPlatform: ${platform}\n\nUser ${msg.authorName} says: "${msg.content}"\n\n(Response rules: Keep it brief. 1-2 sentences unless deep technical work is needed. If the user asks a direct question, answer it directly in the first sentence.)`;
 
         // Telegram uses string ID for typing, Discord requires the raw channel object
         tool.startTyping(platform === 'telegram' ? msg.channelId : msg.channelObj);
