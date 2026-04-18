@@ -14,20 +14,72 @@ class DiscordTool {
       this.client.once('ready', () => {
         console.log(`Logged in as ${this.client.user.username}`);
         
-        try {
-            const { SpotifyRPC } = require('discord.js-selfbot-v13');
-            const spotify = new SpotifyRPC(this.client)
-              .setAssetsLargeImage('spotify:ab67616d00001e028b52c6b9bc4e43d373bfdeeb')
-              .setAssetsLargeText('Lungu Boy')
-              .setState('Asake')
-              .setDetails('MMS (feat. Wizkid)')
-              .setStartTimestamp(Date.now());
-              
-            this.client.user.setActivity(spotify);
-            console.log(`[Discord] Set Spotify activity perfectly.`);
-        } catch (e) {
-            console.warn("[Discord] Failed to set Spotify status:", e.message);
-        }
+        let playlistIndex = 0;
+        const updateSpotify = () => {
+            try {
+                const fs = require('fs');
+                const path = require('path');
+                let playlistFile;
+                
+                try {
+                    const filePath = path.join(process.cwd(), 'spotify_playlist.json');
+                    playlistFile = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+                } catch(e) {
+                    console.log("[Discord] No valid spotify_playlist.json found in root. Skipping rich presence.");
+                    return;
+                }
+                
+                const playlist = playlistFile.playlist;
+                if (playlist && playlist.length > 0) {
+                    const pick = playlist[playlistIndex % playlist.length];
+                    playlistIndex++;
+                    
+                    // Auto-parse full URLs so the user just pastes exactly what they get from Spotify
+                    const extractTrackId = (url) => url.includes('track/') ? url.split('track/')[1].split('?')[0] : url;
+                    const extractImageHash = (url) => {
+                        if (url.includes('image/')) return 'spotify:' + url.split('image/')[1].split('?')[0];
+                        if (url.startsWith('spotify:')) return url;
+                        return null;
+                    };
+
+                    const trackId = extractTrackId(pick.spotifyTrackUrl || "");
+                    const imageHash = extractImageHash(pick.albumCoverUrl || "");
+                    
+                    const { SpotifyRPC } = require('discord.js-selfbot-v13');
+                    const spotify = new SpotifyRPC(this.client)
+                      .setAssetsLargeText(pick.albumName || 'Album')
+                      .setState(pick.artistName || 'Unknown Artist')
+                      .setDetails(pick.songTitle || 'Unknown Track')
+                      
+                    const startMs = Date.now();
+                    spotify.setStartTimestamp(startMs);
+                    if (pick.durationMs) {
+                        spotify.setEndTimestamp(startMs + pick.durationMs);
+                    }
+                      
+                    if (trackId) spotify.setSongId(trackId);
+                    if (imageHash) spotify.setAssetsLargeImage(imageHash);
+                      
+                    this.client.user.setActivity(spotify);
+                    console.log(`[Discord] Set Spotify activity: "${pick.songTitle}" by ${pick.artistName}`);
+                }
+            } catch (e) {
+                console.warn("[Discord] Failed to set Spotify status from JSON:", e.message);
+            }
+        };
+
+        // Fire once on load, then repeat every X minutes based on config (or default 5)
+        updateSpotify();
+        setInterval(() => {
+            try {
+                const fs = require('fs');
+                const path = require('path');
+                const playlistFile = JSON.parse(fs.readFileSync(path.join(process.cwd(), 'spotify_playlist.json'), 'utf8'));
+                const ms = (playlistFile.updateIntervalMinutes || 5) * 60000;
+                // Wait for the next loop
+            } catch(e) {}
+            updateSpotify();
+        }, 5 * 60 * 1000); // 5 minutes standard interval
 
         resolve();
       });

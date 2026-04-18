@@ -1,0 +1,21 @@
+{
+  "playlist": [
+    {
+      "songTitle": "MMS",
+      "artistName": "Asake, Wizkid",
+      "albumName": "Lungu Boy",
+      "spotifyTrackUrl": "https://open.spotify.com/track/64r28qX8JpWv7r5OaT53bH",
+      "albumCoverUrl": "https://i.scdn.co/image/ab67616d0000b273a5a73e16421baeb6a862b3ef",
+      "durationMs": 204000
+    },
+    {
+      "songTitle": "Active",
+      "artistName": "Asake, Travis Scott",
+      "albumName": "Lungu Boy",
+      "spotifyTrackUrl": "https://open.spotify.com/track/YOUR_TRACK_ID_HERE",
+      "albumCoverUrl": "https://i.scdn.co/image/YOUR_IMAGE_ID_HERE",
+      "durationMs": 180000
+    }
+  ],
+  "updateIntervalMinutes": 5
+}
