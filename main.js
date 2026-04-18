@@ -128,7 +128,7 @@ async function runBot() {
             try {
                 console.log(`[System] Generating agent response...`);
                 let fullAiResponse = "";
-                let maxRetries = 3;
+                let maxRetries = keyManager.keys.length > 0 ? keyManager.keys.length : 3;
 
                 for (let attempt = 1; attempt <= maxRetries; attempt++) {
                     fullAiResponse = "";
