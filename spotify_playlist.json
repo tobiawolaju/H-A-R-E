@@ -7,15 +7,7 @@
       "spotifyTrackUrl": "https://open.spotify.com/track/1heVYYJgIbEmeEQ8ye0YFX",
       "albumCoverUrl": "https://i.scdn.co/image/ab67616d00001e021ee6732ccb8f07bd15b33beb",
       "durationMs": 141600
-    },
-    {
-      "songTitle": "Nzaza",
-      "artistName": "Asake",
-      "albumName": "Mr Money with the vibes ",
-      "spotifyTrackUrl": "https://open.spotify.com/album/0lzPMIAYhhUSD2BPT0VQWI?uid=eae1deaec205497b&uri=spotify%3Atrack%3A0VjzaXw81JQJM61pzWwP8b",
-      "albumCoverUrl": "https://i.scdn.co/image/ab67616d000048511ee6732ccb8f07bd15b33beb",
-      "durationMs": 181800
     }
   ],
-  "updateIntervalMinutes": 5
+  "updateIntervalMinutes": 2.39
 }
