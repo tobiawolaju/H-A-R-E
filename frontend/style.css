@@ -308,35 +308,58 @@ body {
     transform: rotate(-90deg);
 }
 
-/* Repos List */
-.repo-list {
-    list-style: none;
-    margin-top: 1rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.8rem;
-}
-
-.repo-list li {
+/* Open Source Dashboard Cards */
+.repo-grid {
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    background: rgba(0, 0, 0, 0.2);
-    padding: 10px 14px;
-    border-radius: 8px;
+    gap: 15px;
+    margin-top: 1rem;
+    height: 100%;
 }
 
-.repo-list strong {
-    font-weight: 500;
-    font-size: 1rem;
-}
-
-.stats {
-    font-size: 0.8rem;
-    color: var(--text-secondary);
-    background: rgba(255, 255, 255, 0.1);
-    padding: 2px 8px;
+.repo-card {
+    background: linear-gradient(180deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.01) 100%);
+    border: 1px solid rgba(255,255,255,0.08);
+    flex: 1;
+    padding: 18px;
     border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.repo-card:hover {
+    background: rgba(255,255,255,0.1);
+    transform: translateY(-5px);
+    border-color: rgba(255,255,255,0.3);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+}
+
+.repo-name {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+    margin-bottom: 6px;
+    letter-spacing: 0.5px;
+}
+
+.repo-metric {
+    font-size: 2rem;
+    font-weight: 900;
+    line-height: 1;
+    color: #4fc3f7; /* High contrast cyan for commits */
+    display: flex;
+    flex-direction: column;
+}
+
+.metric-label {
+    font-size: 0.6rem;
+    font-weight: 700;
+    opacity: 0.6;
+    letter-spacing: 2px;
+    color: #ffffff;
+    margin-top: 4px;
 }
 
 /* Contact Button */
@@ -413,6 +436,14 @@ body {
     .tile-large {
         grid-column: span 2;
         grid-row: span 2;
+    }
+    
+    .repo-grid {
+        flex-direction: column;
+    }
+    
+    .repo-card {
+        padding: 12px;
     }
 }
 
