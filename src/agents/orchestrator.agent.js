@@ -206,22 +206,6 @@ const listReposTool = new FunctionTool({
     }
 });
 
-// --- Sheet/Discord Helpers ---
-
-const discordReplyTool = new FunctionTool({
-    name: "discord_reply",
-    description: "Sends a response back to the user on Discord.",
-    parameters: {
-        type: "object",
-        properties: { channelId: { type: "string" }, messageId: { type: "string" }, content: { type: "string" } },
-        required: ["channelId", "messageId", "content"]
-    },
-    execute: async ({ channelId, messageId, content }) => {
-        await discord.replyToMessage(channelId, messageId, content);
-        return "Replied.";
-    }
-});
-
 // ==========================================
 // 2. AGENT INITIALIZATION
 // ==========================================
@@ -238,6 +222,13 @@ const orchestratorAgent = new LlmAgent({
     model: createOrchestratorModel(),
     instruction: `You are Miles, the proactive Hackathon Orchestrator for 'tobiawolaju'.
 
+RESPONSE CONTRACT (CRITICAL):
+- Return your final user-facing response as plain text in the assistant output.
+- Do NOT call tools just to send or repeat a message.
+- If the user greets you or asks a simple question, answer directly without tools.
+- Use tools only when you need external data or to perform an explicit action.
+- Keep tool usage efficient: maximum 2 tool calls per user request unless the user explicitly asks for deep research.
+
 NETWORKING & SOCIAL:
 - Use 'get_guild_admins' to find high-value contacts in servers.
 - Use 'send_friend_request' and 'automate_member_networking' to expand your master's reach.
@@ -253,15 +244,15 @@ RESEARCH & DISCOVERY:
 - Use 'browse_url' to read the content of search results or specific links to understand projects deeply.
 - Use 'list_github_repos' to see what a user or project has built on GitHub.
 - Combine these to answer questions like "what do you know about [project]" or "find the link for [resource]".
+- For "latest news today" style prompts, search using the current date context from the incoming message.
 
 GENERAL:
-- ALWAYS use 'discord_reply' to confirm actions to your master.
 - Keep your master updated on your networking progress via the 'engagement_log' (managed by main.js).`,
     tools: [
         googleSearchTool, browseUrlTool,
         friendRequestTool, getAdminsTool, automateNetworkingTool,
         startMonitoringTool, stopMonitoringTool,
-        getFileTool, listReposTool, discordReplyTool
+        getFileTool, listReposTool
     ]
 });
 
