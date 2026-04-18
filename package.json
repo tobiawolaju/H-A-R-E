@@ -1,0 +1,21 @@
+{
+  "name": "miles-orchestrator",
+  "version": "1.0.0",
+  "main": "main.js",
+  "scripts": {
+    "start": "node main.js"
+  },
+  "dependencies": {
+    "@google/adk": "latest",
+    "@google/genai": "latest",
+    "@octokit/rest": "^22.0.1",
+    "axios": "^1.6.0",
+    "cheerio": "^1.2.0",
+    "debug": "^4.4.3",
+    "discord.js-selfbot-v13": "^3.7.1",
+    "dotenv": "^16.0.0",
+    "node-cron": "^3.0.0",
+    "p-limit": "^7.3.0",
+    "zod": "^4.3.6"
+  }
+}
