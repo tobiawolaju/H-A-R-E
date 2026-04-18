@@ -40,7 +40,7 @@ async function handleAutomatedReply(message, rule) {
     console.log(`[Monitoring] Auto-replying in ${message.channel.id} via KB: ${rule.KbUrl}`);
     
     // Show Miles is thinking (Continuous)
-    discord.startTyping(message.channel.id);
+    discord.startTyping(message.channel);
 
     try {
         // Fetch Knowledge Base/Persona
@@ -123,15 +123,48 @@ async function runBot() {
             const aiPrompt = `[SYSTEM DATE]\n${currentDate}\n\n[CONTEXT]\n${contextStr}\n\n[MESSAGE]\nUser ${message.author.username}: "${message.content}"\nChannel: ${message.channel.id}\nMessage: ${message.id}`;
 
             // Show Miles is thinking (Continuous)
-            discord.startTyping(message.channel.id);
+            discord.startTyping(message.channel);
 
             try {
                 console.log(`[System] Generating agent response...`);
-                const stream = runner.runAsync({ userId: message.author.id, sessionId, newMessage: { role: "user", parts: [{ text: aiPrompt }] } });
                 let fullAiResponse = "";
-                for await (const event of stream) {
-                    if (event.content?.parts) {
-                        for (const part of event.content.parts) if (part.text) fullAiResponse += part.text;
+                let maxRetries = 3;
+
+                for (let attempt = 1; attempt <= maxRetries; attempt++) {
+                    fullAiResponse = "";
+                    let streamError = null;
+                    
+                    try {
+                        const stream = runner.runAsync({ userId: message.author.id, sessionId, newMessage: { role: "user", parts: [{ text: aiPrompt }] } });
+                        for await (const event of stream) {
+                            if (event.errorCode || event.errorMessage) {
+                                streamError = new Error(event.errorMessage || `Error ${event.errorCode}`);
+                            }
+                            if (event.content?.parts) {
+                                for (const part of event.content.parts) if (part.text) fullAiResponse += part.text;
+                            }
+                        }
+                        
+                        if (streamError) {
+                            throw streamError;
+                        }
+                        
+                        // Success, break out of retry loop
+                        break;
+                    } catch (error) {
+                        if (error.message.includes("429") || error.message.includes("Quota")) {
+                            console.log(`[Master] Rate limit hit. Rotating key... (Attempt ${attempt}/${maxRetries})`);
+                            await keyManager.rotate();
+                            refreshAgentModel();
+                            
+                            if (attempt === maxRetries) {
+                                throw error;
+                            }
+                            // Wait a bit before retrying
+                            await new Promise(r => setTimeout(r, 1000));
+                        } else {
+                            throw error;
+                        }
                     }
                 }
                 
@@ -142,17 +175,14 @@ async function runBot() {
                     await discord.replyToMessage(message.channel.id, message.id, fullAiResponse.trim());
                 } else {
                     console.warn(`[System] AI returned an empty response.`);
-                    const fallback = "I hit an internal issue and returned an empty result. Please retry your request in one message and I’ll handle it directly.";
+                    const fallback = "I hit an internal issue and returned an empty result. Please retry your request in one message and I'll handle it directly.";
                     await sheets.logHistory(sessionId, "assistant", fallback);
                     await discord.replyToMessage(message.channel.id, message.id, fallback);
                 }
             } catch (error) {
-                if (error.message.includes("429") || error.message.includes("Quota")) {
-                    console.log("[Master] Rate limit hit. Rotating key...");
-                    await keyManager.rotate();
-                    refreshAgentModel();
-                }
                 console.error("[Agent Error]", error.message);
+                const fallback = "I encountered an error interpreting that: " + error.message;
+                await discord.replyToMessage(message.channel.id, message.id, fallback);
             } finally {
                 discord.stopTyping(message.channel.id);
             }

@@ -13,6 +13,22 @@ class DiscordTool {
     return new Promise((resolve, reject) => {
       this.client.once('ready', () => {
         console.log(`Logged in as ${this.client.user.username}`);
+        
+        try {
+            const { SpotifyRPC } = require('discord.js-selfbot-v13');
+            const spotify = new SpotifyRPC(this.client)
+              .setAssetsLargeImage('spotify:ab67616d00001e028b52c6b9bc4e43d373bfdeeb')
+              .setAssetsLargeText('Lungu Boy')
+              .setState('Asake')
+              .setDetails('MMS (feat. Wizkid)')
+              .setStartTimestamp(Date.now());
+              
+            this.client.user.setActivity(spotify);
+            console.log(`[Discord] Set Spotify activity perfectly.`);
+        } catch (e) {
+            console.warn("[Discord] Failed to set Spotify status:", e.message);
+        }
+
         resolve();
       });
 
@@ -46,7 +62,7 @@ class DiscordTool {
     const start = Date.now();
     
     // Use the continuous helper
-    this.startTyping(channel.id);
+    this.startTyping(channel);
 
     while (Date.now() - start < totalTypingTime) {
       await this.humanDelay(1000, 3000);
@@ -57,9 +73,11 @@ class DiscordTool {
     await this.humanDelay(300, 1200);
   }
 
-  startTyping(channelId) {
-    if (this._typingIntervals[channelId]) return;
-    let channel = this.client.channels.cache.get(channelId);
+  startTyping(channelOrId) {
+    let channelId = typeof channelOrId === 'string' ? channelOrId : channelOrId?.id;
+    if (!channelId || this._typingIntervals[channelId]) return;
+
+    let channel = typeof channelOrId === 'string' ? this.client.channels.cache.get(channelId) : channelOrId;
     if (!channel) return;
 
     console.log(`[Discord] Starting persistent typing indicator in ${channelId}`);
