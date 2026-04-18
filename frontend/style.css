@@ -362,19 +362,43 @@ body {
     margin-top: 4px;
 }
 
-/* Contact Button */
-.btn-link {
-    color: white;
-    text-decoration: none;
-    font-weight: 700;
-    font-size: 1.2rem;
-    border-bottom: 2px solid transparent;
-    transition: all 0.3s;
+/* Social & Contact Tile */
+.social-links-vertical {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
-.contact-tile:hover .btn-link {
-    border-bottom: 2px solid white;
-    letter-spacing: 1px;
+.social-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: white;
+    text-decoration: none;
+    padding: 10px;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: all 0.3s;
+    font-size: 0.9rem;
+}
+
+.social-btn:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: translateY(-2px);
+    border-color: #b388ff; /* Purple glow */
+    box-shadow: 0 4px 10px rgba(179, 136, 255, 0.2);
+}
+
+.unified-handle {
+    margin-top: auto;
+    font-size: 0.85rem;
+    color: #4fc3f7; /* Cyan */
+    font-weight: 800;
+    text-align: center;
+    letter-spacing: 0.5px;
+    padding-top: 10px;
 }
 
 /* Animations */
