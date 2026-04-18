@@ -107,16 +107,78 @@ async function runBot() {
 
     const processMasterInteraction = async (platform, msg) => {
         const sessionId = msg.channelId;
+        const tool = platform === 'telegram' ? require('./src/tools/telegram') : discord;
+
+        // 1. COMMAND SYSTEM INTERCEPTION
+        if (msg.content.startsWith('!')) {
+            const [cmd, ...args] = msg.content.slice(1).split(' ');
+            const command = cmd.toLowerCase();
+
+            if (command === 'help') {
+                const helpMsg = `🛠️ **Miles Command Center**\n\n` +
+                    `**Memory**\n` +
+                    `• \`!clear\`: Wipes my recent memory loops (Resets Brain)\n\n` +
+                    `**GitHub Overrides**\n` +
+                    `• \`!github list [user]\`: Lists repos (default: tobiawolaju)\n` +
+                    `• \`!github create [name] [desc]\`: Creates a new repo\n` +
+                    `• \`!github write [repo] [path] [content]\`: Commits code\n\n` +
+                    `**System**\n` +
+                    `• \`!status\`: Check bridge & API health`;
+                if (platform === 'telegram') await tool.reply(msg.channelId, helpMsg);
+                else await tool.replyToMessage(msg.channelId, msg.messageId, helpMsg);
+                return;
+            }
+
+            if (command === 'clear') {
+                console.log(`[System] Clearing session memory for ${sessionId}`);
+                // Wipe the backend state in Sheets
+                await sheets.updateSessionState({ id: sessionId, appName: "miles_orchestrator", userId: msg.authorId || msg.authorName, state: {}, events: [] }).catch(()=>{});
+                const clearMsg = "🧠 **Brain Reset:** I have cleared my recent memory loops. My context window is now fresh.";
+                if (platform === 'telegram') await tool.reply(msg.channelId, clearMsg);
+                else await tool.replyToMessage(msg.channelId, msg.messageId, clearMsg);
+                return;
+            }
+
+            if (command === 'github') {
+                const sub = args[0]?.toLowerCase();
+                const githubTool = require('./src/tools/github');
+                
+                try {
+                    if (sub === 'list') {
+                        const target = args[1] || 'tobiawolaju';
+                        const repos = await githubTool.listUserRepos(target);
+                        const repoList = repos.slice(0, 5).map(r => `• ${r.name}`).join('\n');
+                        await tool.reply(msg.channelId, `📂 **Top 5 Repos for ${target}:**\n${repoList}`);
+                    } else if (sub === 'create') {
+                        const name = args[1];
+                        const desc = args.slice(2).join(' ') || "Created via Miles Command Center";
+                        const result = await githubTool.createRepo(name, desc);
+                        await tool.reply(msg.channelId, `✅ **GitHub:** Created ${result}`);
+                    } else if (sub === 'write') {
+                        const repo = args[1];
+                        const path = args[2];
+                        const content = args.slice(3).join(' ');
+                        await githubTool.editFiles('tobiawolaju', repo, 'main', [{ path, content }]);
+                        await tool.reply(msg.channelId, `📝 **GitHub:** Committed to ${repo}/${path}`);
+                    } else {
+                        await tool.reply(msg.channelId, "❌ Unknown github command. Use `!help` for usage.");
+                    }
+                } catch (err) {
+                    await tool.reply(msg.channelId, `⚠️ **GitHub Error:** ${err.message}`);
+                }
+                return;
+            }
+        }
+
         console.log(`[System] Master message received via ${platform} in ${sessionId}`);
         
         // Log to our frontend UI database (Fire and Forget)
         sheets.logHistory(sessionId, "user", msg.content).catch(()=>{});
 
         const currentDate = new Date().toISOString();
-        const aiPrompt = `[SYSTEM]\nDate: ${currentDate}\nPlatform: ${platform}\n\nUser ${msg.authorName} says: "${msg.content}"`;
+        // HISTORY TRIMMING: Light-weight aiPrompt to avoid 429 Quota errors
+        const aiPrompt = `[SYSTEM]\nDate: ${currentDate}\nMaster: tobiawolaju\nPlatform: ${platform}\n\nUser ${msg.authorName} says: "${msg.content}"\n\n(Remember: Keep it brief. 1-2 sentences unless deep technical work is needed.)`;
 
-        const tool = platform === 'telegram' ? require('./src/tools/telegram') : discord;
-        
         // Telegram uses string ID for typing, Discord requires the raw channel object
         tool.startTyping(platform === 'telegram' ? msg.channelId : msg.channelObj);
 
@@ -183,7 +245,7 @@ async function runBot() {
                 }
             } else {
                 console.warn(`[System] AI returned an empty response.`);
-                const fallback = "I hit an internal issue and returned an empty result. Please retry your request in one message and I'll handle it directly.";
+                const fallback = "I hit an internal issue and returned an empty result. Please retry your request after using !clear to reset my context.";
                 sheets.logHistory(sessionId, "assistant", fallback).catch(()=>{});
                 if (platform === 'telegram') await tool.reply(msg.channelId, fallback);
                 else await tool.replyToMessage(msg.channelId, msg.messageId, fallback);
