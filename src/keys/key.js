@@ -13,14 +13,14 @@ class KeyManager {
     }
 
     loadKeysFromEnv() {
-        // Collect all GEMINI_KEY_N present in env (1 to 10)
-        for (let i = 1; i <= 10; i++) {
+        // Collect all GEMINI_KEY_N present in env (1 to 9)
+        for (let i = 1; i <= 9; i++) {
             const val = process.env[`GEMINI_KEY_${i}`];
             if (val && val.trim()) {
                 this.keys.push(val.trim());
             }
         }
-        
+
         // Fallback to GEMINI_API_KEY if no indexed keys found
         if (this.keys.length === 0 && process.env.GEMINI_API_KEY) {
             this.keys.push(process.env.GEMINI_API_KEY.trim());
