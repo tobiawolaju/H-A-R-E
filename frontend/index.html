@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Miles - Portfolio</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Using Google Fonts for premium typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700;900&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <main class="metro-container">
+        <!-- Tile 1: Hero Tile (Square/Large) with background image -->
+        <div class="tile tile-large hero-tile" style="--base-color: #0b0f19;">
+            <div class="hero-bg"></div>
+            <div class="tile-content hero-content">
+                <h1 class="hero-name">MILES</h1>
+                <h2 class="hero-subtitle">Software Dev &<br>Community Manager</h2>
+                <div class="status-badge"><span class="pulse"></span> Free Agent</div>
+            </div>
+        </div>
+
+        <!-- Tile 2: About Me (Rectangle/Wide) -->
+        <div class="tile tile-wide about-tile" style="--base-color: #1b5e20;"> <!-- Emerald Green -->
+            <div class="tile-content">
+                <h3 class="tile-header">About Me</h3>
+                <p>Bridging the gap between robust code and thriving communities. I architect high-performance solutions and cultivate spaces where developers and users grow together.</p>
+            </div>
+        </div>
+
+        <!-- Tile 3: Projects Header (Square/Small) -->
+        <div class="tile tile-small header-tile" style="--base-color: #000000;">
+            <div class="tile-content center-content">
+                <h3 class="rotated-header">WORK</h3>
+            </div>
+        </div>
+
+        <!-- Tile 4: Community Manager (Rectangle/Tall) -->
+        <div class="tile tile-tall community-tile" style="--base-color: #4a148c;"> <!-- Deep Purple -->
+            <div class="tile-content">
+                <div class="tile-icon">👥</div>
+                <h4 class="tile-title">Community Manager</h4>
+                <p class="tile-desc">Led a 10K+ member developer community. Hosted AMAs, managed open-source contributions, and created developer advocacy pipelines.</p>
+            </div>
+        </div>
+
+        <!-- Tile 5: Hackathon (Square/Medium) -->
+        <div class="tile tile-medium hackathon-tile" style="--base-color: #e65100;"> <!-- Vibrant Orange -->
+            <div class="tile-content">
+                <div class="tile-icon">🏆</div>
+                <h4 class="tile-title">Hackathon Winner</h4>
+                <p class="tile-desc">Build The Web '25</p>
+                <span class="highlight-tag">1st Place Overall</span>
+            </div>
+        </div>
+
+        <!-- Tile 6: Open Source (Wide/Medium) -->
+        <div class="tile tile-wide opensource-tile" style="--base-color: #0d47a1;"> <!-- Deep Azure -->
+            <div class="tile-content">
+                <h4 class="tile-title">Open Source Contributor</h4>
+                <ul class="repo-list">
+                    <li>
+                        <strong>React-Motion</strong>
+                        <span class="stats">14 Commits / 10 Merged</span>
+                    </li>
+                    <li>
+                        <strong>Next-Auth</strong>
+                        <span class="stats">8 Commits / 6 Merged</span>
+                    </li>
+                    <li>
+                        <strong>TailwindCSS</strong>
+                        <span class="stats">5 Commits / 5 Merged</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Tile 7: Contact CTA (Square/Small) -->
+        <div class="tile tile-small contact-tile" style="--base-color: #b71c1c;"> <!-- Crimson Red -->
+            <div class="tile-content center-content">
+                <a href="#" class="btn-link">Let's Talk &rarr;</a>
+            </div>
+        </div>
+
+    </main>
+
+    <script src="main.js"></script>
+</body>
+</html>

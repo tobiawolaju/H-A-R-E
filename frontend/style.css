@@ -1,0 +1,316 @@
+/* 
+  Miles Portfolio - Premium Metro UI Style
+*/
+
+:root {
+    --bg-color: #0f111a;
+    --text-primary: #ffffff;
+    --text-secondary: rgba(255, 255, 255, 0.7);
+    --gap: 16px;
+    --border-radius: 12px; /* Slight rounding for modern feel vs strict Windows Phone */
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-primary);
+    font-family: 'Outfit', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+    overflow-x: hidden;
+}
+
+/* Metro Grid Container */
+.metro-container {
+    display: grid;
+    grid-template-columns: repeat(4, 150px);
+    grid-auto-rows: 150px;
+    gap: var(--gap);
+    grid-auto-flow: dense; /* Crucial for no empty space */
+    max-width: 1000px;
+    width: 100%;
+}
+
+/* Base Tile Styling */
+.tile {
+    position: relative;
+    background-color: var(--base-color);
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    cursor: default;
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    /* Animation initial state */
+    opacity: 0;
+    transform: scale(0.9) translateY(20px);
+    animation: tileEntrance 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+.tile:hover {
+    transform: scale(1.03) translateY(-4px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4), inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+    z-index: 10;
+}
+
+/* Tile Content */
+.tile-content {
+    position: relative;
+    z-index: 2;
+    padding: 1.5rem;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.center-content {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+/* Metro Grid Sizes */
+.tile-small {
+    grid-column: span 1;
+    grid-row: span 1;
+}
+
+.tile-medium {
+    grid-column: span 2;
+    grid-row: span 2;
+}
+
+.tile-wide {
+    grid-column: span 3;
+    grid-row: span 1;
+}
+
+.tile-tall {
+    grid-column: span 1;
+    grid-row: span 2;
+}
+
+.tile-large {
+    grid-column: span 2;
+    grid-row: span 2;
+}
+
+/* Specific Tile Customizations */
+
+/* Hero Tile */
+.hero-tile {
+    grid-column: span 2;
+    grid-row: span 2;
+    background-color: transparent !important;
+}
+
+.hero-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('miles.jpg');
+    background-size: cover;
+    background-position: center;
+    filter: brightness(0.6) saturate(1.2);
+    transition: transform 0.8s ease, filter 0.5s ease;
+    z-index: 0;
+}
+
+.hero-tile:hover .hero-bg {
+    transform: scale(1.1);
+    filter: brightness(0.4) saturate(1.4);
+}
+
+.hero-content {
+    justify-content: flex-end;
+    background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0) 80%);
+}
+
+.hero-name {
+    font-size: 3rem;
+    font-weight: 900;
+    letter-spacing: -1px;
+    line-height: 1;
+    margin-bottom: 0.5rem;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+}
+
+.hero-subtitle {
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    line-height: 1.4;
+    margin-bottom: 1rem;
+}
+
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(4px);
+    padding: 0.4rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    align-self: flex-start;
+    border: 1px solid rgba(255,255,255,0.1);
+}
+
+.pulse {
+    width: 8px;
+    height: 8px;
+    background-color: #00e676;
+    border-radius: 50%;
+    margin-right: 8px;
+    box-shadow: 0 0 0 rgba(0, 230, 118, 0.4);
+    animation: pulse 2s infinite;
+}
+
+/* Headers & Text */
+.tile-header {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.tile p {
+    font-weight: 300;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: var(--text-secondary);
+}
+
+.tile-icon {
+    font-size: 2.5rem;
+    margin-bottom: auto;
+}
+
+.tile-title {
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+}
+
+.tile-desc {
+    margin-bottom: 1rem;
+}
+
+.highlight-tag {
+    background: rgba(255,255,255,0.2);
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    display: inline-block;
+}
+
+/* Rotated Header Tile */
+.rotated-header {
+    font-size: 2.5rem;
+    font-weight: 900;
+    letter-spacing: 4px;
+    opacity: 0.3;
+    transform: rotate(-90deg);
+}
+
+/* Repos List */
+.repo-list {
+    list-style: none;
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+
+.repo-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(0,0,0,0.2);
+    padding: 10px 14px;
+    border-radius: 8px;
+}
+
+.repo-list strong {
+    font-weight: 500;
+    font-size: 1rem;
+}
+
+.stats {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    background: rgba(255,255,255,0.1);
+    padding: 2px 8px;
+    border-radius: 12px;
+}
+
+/* Contact Button */
+.btn-link {
+    color: white;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 1.2rem;
+    border-bottom: 2px solid transparent;
+    transition: all 0.3s;
+}
+
+.contact-tile:hover .btn-link {
+    border-bottom: 2px solid white;
+    letter-spacing: 1px;
+}
+
+/* Animations */
+@keyframes tileEntrance {
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(0, 230, 118, 0.4);
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba(0, 230, 118, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(0, 230, 118, 0);
+    }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .metro-container {
+        grid-template-columns: repeat(2, 1fr);
+        grid-auto-rows: minmax(150px, auto);
+    }
+    
+    .tile-wide {
+        grid-column: span 2;
+    }
+    
+    .tile-large {
+        grid-column: span 2;
+        grid-row: span 2;
+    }
+}
+
+@media (max-width: 480px) {
+    .metro-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .tile-wide, .tile-medium, .tile-large {
+        grid-column: span 1;
+    }
+}
