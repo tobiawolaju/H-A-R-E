@@ -146,20 +146,21 @@ body {
 
 /* Wallet Widget */
 .wallet-widget {
-    background: linear-gradient(135deg, #7b1fa2 0%, #4a148c 100%);
+    background: rgba(0, 0, 0, 0.4);
     padding: 12px 18px;
     border-radius: 14px;
     cursor: pointer;
     text-align: right;
     box-shadow: 0 4px 15px rgba(0,0,0,0.4);
     border: 1px solid rgba(255, 255, 255, 0.1);
-    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease;
+    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease, border 0.2s ease;
     backdrop-filter: blur(8px);
 }
 
 .wallet-widget:hover {
     transform: scale(1.05) translateY(-2px);
-    box-shadow: 0 8px 25px rgba(123, 31, 162, 0.6);
+    box-shadow: 0 8px 25px rgba(156, 39, 176, 0.2);
+    border: 1px solid rgba(156, 39, 176, 0.6);
 }
 
 .wallet-widget:active {
@@ -170,6 +171,7 @@ body {
     font-size: 1.5rem;
     font-weight: 900;
     line-height: 1.1;
+    color: #b388ff; /* Vibrant Purple */
     text-shadow: 0 2px 4px rgba(0,0,0,0.3);
 }
 
@@ -432,5 +434,17 @@ body {
     /* Ensure hero background doesn't get squished */
     .hero-tile {
         min-height: 300px;
+    }
+    
+    .wallet-balance {
+        font-size: 1.1rem;
+    }
+    
+    .wallet-address {
+        font-size: 0.7rem;
+    }
+    
+    .wallet-widget {
+        padding: 8px 12px;
     }
 }
