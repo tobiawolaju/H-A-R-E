@@ -170,14 +170,16 @@ async function runBot() {
             }
         }
 
+        if (!msg.content || !msg.content.trim()) return;
+
         console.log(`[System] Master message received via ${platform} in ${sessionId}`);
         
         // Log to our frontend UI database (Fire and Forget)
         sheets.logHistory(sessionId, "user", msg.content).catch(()=>{});
 
         const currentDate = new Date().toISOString();
-        // HISTORY TRIMMING: Light-weight aiPrompt to avoid 429 Quota errors
-        const aiPrompt = `[SYSTEM]\nDate: ${currentDate}\nMaster: tobiawolaju\nPlatform: ${platform}\n\nUser ${msg.authorName} says: "${msg.content}"\n\n(Response rules: Keep it brief. 1-2 sentences unless deep technical work is needed. If the user asks a direct question, answer it directly in the first sentence.)`;
+        // ZERO ROLEPLAY DIRECTIVE: Force the AI to be surgical and stop yapping preamble.
+        const aiPrompt = `[SURGICAL MODE]\nDate: ${currentDate}\nMaster: tobiawolaju\nPlatform: ${platform}\n\nUSER: "${msg.content}"\n\nCRITICAL: Answer directly. Absolutely NO roleplay, NO "Understood", NO "Online", NO "Awaiting command". Just the answer.`;
 
         // Telegram uses string ID for typing, Discord requires the raw channel object
         tool.startTyping(platform === 'telegram' ? msg.channelId : msg.channelObj);
