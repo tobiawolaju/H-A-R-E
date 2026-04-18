@@ -133,8 +133,52 @@ body {
 }
 
 .hero-content {
-    justify-content: flex-end;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-end;
     background: linear-gradient(to top, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0) 80%);
+}
+
+.hero-info {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Wallet Widget */
+.wallet-widget {
+    background: linear-gradient(135deg, #7b1fa2 0%, #4a148c 100%);
+    padding: 12px 18px;
+    border-radius: 14px;
+    cursor: pointer;
+    text-align: right;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease;
+    backdrop-filter: blur(8px);
+}
+
+.wallet-widget:hover {
+    transform: scale(1.05) translateY(-2px);
+    box-shadow: 0 8px 25px rgba(123, 31, 162, 0.6);
+}
+
+.wallet-widget:active {
+    transform: scale(0.95);
+}
+
+.wallet-balance {
+    font-size: 1.5rem;
+    font-weight: 900;
+    line-height: 1.1;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+.wallet-address {
+    font-size: 0.85rem;
+    color: rgba(255,255,255,0.7);
+    font-family: monospace;
+    margin-top: 4px;
+    letter-spacing: 0.5px;
 }
 
 .hero-name {
