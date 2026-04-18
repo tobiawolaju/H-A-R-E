@@ -137,6 +137,20 @@ const stopMonitoringTool = new FunctionTool({
     }
 });
 
+const listMonitoringTool = new FunctionTool({
+    name: "list_active_monitors",
+    description: "Lists all currently active channel/server monitoring rules.",
+    parameters: { type: "object", properties: {} },
+    execute: async () => {
+        try {
+            const rules = await sheets.getMonitoringRules();
+            return JSON.stringify(rules, null, 2);
+        } catch (err) {
+            return `Error: ${err.message}`;
+        }
+    }
+});
+
 // --- Research & Discovery Tools ---
 
 const googleSearchTool = new FunctionTool({
@@ -206,6 +220,62 @@ const listReposTool = new FunctionTool({
     }
 });
 
+const createRepoTool = new FunctionTool({
+    name: "create_github_repo",
+    description: "Creates a new repository on the authenticated user's GitHub account.",
+    parameters: {
+        type: "object",
+        properties: {
+            name: { type: "string" },
+            description: { type: "string" },
+            isPrivate: { type: "boolean", default: false }
+        },
+        required: ["name"]
+    },
+    execute: async (args) => {
+        try {
+            const fullName = await github.createRepo(args.name, args.description, args.isPrivate);
+            return `Repo created: ${fullName}`;
+        } catch (err) {
+            return `Error: ${err.message}`;
+        }
+    }
+});
+
+const writeGithubFilesTool = new FunctionTool({
+    name: "write_files_to_github",
+    description: "Creates or updates one or more files in a GitHub repository.",
+    parameters: {
+        type: "object",
+        properties: {
+            owner: { type: "string" },
+            repo: { type: "string" },
+            branch: { type: "string", default: "main" },
+            files: {
+                type: "array",
+                items: {
+                    type: "object",
+                    properties: {
+                        path: { type: "string", description: "Path to the file (e.g., 'README.md')" },
+                        content: { type: "string", description: "Content of the file" }
+                    },
+                    required: ["path", "content"]
+                }
+            },
+            commitMessage: { type: "string", default: "Update via Miles Orchestrator" }
+        },
+        required: ["owner", "repo", "files"]
+    },
+    execute: async (args) => {
+        try {
+            await github.editFiles(args.owner, args.repo, args.branch, args.files, args.commitMessage);
+            return `Successfully updated ${args.files.length} file(s) in ${args.repo}.`;
+        } catch (err) {
+            return `Error: ${err.message}`;
+        }
+    }
+});
+
 // ==========================================
 // 2. AGENT INITIALIZATION
 // ==========================================
@@ -222,37 +292,38 @@ const orchestratorAgent = new LlmAgent({
     model: createOrchestratorModel(),
     instruction: `You are Miles, the proactive Hackathon Orchestrator for 'tobiawolaju'.
 
-RESPONSE CONTRACT (CRITICAL):
+RESPONSE CONTRACT (URGENT):
+- NO YAPPING. Keep responses hyper-concise and clinical. 
+- If the Master says "Hi", just say "Hi [Name], how can I assist you today?". Do not write a paragraph.
 - Return your final user-facing response as plain text in the assistant output.
 - Do NOT call tools just to send or repeat a message.
-- If the user greets you or asks a simple question, answer directly without tools.
+- If the user asks a simple question, answer directly without tools.
 - Use tools only when you need external data or to perform an explicit action.
-- Keep tool usage efficient: maximum 2 tool calls per user request unless the user explicitly asks for deep research.
+- Keep tool usage efficient: maximum 2 tool calls per user request unless deep research is needed.
 
 NETWORKING & SOCIAL:
 - Use 'get_guild_admins' to find high-value contacts in servers.
 - Use 'send_friend_request' and 'automate_member_networking' to expand your master's reach.
-- CRITICAL: Always warn the user about the 2m+ safety delay when performing social tasks.
+- Always warn the user about the 2m+ safety delay when performing social tasks.
 
 MONITORING & AUTO-REPLY:
 - Use 'start_channel_monitoring' to watch specific channels.
-- When monitoring, you will be provided with a Knowledge Base (KB) link. 
-- Your persona and knowledge for that specific channel are defined IN the KB link. Adapt your character accordingly.
+- Use 'list_active_monitors' if you ever need to remember what you are currently watching.
+- Note: Background monitors are independent processes; they handle auto-replies internally.
 
 RESEARCH & DISCOVERY:
-- Use 'google_search' to find official links, documentation, or news.
-- Use 'browse_url' to read the content of search results or specific links to understand projects deeply.
+- Use 'google_search' for live information.
+- Use 'browse_url' to read the content of links.
 - Use 'list_github_repos' to see what a user or project has built on GitHub.
-- Combine these to answer questions like "what do you know about [project]" or "find the link for [resource]".
-- For "latest news today" style prompts, search using the current date context from the incoming message.
+- Use 'create_github_repo' and 'write_files_to_github' to build projects. You HAVE authenticated control over your master's GitHub account via the GITHUB_TOKEN. Never claim you cannot control it.
 
 GENERAL:
-- Keep your master updated on your networking progress via the 'engagement_log' (managed by main.js).`,
+- Keep your master updated on your networking progress via the 'engagement_log'.`,
     tools: [
         googleSearchTool, browseUrlTool,
         friendRequestTool, getAdminsTool, automateNetworkingTool,
-        startMonitoringTool, stopMonitoringTool,
-        getFileTool, listReposTool
+        startMonitoringTool, stopMonitoringTool, listMonitoringTool,
+        getFileTool, listReposTool, createRepoTool, writeGithubFilesTool
     ]
 });
 

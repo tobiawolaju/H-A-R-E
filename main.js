@@ -20,14 +20,12 @@ class SheetsSessionService {
         return sessionData;
     }
     async createSession({ appName, userId, sessionId, state = {} }) {
-        await sheets.updateSessionState({ id: sessionId, appName, userId, state });
+        sheets.updateSessionState({ id: sessionId, appName, userId, state }).catch(()=>{});
         return { id: sessionId, appName, userId, state, events: [] };
     }
     async appendEvent({ session, event }) {
-        try {
-            await sheets.logSessionEvent({ sessionId: session.id, appName: session.appName, userId: session.userId, event });
-            await sheets.updateSessionState({ id: session.id, appName: session.appName, userId: session.userId, state: session.state || {} });
-        } catch (err) {}
+        sheets.logSessionEvent({ sessionId: session.id, appName: session.appName, userId: session.userId, event }).catch(()=>{});
+        sheets.updateSessionState({ id: session.id, appName: session.appName, userId: session.userId, state: session.state || {} }).catch(()=>{});
         return event;
     }
 }
@@ -111,12 +109,11 @@ async function runBot() {
         const sessionId = msg.channelId;
         console.log(`[System] Master message received via ${platform} in ${sessionId}`);
         
-        await sheets.logHistory(sessionId, "user", msg.content);
-        const history = await sheets.getHistory(sessionId, 5);
-        const contextStr = history.map(h => `${h.role}: ${h.content}`).join("\n");
+        // Log to our frontend UI database (Fire and Forget)
+        sheets.logHistory(sessionId, "user", msg.content).catch(()=>{});
 
         const currentDate = new Date().toISOString();
-        const aiPrompt = `[SYSTEM DATE]\n${currentDate}\n\n[CONTEXT]\n${contextStr}\n\n[MESSAGE]\nUser ${msg.authorName}: "${msg.content}"\nPlatform: ${platform}\nChannel: ${msg.channelId}`;
+        const aiPrompt = `[SYSTEM]\nDate: ${currentDate}\nPlatform: ${platform}\n\nUser ${msg.authorName} says: "${msg.content}"`;
 
         const tool = platform === 'telegram' ? require('./src/tools/telegram') : discord;
         
@@ -145,11 +142,17 @@ async function runBot() {
                     
                     if (streamError) throw streamError;
                     
+                    // If Google's API silently blocks output or returns junk like "null"
+                    const trimmed = fullAiResponse.trim();
+                    if (!trimmed || trimmed.toLowerCase() === 'null' || trimmed === 'none') {
+                        throw new Error("EmptyResult");
+                    }
+                    
                     // Success, break out of retry loop
                     break;
                 } catch (error) {
-                    if (error.message.includes("429") || error.message.includes("Quota")) {
-                        console.log(`[Master] Rate limit hit. Rotating key... (Attempt ${attempt}/${maxRetries})`);
+                    if (error.message.includes("429") || error.message.includes("Quota") || error.message.includes("EmptyResult")) {
+                        console.log(`[Master] Key exhaustion or safety filter hit. Rotating key... (Attempt ${attempt}/${maxRetries})`);
                         await keyManager.rotate();
                         refreshAgentModel();
                         
@@ -163,7 +166,7 @@ async function runBot() {
             
             if (fullAiResponse.trim()) {
                 console.log(`[System] Sending final response to ${platform} and Sheets...`);
-                await sheets.logHistory(sessionId, "assistant", fullAiResponse.trim());
+                sheets.logHistory(sessionId, "assistant", fullAiResponse.trim()).catch(()=>{});
                 
                 if (platform === 'telegram') {
                     await tool.reply(msg.channelId, fullAiResponse.trim());
@@ -173,7 +176,7 @@ async function runBot() {
             } else {
                 console.warn(`[System] AI returned an empty response.`);
                 const fallback = "I hit an internal issue and returned an empty result. Please retry your request in one message and I'll handle it directly.";
-                await sheets.logHistory(sessionId, "assistant", fallback);
+                sheets.logHistory(sessionId, "assistant", fallback).catch(()=>{});
                 if (platform === 'telegram') await tool.reply(msg.channelId, fallback);
                 else await tool.replyToMessage(msg.channelId, msg.messageId, fallback);
             }
