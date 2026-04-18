@@ -4,6 +4,7 @@ class DiscordTool {
   constructor(token) {
     this.client = new Client();
     this.token = token;
+    this._typingIntervals = {}; // Track active typing loops
   }
 
   async connect() {
@@ -43,17 +44,37 @@ class DiscordTool {
 
     let totalTypingTime = Math.min(12000, content.length * (25 + Math.random() * 20));
     const start = Date.now();
-    const interval = setInterval(() => {
-      channel.sendTyping().catch(() => {});
-    }, 4000);
+    
+    // Use the continuous helper
+    this.startTyping(channel.id);
 
     while (Date.now() - start < totalTypingTime) {
       await this.humanDelay(1000, 3000);
       if (Math.random() < 0.3) await this.humanDelay(1000, 2500);
     }
 
-    clearInterval(interval);
+    this.stopTyping(channel.id);
     await this.humanDelay(300, 1200);
+  }
+
+  startTyping(channelId) {
+    if (this._typingIntervals[channelId]) return;
+    let channel = this.client.channels.cache.get(channelId);
+    if (!channel) return;
+
+    console.log(`[Discord] Starting persistent typing indicator in ${channelId}`);
+    channel.sendTyping().catch(() => {});
+    this._typingIntervals[channelId] = setInterval(() => {
+      channel.sendTyping().catch(() => {});
+    }, 5000);
+  }
+
+  stopTyping(channelId) {
+    if (this._typingIntervals[channelId]) {
+      console.log(`[Discord] Stopping persistent typing indicator in ${channelId}`);
+      clearInterval(this._typingIntervals[channelId]);
+      delete this._typingIntervals[channelId];
+    }
   }
 
   maybeSplitMessage(content) {
@@ -126,7 +147,7 @@ class DiscordTool {
         if (i < parts.length - 1) await this.humanDelay(800, 2500);
       }
     } catch (error) {
-      console.error('Send Error:', error.message);
+      console.error('[Discord] Send Error:', error.message);
     }
   }
 
@@ -135,18 +156,33 @@ class DiscordTool {
       let channel = this.client.channels.cache.get(channelId);
       if (!channel) channel = await this.client.channels.fetch(channelId);
       
-      let message = await channel.messages.fetch(messageId).catch(() => channel.messages.cache.get(messageId));
-      if (!message) throw new Error("Could not find message");
+      let message;
+      try {
+        message = await channel.messages.fetch(messageId);
+      } catch (err) {
+        message = channel.messages.cache.get(messageId);
+      }
 
       const parts = this.maybeSplitMessage(content);
       for (let i = 0; i < parts.length; i++) {
         const part = parts[i];
         await this.simulateTyping(channel, part);
-        await message.reply(part);
+        
+        try {
+            if (message) {
+                await message.reply(part);
+            } else {
+                await channel.send(part);
+            }
+        } catch (replyErr) {
+            console.warn(`[Discord] Reply failed (Self-bot limitation?), falling back to send:`, replyErr.message);
+            await channel.send(part);
+        }
+        
         if (i < parts.length - 1) await this.humanDelay(800, 2000);
       }
     } catch (error) {
-      console.error('Reply Error:', error.message);
+      console.error('[Discord] Reply Logic Error:', error.message);
     }
   }
 
@@ -164,7 +200,7 @@ class DiscordTool {
         if (i < parts.length - 1) await this.humanDelay(1000, 2500);
       }
     } catch (error) {
-      console.error('DM Error:', error.message);
+      console.error('[Discord] DM Error:', error.message);
     }
   }
 }

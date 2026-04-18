@@ -39,35 +39,37 @@ class SheetsSessionService {
 async function handleAutomatedReply(message, rule) {
     console.log(`[Monitoring] Auto-replying in ${message.channel.id} via KB: ${rule.KbUrl}`);
     
-    // Show Miles is thinking
-    try { await message.channel.sendTyping(); } catch (e) {}
+    // Show Miles is thinking (Continuous)
+    discord.startTyping(message.channel.id);
 
-    // Fetch Knowledge Base/Persona
-    const kbContent = await scraper.fetchKnowledgeBase(rule.KbUrl);
-    
-    const responder = new LlmAgent({
-        name: "Miles-Responder",
-        model: new Gemini({ 
-            model: "gemini-3-flash-preview", 
-            apiKey: keyManager.getKey() // Use KeyManager
-        }),
-        instruction: `You are Miles, acting with the following Persona and Knowledge:
-        
-        ${kbContent}
-        
-        CRITICAL: 
-        - Your reply will be sent directly to Discord. 
-        - Keep it concise and relevant to the channel context.
-        - Do not use tools. Just provide the text response.`
-    });
-
-    const prompt = `User ${message.author.username} said: "${message.content}" in channel ${message.channel.name}. Reply appropriately.`;
-    
     try {
+        // Fetch Knowledge Base/Persona
+        const kbContent = await scraper.fetchKnowledgeBase(rule.KbUrl);
+        
+        const responder = new LlmAgent({
+            name: "Miles-Responder",
+            model: new Gemini({ 
+                model: "gemini-3-flash-preview", 
+                apiKey: keyManager.getKey() 
+            }),
+            instruction: `You are Miles, acting with the following Persona and Knowledge:
+            
+            ${kbContent}
+            
+            CRITICAL: 
+            - Your reply will be sent directly to Discord. 
+            - Keep it concise and relevant to the channel context.
+            - Do not use tools. Just provide the text response.`
+        });
+
+        const prompt = `User ${message.author.username} said: "${message.content}" in channel ${message.channel.name}. Reply appropriately.`;
+        
+        console.log(`[Monitoring] Generating auto-reply...`);
         const response = await responder.model.generateContent(prompt);
         const aiText = response.text;
         
         if (aiText) {
+            console.log(`[Monitoring] Sending auto-reply to Discord...`);
             await discord.replyToMessage(message.channel.id, message.id, aiText);
             await sheets.addProjectNode({ id: `auto_${Date.now()}`, name: "AutoReply", desc: `Replied to ${message.author.tag} in ${message.channel.id}` });
         }
@@ -75,9 +77,10 @@ async function handleAutomatedReply(message, rule) {
         if (err.message.includes("429") || err.message.includes("Quota")) {
             console.log("[Monitoring] Rate limit hit. Rotating key...");
             await keyManager.rotate();
-            // Optional: retry once
         }
         console.error("[Monitoring Error] Failed to generate/send auto-reply:", err.message);
+    } finally {
+        discord.stopTyping(message.channel.id);
     }
 }
 
@@ -110,16 +113,19 @@ async function runBot() {
         // 1. MASTER INTERACTION
         if (message.author.username === MASTER_USERNAME) {
             const sessionId = message.channel.id;
+            console.log(`[System] Master message received in ${sessionId}`);
+            
             await sheets.logHistory(sessionId, "user", message.content);
             const history = await sheets.getHistory(sessionId, 5);
             const contextStr = history.map(h => `${h.role}: ${h.content}`).join("\n");
 
             const aiPrompt = `[CONTEXT]\n${contextStr}\n\n[MESSAGE]\nUser ${message.author.username}: "${message.content}"\nChannel: ${message.channel.id}\nMessage: ${message.id}`;
 
-            // Show Miles is thinking
-            try { await message.channel.sendTyping(); } catch (e) {}
+            // Show Miles is thinking (Continuous)
+            discord.startTyping(message.channel.id);
 
             try {
+                console.log(`[System] Generating agent response...`);
                 const stream = runner.runAsync({ userId: message.author.id, sessionId, newMessage: { role: "user", parts: [{ text: aiPrompt }] } });
                 let fullAiResponse = "";
                 for await (const event of stream) {
@@ -127,10 +133,14 @@ async function runBot() {
                         for (const part of event.content.parts) if (part.text) fullAiResponse += part.text;
                     }
                 }
+                
                 if (fullAiResponse.trim()) {
+                    console.log(`[System] Sending final response to Discord and Sheets...`);
                     await sheets.logHistory(sessionId, "assistant", fullAiResponse.trim());
                     // Always reply to the master in Discord
                     await discord.replyToMessage(message.channel.id, message.id, fullAiResponse.trim());
+                } else {
+                    console.warn(`[System] AI returned an empty response.`);
                 }
             } catch (error) {
                 if (error.message.includes("429") || error.message.includes("Quota")) {
@@ -139,6 +149,8 @@ async function runBot() {
                     refreshAgentModel();
                 }
                 console.error("[Agent Error]", error.message);
+            } finally {
+                discord.stopTyping(message.channel.id);
             }
             return;
         }
