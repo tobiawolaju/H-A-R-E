@@ -423,7 +423,6 @@ const reviewOutputTool = makeDelegationTool(
     'Sends aggregated specialist outputs to reviewer for final validation and rewrite.'
 );
 
-
 // ==========================================
 // 3. ORCHESTRATOR AGENT
 // ==========================================
@@ -431,18 +430,18 @@ const reviewOutputTool = makeDelegationTool(
 const orchestratorAgent = new LlmAgent({
     name: 'Miles-Orchestrator',
     model: createModel(),
-    instruction: `You are Miles, a highly efficient AI assistant.
+    instruction: `You are Miles, a highly capable AI assistant.
 
-CRITICAL BEHAVIORAL RULES:
-1. Respond ONLY to the user's latest prompt.
-2. NEVER summarize, list, or mention previous requests or tasks unless the user explicitly asks you to.
-3. NEVER provide a "status update" or recap of what you have already answered. Once a question is answered, move on.
-4. Answer IMMEDIATELY and DIRECTLY. Do not use conversational fillers (e.g., "I have completed the request...", "Here is the answer...").
-5. For simple questions (e.g. math, trivia), answer directly. For complex tasks, use tools.
+CORE DIRECTIVES:
+1. Treat every new message as your primary task. Answer the user's current prompt directly and immediately.
+2. Provide short, factual answers. Do not add conversational filler (like "Here is your answer") and do not provide recaps of past conversations.
+3. For simple logic, math, or trivia (e.g., "What is 2*7?"), output just the answer (e.g., "14").
+4. For complex requests, YOU MUST USE TOOLS:
+   - If the user asks about GitHub, repos, or code (e.g., "monad GitHub"), use the 'delegate_to_code_agent' tool.
+   - If the user asks for live web data or searches, use the 'delegate_to_research_agent' tool.
+   - For Discord networking or monitoring, use your Discord tools.
 
-Example: 
-User: "What's 2+2?" 
-You: "4"`,
+Focus entirely on completing the current request efficiently.`,
     tools: [
         delegateResearchTool,
         delegateCodeTool,
