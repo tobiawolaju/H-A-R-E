@@ -7,6 +7,7 @@ const path = require('path');
 require('dotenv').config({ path: path.resolve(__dirname, './.env') });
 
 const MASTER_USERNAME = process.env.MASTER_USERNAME || "tobiawolaju";
+const SESSION_EVENT_LIMIT = parseInt(process.env.SESSION_EVENT_LIMIT || "12", 10);
 
 function safeAsync(promise, context) {
     return promise.catch((err) => {
@@ -30,6 +31,10 @@ class SheetsSessionService {
         const sessionData = await sheets.getSessionData({ appName, userId, sessionId });
         if (!sessionData || sessionData.status === "error" || !sessionData.id) {
             return { id: sessionId, appName, userId, state: {}, events: [] };
+        }
+        // Guardrail: cap historical events to avoid stale context dominating fresh prompts.
+        if (Array.isArray(sessionData.events) && sessionData.events.length > SESSION_EVENT_LIMIT) {
+            sessionData.events = sessionData.events.slice(-SESSION_EVENT_LIMIT);
         }
         return sessionData;
     }
@@ -204,8 +209,14 @@ async function runBot() {
         // Log to our frontend UI database (Fire and Forget)
         safeAsync(sheets.logHistory(sessionId, "user", msg.content), `logHistory(user:${sessionId})`);
 
-        // ADK's runner already tracks session history, so only pass the latest user message.
-        const aiPrompt = msg.content;
+        // ADK tracks history; reinforce that the latest message should be answered first.
+        const aiPrompt = [
+            "PRIORITY INSTRUCTION:",
+            "Answer the latest user message first and directly.",
+            "Use prior session context only when it is necessary.",
+            "",
+            `LATEST USER MESSAGE: ${msg.content}`
+        ].join('\n');
 
         // Telegram uses string ID for typing, Discord requires the raw channel object
         tool.startTyping(platform === 'telegram' ? msg.channelId : msg.channelObj);
