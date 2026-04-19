@@ -12,6 +12,7 @@
     "debug": "^4.4.3",
     "discord.js-selfbot-v13": "^3.7.1",
     "dotenv": "^16.0.0",
-    "fs-extra": "^11.2.0"
+    "fs-extra": "^11.2.0",
+    "telegram": "^2.26.22"
   }
 }

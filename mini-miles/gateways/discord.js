@@ -55,15 +55,21 @@ class DiscordGateway {
 
   async _sendHumanMessage(channel, content, replyTo = null) {
     try {
-      await channel.sendTyping();
-      // Simulate thinking/typing time
-      const delay = Math.min(5000, content.length * 20);
-      await new Promise(r => setTimeout(r, delay));
+      // Split content into chunks of ~1900 chars to stay under 2000 limit
+      const chunks = content.match(/[\s\S]{1,1900}/g) || [];
+      
+      for (const chunk of chunks) {
+        await channel.sendTyping();
+        // Simulate thinking/typing time (min 1s, max 3s per chunk)
+        const delay = Math.min(3000, Math.max(1000, chunk.length * 10));
+        await new Promise(r => setTimeout(r, delay));
 
-      if (replyTo && typeof replyTo.reply === 'function') {
-        await replyTo.reply(content);
-      } else {
-        await channel.send(content);
+        if (replyTo && typeof replyTo.reply === 'function') {
+          // If it's a message object, use its native reply (maintains thread/author reference)
+          await replyTo.reply(chunk);
+        } else {
+          await channel.send(chunk);
+        }
       }
     } catch (err) {
       error(`Failed to send Discord message:`, err.message);
