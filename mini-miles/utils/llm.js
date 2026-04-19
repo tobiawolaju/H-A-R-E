@@ -46,12 +46,14 @@ Master User is ${config.MASTER_USER_ID}.`;
       });
 
       const lastMessage = history[history.length - 1];
-      const result = await chat.sendMessage(lastMessage.parts[0].text);
+      const result = await chat.sendMessage(lastMessage.parts);
       const response = await result.response;
+      const content = response.candidates[0].content;
       
       return {
         text: response.text(),
-        toolCalls: response.candidates[0].content.parts.filter(p => !!p.functionCall).map(p => p.functionCall),
+        parts: content.parts, // Return all parts (text, functionCall, thought, etc.)
+        toolCalls: content.parts.filter(p => !!p.functionCall).map(p => p.functionCall),
         raw: response
       };
     } catch (err) {

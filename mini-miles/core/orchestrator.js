@@ -52,26 +52,15 @@ class Orchestrator {
         
         if (response.text) {
           lastText = response.text;
-          history.push({ role: 'model', parts: [{ text: response.text }] });
+        }
+
+        if (response.parts) {
+          history.push({ role: 'model', parts: response.parts });
         }
 
         if (response.toolCalls && response.toolCalls.length > 0) {
           core(`Agent requested tools: ${response.toolCalls.map(tc => tc.name).join(', ')}`);
           
-          // If the model sent text + tools, we need to ensure the sequence is role:model with both
-          // Actually Gemini requires role:model to have the toolCalls parts.
-          // Let's refine history entry if it wasn't already added
-          const lastEntry = history[history.length - 1];
-          if (lastEntry.role === 'model') {
-            // Already added text, check if we need to add call parts
-            const existingCalls = lastEntry.parts.filter(p => !!p.functionCall);
-            if (existingCalls.length === 0) {
-              lastEntry.parts.push(...response.toolCalls.map(tc => ({ functionCall: tc })));
-            }
-          } else {
-            history.push({ role: 'model', parts: [{ text: response.text || '' }, ...response.toolCalls.map(tc => ({ functionCall: tc }))] });
-          }
-
           // Execute tools sequentially
           for (const call of response.toolCalls) {
             const skill = this.skills.get(call.name);

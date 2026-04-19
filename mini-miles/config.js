@@ -5,7 +5,7 @@ module.exports = {
   MASTER_USER_ID: process.env.DISCORD_MASTER_ID || 'tobiawolaju',
   DISCORD_TOKEN: process.env.DISCORD_TOKEN,
   GEMINI_API_KEY: process.env.GEMINI_API_KEY || process.env.GOOGLE_GENAI_API_KEY,
-  LLM_MODEL: 'gemini-1.5-flash-latest',
+  LLM_MODEL: 'gemini-3-flash-preview',
   MAX_HISTORY: 15,
   HEARTBEAT_INTERVAL: 60000, // 1 minute
   STORAGE_DIR: './.mini-miles/sessions',

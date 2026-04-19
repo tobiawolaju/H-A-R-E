@@ -1,0 +1,50 @@
+[
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "Hi"
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": "Hello. I am Miles. How can I assist you today?"
+      }
+    ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "What's the capital of France?"
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": "The capital of France is Paris."
+      }
+    ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "Hi"
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": "Hello. How can I help you?"
+      }
+    ]
+  }
+]
