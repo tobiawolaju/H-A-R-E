@@ -35,9 +35,12 @@ class SheetsSessionService {
             return baseSession;
         }
 
-        // Only return the state from the sheet, not the historical events.
-        // The InMemoryRunner will manage conversational history in-memory.
-        return { ...baseSession, state: sessionData.state || {} };
+        // Return the state AND the historical events so the agent remembers context
+        return {
+            ...baseSession,
+            state: sessionData.state || {},
+            events: sessionData.events || [] // <--- FIX: Ensure memory is loaded
+        };
     }
 
     async createSession({ appName, userId, sessionId, state = {} }) {
@@ -74,7 +77,7 @@ async function handleAutomatedReply(message, rule) {
         const responder = new LlmAgent({
             name: "Miles-Responder",
             model: new Gemini({
-                model: "gemini-3-flash-preview",
+                model: "gemini-2.5-flash", // <--- FIX: Used a valid Google Gemini Model ID
                 apiKey: keyManager.getKey()
             }),
             instruction: `You are Miles, acting with the following Persona and Knowledge:
@@ -152,8 +155,8 @@ async function runBot() {
                     `• \`!clear\`: Wipes my recent memory loops (Resets Brain)\n\n` +
                     `**GitHub Overrides**\n` +
                     `• \`!github list [user]\`: Lists repos (default: tobiawolaju)\n` +
-                    `• \`!github create [name] [desc]\`: Creates a new repo\n` +
-                    `• \`!github write [repo] [path] [content]\`: Commits code\n\n` +
+                    `• \`!github create[name] [desc]\`: Creates a new repo\n` +
+                    `• \`!github write[repo] [path] [content]\`: Commits code\n\n` +
                     `**System**\n` +
                     `• \`!status\`: Check bridge & API health`;
                 await sendPlatformReply(platform, tool, msg, helpMsg);
@@ -216,7 +219,9 @@ async function runBot() {
         try {
             console.log(`[System] Generating agent response...`);
             let fullAiResponse = "";
-            let maxRetries = keyManager.keys.length > 0 ? keyManager.keys.length : 3;
+
+            // <--- FIX: Optional chaining on `.length` to prevent TypeError crash
+            let maxRetries = keyManager.keys?.length > 0 ? keyManager.keys.length : 3;
 
             for (let attempt = 1; attempt <= maxRetries; attempt++) {
                 fullAiResponse = "";

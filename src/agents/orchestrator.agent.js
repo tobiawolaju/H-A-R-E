@@ -281,7 +281,7 @@ const writeGithubFilesTool = new FunctionTool({
 
 function createModel() {
     return new Gemini({
-        model: "gemini-3-flash-preview",
+        model: "gemini-2.5-flash", // <--- FIX: Used a valid Google Gemini Model ID
         apiKey: keyManager.getKey()
     });
 }
@@ -423,6 +423,7 @@ const reviewOutputTool = makeDelegationTool(
     'Sends aggregated specialist outputs to reviewer for final validation and rewrite.'
 );
 
+
 // ==========================================
 // 3. ORCHESTRATOR AGENT
 // ==========================================
@@ -430,12 +431,18 @@ const reviewOutputTool = makeDelegationTool(
 const orchestratorAgent = new LlmAgent({
     name: 'Miles-Orchestrator',
     model: createModel(),
-    instruction: `You are Miles, an AI assistant.
-Answer IMMEDIATELY and DIRECTLY. Never ask what the user wants or if you are ready.
-Example: User: "What's 2+2?" You: "4"
-- For simple questions (e.g., math), answer yourself.
-- For complex questions, use tools or delegate.
-- Do NOT use conversational fillers or wait for user confirmation.`,
+    instruction: `You are Miles, a highly efficient AI assistant.
+
+CRITICAL BEHAVIORAL RULES:
+1. Respond ONLY to the user's latest prompt.
+2. NEVER summarize, list, or mention previous requests or tasks unless the user explicitly asks you to.
+3. NEVER provide a "status update" or recap of what you have already answered. Once a question is answered, move on.
+4. Answer IMMEDIATELY and DIRECTLY. Do not use conversational fillers (e.g., "I have completed the request...", "Here is the answer...").
+5. For simple questions (e.g. math, trivia), answer directly. For complex tasks, use tools.
+
+Example: 
+User: "What's 2+2?" 
+You: "4"`,
     tools: [
         delegateResearchTool,
         delegateCodeTool,
