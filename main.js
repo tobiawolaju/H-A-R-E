@@ -29,14 +29,15 @@ async function sendPlatformReply(platform, tool, msg, text) {
 class SheetsSessionService {
     async getSession({ appName, userId, sessionId }) {
         const sessionData = await sheets.getSessionData({ appName, userId, sessionId });
+        const baseSession = { id: sessionId, appName, userId, state: {}, events: [] };
+
         if (!sessionData || sessionData.status === "error" || !sessionData.id) {
-            return { id: sessionId, appName, userId, state: {}, events: [] };
+            return baseSession;
         }
-        // Guardrail: cap historical events to avoid stale context dominating fresh prompts.
-        if (Array.isArray(sessionData.events) && sessionData.events.length > SESSION_EVENT_LIMIT) {
-            sessionData.events = sessionData.events.slice(-SESSION_EVENT_LIMIT);
-        }
-        return sessionData;
+
+        // Only return the state from the sheet, not the historical events.
+        // The InMemoryRunner will manage conversational history in-memory.
+        return { ...baseSession, state: sessionData.state || {} };
     }
 
     async createSession({ appName, userId, sessionId, state = {} }) {
@@ -209,15 +210,6 @@ async function runBot() {
         // Log to our frontend UI database (Fire and Forget)
         safeAsync(sheets.logHistory(sessionId, "user", msg.content), `logHistory(user:${sessionId})`);
 
-        // ADK tracks history; reinforce that the latest message should be answered first.
-        const aiPrompt = [
-            "PRIORITY INSTRUCTION:",
-            "Answer the latest user message first and directly.",
-            "Use prior session context only when it is necessary.",
-            "",
-            `LATEST USER MESSAGE: ${msg.content}`
-        ].join('\n');
-
         // Telegram uses string ID for typing, Discord requires the raw channel object
         tool.startTyping(platform === 'telegram' ? msg.channelId : msg.channelObj);
 
@@ -232,7 +224,7 @@ async function runBot() {
 
                 try {
                     let toolCallsMade = 0;
-                    const stream = runner.runAsync({ userId: msg.authorId || msg.authorName, sessionId, newMessage: { role: "user", parts: [{ text: aiPrompt }] } });
+                    const stream = runner.runAsync({ userId: msg.authorId || msg.authorName, sessionId, newMessage: { role: "user", parts: [{ text: msg.content }] } });
                     for await (const event of stream) {
                         if (event.errorCode || event.errorMessage) {
                             streamError = new Error(event.errorMessage || `Error ${event.errorCode}`);
