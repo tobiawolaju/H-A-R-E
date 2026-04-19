@@ -4,7 +4,7 @@
 
 const axios = require("axios");
 
-const BACKEND_URL = "https://script.google.com/macros/s/AKfycbyBqYISAtiw_Ut_DOBkNyVmnsvyNA1jFVGeRau38qaz-ajNjd6QtijCUu5FYo_TUhOPew/exec";
+const BACKEND_URL = process.env.SHEETS_BACKEND_URL || "https://script.google.com/macros/s/AKfycbyBqYISAtiw_Ut_DOBkNyVmnsvyNA1jFVGeRau38qaz-ajNjd6QtijCUu5FYo_TUhOPew/exec";
 
 async function apiCall(action, payload) {
   try {

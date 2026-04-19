@@ -40,6 +40,14 @@ class TelegramTool {
                 });
 
                 // This will block and prompt the user in terminal if no valid session string exists
+                const hasSession = !!(process.env.TELEGRAM_SESSION_STRING && process.env.TELEGRAM_SESSION_STRING.trim());
+                const interactiveLoginAllowed = process.stdin.isTTY && process.stdout.isTTY;
+
+                if (!hasSession && !interactiveLoginAllowed) {
+                    console.warn("[Telegram] No TELEGRAM_SESSION_STRING found and terminal is non-interactive. Skipping Telegram login.");
+                    return resolve(false);
+                }
+
                 await this.client.start({
                     phoneNumber: async () => await input.text('Please enter your Telegram number (e.g., +1234567890): '),
                     password: async () => await input.text('Please enter your Telegram password (if any): '),
@@ -102,6 +110,8 @@ class TelegramTool {
         if (!sender || !sender.username) return;
 
         // Check if the sender is the master assigned in .env
+        if (!this.masterUsername || !sender.username) return;
+
         if (sender.username.toLowerCase() === this.masterUsername.toLowerCase()) {
             
             // Log that we received a valid master message
