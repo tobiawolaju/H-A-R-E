@@ -1,0 +1,213 @@
+[
+  {
+    "role": "function",
+    "parts": [
+      {
+        "functionResponse": {
+          "name": "web_search_and_scrape",
+          "response": {
+            "result": "[\n  {\n    \"title\": \"AI Video Generators Ranked: Who Does Anime BEST in ... - YouTube\",\n    \"link\": \"https://www.youtube.com/watch?v=ctNvfJRiLHE\",\n    \"snippet\": \"... video generator for anime you can buy RIGHT NOW. 0:00 - Intro 0:18 - Platforms and Images 1:30 - Sora 2 4:07 - Veo 3.1 6:57 -Kling 2.6 9:39 ...\",\n    \"date\": \"Jan 10, 2026\",\n    \"attributes\": {\n      \"Missing\": \"miles | Show results with:miles\"\n    },\n    \"position\": 1\n  },\n  {\n    \"title\": \"How to Train an Anime Video Generation AI (explain it to me as if I'm ...\",\n    \"link\": \"https://www.reddit.com/r/OpenAI/comments/1in90lq/how_to_train_an_anime_video_generation_ai_explain/\",\n    \"snippet\": \"I just had a thought while watching anime. What if someone used all the anime available in the world to train a single video generation AI model ...\",\n    \"date\": \"Feb 11, 2025\",\n    \"attributes\": {\n      \"Missing\": \"miles | Show results with:miles\"\n    },\n    \"sitelinks\": [\n      {\n        \"title\": \"Okay just to be clear Sora is the best ai video generator out there.\",\n        \"link\": \"https://www.reddit.com/r/SoraAi/comments/1hfvfz3/okay_just_to_be_clear_sora_is_the_best_ai_video/\"\n      },\n      {\n        \"title\": \"My opinion on freepik AI after 1 month of heavy usage - Reddit\",\n        \"link\": \"https://www.reddit.com/r/Freepik_AI/comments/1imb8n6/my_opinion_on_freepik_ai_after_1_month_of_heavy/\"\n      }\n    ],\n    \"position\": 2\n  },\n  {\n    \"title\": \"Best AI Anime Video Generator 2026 With Consistent Characters!\",\n    \"link\": \"https://www.youtube.com/watch?v=DLINCUBxPc8\",\n    \"snippet\": \"one AI anime generator that turns a simple prompt into cinematic shorts and full-length movies in minutes. Built for storytellers, it ...\",\n    \"date\": \"Feb 8, 2026\",\n    \"attributes\": {\n      \"Missing\": \"miles | Show results with:miles\"\n    },\n    \"position\": 3\n  },\n  {\n    \"title\": \"LensGo AI: Free AI Anime & Cartoon Video Generator\",\n    \"link\": \"https://ailensgo.com/\",\n    \"snippet\": \"AI Anime & Cartoon Video Generator that turns your text, photos, and clips into short animated videos in minutes.\",\n    \"position\": 4\n  },\n  {\n    \"title\": \"AI Anime Video Generator - ImagineArt\",\n    \"link\": \"https://www.imagine.art/features/ai-anime-video-generator\",\n    \"snippet\": \"Create great anime videos in minutes with ImagineArt's AI anime video generator. Customize styles, add music, and streamline video creation. Start for free!\",\n    \"attributes\": {\n      \"Missing\": \"miles | Show results with:miles\"\n    },\n    \"position\": 5\n  }\n]"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "functionCall": {
+          "name": "web_search_and_scrape",
+          "args": {
+            "query": "\"miles anime engine\" (2s, blue) \"cooking at 720p\" (3s, purple)"
+          },
+          "id": "t84f4m3f"
+        },
+        "thoughtSignature": "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"
+      }
+    ]
+  },
+  {
+    "role": "function",
+    "parts": [
+      {
+        "functionResponse": {
+          "name": "web_search_and_scrape",
+          "response": {
+            "result": "[]"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "functionCall": {
+          "name": "github_operation",
+          "args": {
+            "action": "list_repos"
+          },
+          "id": "jr3ivd9n"
+        },
+        "thoughtSignature": "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"
+      }
+    ]
+  },
+  {
+    "role": "function",
+    "parts": [
+      {
+        "functionResponse": {
+          "name": "github_operation",
+          "response": {
+            "result": "[\n  {\n    \"name\": \"MechaForge\",\n    \"url\": \"https://github.com/tobiawolaju/MechaForge\"\n  },\n  {\n    \"name\": \"test3\",\n    \"url\": \"https://github.com/tobiawolaju/test3\"\n  },\n  {\n    \"name\": \"test2\",\n    \"url\": \"https://github.com/tobiawolaju/test2\"\n  },\n  {\n    \"name\": \"test4\",\n    \"url\": \"https://github.com/tobiawolaju/test4\"\n  },\n  {\n    \"name\": \"test5\",\n    \"url\": \"https://github.com/tobiawolaju/test5\"\n  },\n  {\n    \"name\": \"test1\",\n    \"url\": \"https://github.com/tobiawolaju/test1\"\n  },\n  {\n    \"name\": \"AiSolve\",\n    \"url\": \"https://github.com/tobiawolaju/AiSolve\"\n  },\n  {\n    \"name\": \"quickmiles\",\n    \"url\": \"https://github.com/tobiawolaju/quickmiles\"\n  },\n  {\n    \"name\": \"Obitosakamoto\",\n    \"url\": \"https://github.com/tobiawolaju/Obitosakamoto\"\n  },\n  {\n    \"name\": \"lingbot-map\",\n    \"url\": \"https://github.com/tobiawolaju/lingbot-map\"\n  },\n  {\n    \"name\": \"jokeapi\",\n    \"url\": \"https://github.com/tobiawolaju/jokeapi\"\n  },\n  {\n    \"name\": \"WorldOfNads\",\n    \"url\": \"https://github.com/tobiawolaju/WorldOfNads\"\n  },\n  {\n    \"name\": \"career-ops\",\n    \"url\": \"https://github.com/tobiawolaju/career-ops\"\n  },\n  {\n    \"name\": \"sekreets\",\n    \"url\": \"https://github.com/tobiawolaju/sekreets\"\n  },\n  {\n    \"name\": \"PLFM_RADAR\",\n    \"url\": \"https://github.com/tobiawolaju/PLFM_RADAR\"\n  },\n  {\n    \"name\": \"Noogler\",\n    \"url\": \"https://github.com/tobiawolaju/Noogler\"\n  },\n  {\n    \"name\": \"clarity\",\n    \"url\": \"https://github.com/tobiawolaju/clarity\"\n  },\n  {\n    \"name\": \"monad-protocols\",\n    \"url\": \"https://github.com/tobiawolaju/monad-protocols\"\n  },\n  {\n    \"name\": \"monad-token-list\",\n    \"url\": \"https://github.com/tobiawolaju/monad-token-list\"\n  },\n  {\n    \"name\": \"tobiawolaju\",\n    \"url\": \"https://github.com/tobiawolaju/tobiawolaju\"\n  },\n  {\n    \"name\": \"Indexed-BIP39-Generator\",\n    \"url\": \"https://github.com/tobiawolaju/Indexed-BIP39-Generator\"\n  },\n  {\n    \"name\": \"sonar\",\n    \"url\": \"https://github.com/tobiawolaju/sonar\"\n  },\n  {\n    \"name\": \"shadow-index\",\n    \"url\": \"https://github.com/tobiawolaju/shadow-index\"\n  },\n  {\n    \"name\": \"MoyakiTraceEngine\",\n    \"url\": \"https://github.com/tobiawolaju/MoyakiTraceEngine\"\n  },\n  {\n    \"name\": \"portfolio\",\n    \"url\": \"https://github.com/tobiawolaju/portfolio\"\n  },\n  {\n    \"name\": \"FeedBack\",\n    \"url\": \"https://github.com/tobiawolaju/FeedBack\"\n  },\n  {\n    \"name\": \"tempo-go\",\n    \"url\": \"https://github.com/tobiawolaju/tempo-go\"\n  },\n  {\n    \"name\": \"tempo-std\",\n    \"url\": \"https://github.com/tobiawolaju/tempo-std\"\n  },\n  {\n    \"name\": \"tempo-foundry\",\n    \"url\": \"https://github.com/tobiawolaju/tempo-foundry\"\n  },\n  {\n    \"name\": \"tempo-ts\",\n    \"url\": \"https://github.com/tobiawolaju/tempo-ts\"\n  },\n  {\n    \"name\": \"tempo-apps\",\n    \"url\": \"https://github.com/tobiawolaju/tempo-apps\"\n  },\n  {\n    \"name\": \"tempo\",\n    \"url\": \"https://github.com/tobiawolaju/tempo\"\n  },\n  {\n    \"name\": \"The-Launch-Circle\",\n    \"url\": \"https://github.com/tobiawolaju/The-Launch-Circle\"\n  },\n  {\n    \"name\": \"if-then\",\n    \"url\": \"https://github.com/tobiawolaju/if-then\"\n  },\n  {\n    \"name\": \"bips\",\n    \"url\": \"https://github.com/tobiawolaju/bips\"\n  },\n  {\n    \"name\": \"neural-jacobian-field\",\n    \"url\": \"https://github.com/tobiawolaju/neural-jacobian-field\"\n  },\n  {\n    \"name\": \"neuro_render\",\n    \"url\": \"https://github.com/tobiawolaju/neuro_render\"\n  },\n  {\n    \"name\": \"monad\",\n    \"url\": \"https://github.com/tobiawolaju/monad\"\n  },\n  {\n    \"name\": \"nautilus_trader\",\n    \"url\": \"https://github.com/tobiawolaju/nautilus_trader\"\n  },\n  {\n    \"name\": \"manytrace\",\n    \"url\": \"https://github.com/tobiawolaju/manytrace\"\n  },\n  {\n    \"name\": \"foundry\",\n    \"url\": \"https://github.com/tobiawolaju/foundry\"\n  },\n  {\n    \"name\": \"Superyap\",\n    \"url\": \"https://github.com/tobiawolaju/Superyap\"\n  },\n  {\n    \"name\": \"DominusQuant\",\n    \"url\": \"https://github.com/tobiawolaju/DominusQuant\"\n  },\n  {\n    \"name\": \"Flying-Monad\",\n    \"url\": \"https://github.com/tobiawolaju/Flying-Monad\"\n  },\n  {\n    \"name\": \"citadel\",\n    \"url\": \"https://github.com/tobiawolaju/citadel\"\n  },\n  {\n    \"name\": \"cargo-smart-release\",\n    \"url\": \"https://github.com/tobiawolaju/cargo-smart-release\"\n  },\n  {\n    \"name\": \"httpsms\",\n    \"url\": \"https://github.com/tobiawolaju/httpsms\"\n  },\n  {\n    \"name\": \"tigerbeetle\",\n    \"url\": \"https://github.com/tobiawolaju/tigerbeetle\"\n  },\n  {\n    \"name\": \"oracle-dashboard\",\n    \"url\": \"https://github.com/tobiawolaju/oracle-dashboard\"\n  },\n  {\n    \"name\": \"monad-sync-demo\",\n    \"url\": \"https://github.com/tobiawolaju/monad-sync-demo\"\n  }\n]"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "functionCall": {
+          "name": "web_search_and_scrape",
+          "args": {
+            "query": "tobiawolaju miles anime engine"
+          },
+          "id": "qswo9ssw"
+        },
+        "thoughtSignature": "EowFCokFAQw51scc/mIdGb8xPva9hHZ7EMSC2+VCqW1ONh1NENaT8Pkw0ZSWQ8pMs4e0kUBQ/9uJF5JtMF/s6q8RkV6xqmm1Qv3+UEADEi1Tnb1WP1CWcna8IMzm1T+uokXyyLnxToVwHE/3x6szsjoI6Bu61WjkwrrCXqJK0Q4WUgZOO/8XaB8CEjUBoPGESsTx29KR9pVTe4OL+VU0cK7yV2oIYaw7ikGq9pvXAT8BvNujcp04kwKqiYu/CYgBKMjZL0ZBvDuEjjWrEZ6JHCRiPphQwiOdL6x412Z8D7tY395FIteutgtbNqmN76ye+Ma3TGUJ/cFShh7Lg5c99tc9MX3+3wO6WkCix7AVXS6/z8xr1wigIKidNED3BHUnquarGX2ESRHbTBxmozZS5EzRfulMA+Hbo0Vd34hyl5ssoqY3oqwKdJVztN/aWL7fzB3fUYOv0AVnphE84JFASR89zRpuXvoodPy0PLxbKU+BEIqgGSmFSqPM7e3g8cxXRyUdTt8YzhEm2ne/hj5PqKEbcLV/VkZol6koir8txlGGAAfB2+2Xdsrk92fwsTgz1zXlgBiuSn8LxgsD0+0/VHPjBE/mIcAUoLWjfWRIjo/YBR4RZvZ6NpMrxgYNFbmRLOQ5fY+VFbeVVWqC39+xZuV2rdccLHIsgW0KR0RhCJAc1MWXVEvXgSeNrTg4N4++QWB9G0t3e462sAMjvm5r+IIJlVfOw2WeSkem0lgkxUX4nFfRlIAfvMOghOA0OH8NDP30MpaLC9lIqOAsud9NZfDU4Db+0qdvPWP5d4zH0m1WTwfbckBlZNkizWfomG/m5XAFkTTfeTiDIW5f+5fGOyHP7CB8to4a+N6sKE2lNw=="
+      }
+    ]
+  },
+  {
+    "role": "function",
+    "parts": [
+      {
+        "functionResponse": {
+          "name": "web_search_and_scrape",
+          "response": {
+            "result": "[\n  {\n    \"title\": \"Steam engine | TOBIAS AND THE HALF-PARIAH Wiki - Fandom\",\n    \"link\": \"https://tathp.fandom.com/wiki/Steam_engine\",\n    \"snippet\": \"Steam Engines or steam locomotives are a type of railway vehicles that moves itself around using the expansion of steam. Steam engines that work on the Isle ...\",\n    \"attributes\": {\n      \"Missing\": \"miles | Show results with:miles\"\n    },\n    \"position\": 1\n  },\n  {\n    \"title\": \"Tobias the evil tram engine normal faces - DeviantArt\",\n    \"link\": \"https://www.deviantart.com/trainboy112/art/Tobias-the-evil-tram-engine-normal-faces-1305244348\",\n    \"snippet\": \"Here is the faces of Tobias before he became a hybrid i made a 2 custom faces for Tobias Tobias screaming in fear and Tobias's insane crazed ...\",\n    \"date\": \"Mar 2, 2026\",\n    \"attributes\": {\n      \"Missing\": \"miles | Show results with:miles\"\n    },\n    \"position\": 2\n  },\n  {\n    \"title\": \"Meet Toby the Tram Engine! Another self commission, getting better ...\",\n    \"link\": \"https://www.facebook.com/groups/2210552395913166/posts/3868756260092763/\",\n    \"snippet\": \"A new artwork I was commissioned to make in the Railway Series style! This is for a fan story by Twitter user TobysTramway called \\\"Henry's Halt\\\" ...\",\n    \"date\": \"Dec 7, 2025\",\n    \"sitelinks\": [\n      {\n        \"title\": \"Thomas the Tank Engine and his human counterpart in anime style\",\n        \"link\": \"https://www.facebook.com/groups/cursedaiwtf/posts/1407627169845762/\"\n      },\n      {\n        \"title\": \"What are your favorite things about Fable? - Facebook\",\n        \"link\": \"https://www.facebook.com/groups/558977328068750/posts/1865205787445891/\"\n      }\n    ],\n    \"position\": 3\n  },\n  {\n    \"title\": \"gamedev://Tobias/M (@tobiasm.bsky.social) — Bluesky\",\n    \"link\": \"https://bsky.app/profile/tobiasm.bsky.social\",\n    \"snippet\": \"Game developer, 3D artist/animator. Current project: Apobarista - a postapocalyptic slavic barista simulator. https://tobiasm.itch.io/\",\n    \"position\": 4\n  },\n  {\n    \"title\": \"TOBIAS THE EVIL ENGINE!!!!! - IHNT62 - YouTube\",\n    \"link\": \"https://www.youtube.com/watch?v=fDnJ6QiJhq8\",\n    \"snippet\": \"IHNT62 - TOBIAS THE EVIL ENGINE!!!!! 1.8K views · 11 months ago ...more. IHaveNoTalent62. 722. Subscribe. 102. Share.\",\n    \"date\": \"May 1, 2025\",\n    \"attributes\": {\n      \"Missing\": \"miles | Show results with:miles\"\n    },\n    \"position\": 5\n  }\n]"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "functionCall": {
+          "name": "web_search_and_scrape",
+          "args": {
+            "query": "\"miles anime engine\" video script 720p"
+          },
+          "id": "k20yjdq2"
+        },
+        "thoughtSignature": "EogKCoUKAQw51sdiEmVNbG61rfqD2MhffQJFHpDZV64G/KyXljmzH5qgmTMRKzhurveoVZLT+ip0vvL31yh/JxIIHV2ut3C8egyU9LjW5xSQDykReIP5VymyDaCsrlJab3CyacNIG4vvO2aRb+fhBvYXPptussEoxOruRZUiYr/9lJfrJu79Eq3tyW+WiZE9MhmPPD/E5cqqNXHma+0oNNyqlVGLuRWVRDzJdJK3ClQDMJWgnWthd4lmqLoHilRfy4pEWIjyZ66StACBktHKCrCo5aRY+XzSBxnQ6Qwzdwr3ttt5eesOE/fXCe9/dUzbXCus9hcRqmrCR+ok59grZvsStlwqGahv7sfiXC6MC4Z69R8zNNOMGH/w/h8CQm3Xh08XktBngStXBrg+IcNZNt0zp0Uu3suXD4Cs3QKguQgGAfqbWO2iNdYmxHA0pio6CKVfJfk56uUMXMQG2Lzrpjf+PQ6yBoQ59kWdb6MqoUmp5G0upNAvAwNI40FSvfLXroTXwFshvkesCScPFgAuUTGEqN+cWHNmVgqEdeszYUQZvO7Y9clGhb8qOTkAQhtjUWDCJkFr61vIZDWc0ufmYBBQXAktedFBvrbG0LcDODuCIxO8+FxRVk+SBXJAytf8e4YZBHETUYU4j+YZyjF5rQujysAWo4DN1fp3q+z0leezcW+uteVjGMpCk89NnEawkKR5AQEF5VdiOG69ukSMWuB7YdB3sNhJHcnhwEtZhRFVyK6mZiudQ+mEWWDEbviIeSsYAHwsEVZBnU5UrJ4fSHVRrSG3HiK79MFVuVirw91+ikuCqj37O0q9h4lFyEpzC0/TdAxx/dYppO8KneiaceuElvrQFm9eLadhi2rLYPakoupr/OSWlYSNDYkh9kMEpUlR1CZDcF5pv/R45oegYUpJsjD11rXeFYS5FS7IHuETsiJkobtygmAIyoIAg7Z2v9/0mFqiGushA3svQwsF3BvymzCjchm4BHLJGmIuOs0YWvP5gOEj7N/OZs4l0rthV+kp1mhEeX65VQJ/Ya8E+aIN/Cn9wGsotCIur7UDjhHtv1sxzpUFVtF0FMkiMW5sjRtSqCfH0OQecLOM7kV1Lem/7l2MI2mnZMn2eK5InkQpuJVf4QnyR/GhgrkecB4X8yPqy+Jb+wFO3VWWjz92P7THx4YcuFS4ynaqS9yXH5m07AUdiUUAP01VB6D9VC8HH611uJS5IHsNp2wf7L5UiVdiQg9qkP3L/6IEVWk4RdAKFYqXc9ixKpKnZ81zgXT+4IHLZgBj3qGJBOiVojbSHfeQcI/Dp4CBj4twfe7GP6Zzq1VDxFWVOqIh0TyKaKg+P9zQdWMQb16WtwW93udhD9ymNktxSc7GTLTDMg9PMdSmDFRUAOUmpB4nQG9oM9vFvspzq3TxDzblG1dJdG/6iyoYngvbevwX/mnFCWaqjtcgWYPJzNUSeQsHrsuKwX1umlk2qZkdPg+XOS2K4KjIDHnFRcnEJKJu1YAF7cBxAhJkV5DU9WVabsyuVSP6AtwJ0NsghIq6+ySXJv0uvEzXiWMp9sCu6UousfE+EjfS49y/09Bi/6uX4CZBkwyRSPTI7LF3g7WFIXto8o1uk5zSgLw9wQfn3cSJcr7C77pIdQ0oZd/lfVXIoA13k2Aw1XAfv2B21UD1t7OJOC8F+F39q3BCxQufx2+sUWgZXbWfXL3D2eb5Xe8WCZuO1Q=="
+      }
+    ]
+  },
+  {
+    "role": "function",
+    "parts": [
+      {
+        "functionResponse": {
+          "name": "web_search_and_scrape",
+          "response": {
+            "result": "[]"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "functionCall": {
+          "name": "github_operation",
+          "args": {
+            "action": "read_file",
+            "path": "README.md",
+            "repo": "tobiawolaju/MechaForge"
+          },
+          "id": "en9ayk9d"
+        },
+        "thoughtSignature": "ErAGCq0GAQw51seT+aFzA/+hIcnSaPlYm2L/VqQxacXlPHpfDAwyvKxb3P/mhkNdMkmwrydh3LKvvqpj/8D/4m8Hsb/F7Q6V8BQXr09QzXbpp9dFb08fcbUNXjS+D68Amu1qOlJdVdy/4T8mXYzKqmwu7AieHKd1cG5+SstOOILU7mdrlYBkv7PzbiOmQCOw0NFXaTkyWEOyouvo6bHSvKM/IdCk2acIfvozIBykQdFhKHnx7gLvqnXflRwrKPpTq9L8X07tvM3GwYw9Yf+fEm10ih8Qjmso1p9PpUEdOgzgBZ92zzNqbkVp8jLzdQdvqFdwB2u0X07gT5zOkSIxxcf6fX9jyO/KnFb5Sh9LIxL9lz1HKHYDOucllwoIKOFFCll9+IDkXxIO0asut8VWBbzOfxUvqtMV+4Edgh8GOPLuM1dPaXcX0lqqkwxqQbW199qJlGp4iIuAFxs9mMU7+0cxFpBiQtttzopPmlf81EQrujGJYlvpGicHPV8q+Y0e4YJttTWEvRatJwVVONCEiQtNIhOGvKpka0+AfosXJ6DkVeG8kqP70KglQBoKiLqqu1mI2S6r48+tfIF3ehjDQ2MIQUZXCOIQdzEVgSqlNvd9mPw9NeEZ+/iBtw1IeDsVhmov4fNa12TSUyczVBiTlEtqoe/0OBpLYyK04VQDJCN+Au5rBUR0tvgLdtFvzGzXFNeohFMjp5WYZ5zXerNtlMlu2lMeionw9KkMQJme3MXIf/ZtbEdD2UghfmZgb4YELHrxmGDMXM1I0OWh1OGhgB+2nhvmxlAA9RHThRE2XeFEylBK7a1HiJPXUb1unMfruJ6QyYuvLsYA9q5OdNCI8Pn7vAvRzMSzZHkOWJiNO7C+FD3u1QEXONp5U3zhRdrgu6b3muj2+f1FXM/onxrdfFKUzhNWXPQDqqYIQLmjKTmHljyYFqA7SPlWmrXU3iBwVRytf4zzVtVBZdWh++wO0CB1K0xXaNCemtf50LLRWxBh899gZ+/h0EhF0dLpJJVv2R0+onI0z019/3Y6/zeCCaU0YoO5Xqz89XUrBs0qd7+7mD5P43aUXM2+DUuFx/DgB8zX"
+      }
+    ]
+  },
+  {
+    "role": "function",
+    "parts": [
+      {
+        "functionResponse": {
+          "name": "github_operation",
+          "response": {
+            "result": "# MechaForge\n\nA real-time web-based factory automation game for Gamedev.js Jam 2026. Players manage complex assembly lines and 'Machinery' to build robots. Built with Node.js and HTML5 Canvas.\n\n## Setup\n\n```bash\nnpm install\nnode index.js\n```\n"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "functionCall": {
+          "name": "file_manager",
+          "args": {
+            "action": "list"
+          },
+          "id": "9k5sbqly"
+        },
+        "thoughtSignature": "EoALCv0KAQw51scu/yjZKwVmYq7IikQvp8eFtj52NyJWnpRzdY1ISAaK5At5pN1NxR8/OVIPdjdxJOnRiV85WWVeh9I48QN3sk5pN7JPZtnLIMwhxBngMsjoy9NgZ2H8W9oDC5F96d98dB82/FtwsJPR45YnRCIJQxfPui/ycvDH3fXvS4bJDoH+wbJyjTVvqa7wnHhwXEMSFn0vXnkwjQGOcDmfvqjaQN54WqlP2GWmRpVcu74QlgTgNn1FK61KADAV2MdKvQKIUNMpxthfRUlM3QNQX1npHJ7TBVUmCT+n3/9LI7ougLETHvwRUJb19P/Zc0bwIHEpx4DUHYBmqm6a/8yo+Xwn9svfESy+D14Ig3zGXQkATt9TD6SpoztBSMfNnFyeXYgDB0htdfKyLK2ZMJrsCkrS7NDZ9QmTQdVqHTrV8s5sbieW6qoV3Di/1rZWsyFfe56LuMEN4zJkUeDw9mRmQpR/oavvs7fqZ3IrfM4h4x5gY1yGGi9SfgbP8bMDbjluev9FhYgTeFckpcZpYiCDfNrTp4EHUTXHZYe6CFT3o/PxO2+C+gx4XCDjNm6fqr7PuTj3Me4nGzhCeveqfObQ+qaZSXlQ/+IB29nlAym09EPrtok7aW4ZPJu3CyhiWlu+Eh3vcV4/gj53MnrUVHjnGQvbakGzyi55Pdb2xl+LNGan5Rzf7n8iHSkyg0BDGarN8uo+H+NsHJ99veSJ56Fx7dK1Q1rDSDgVIs8AyP9H5EitG+Ui+gCbShatMdyg9MpBEIkYTMaJ9VRlMfv2ZEgmCsFsiHWeDcLIpp54US5sC8j5Ce1AmnS7hMDtnRSfKIpNDh5TqGwyjIyqMHuK9Oz2pXuHF6fbI1uxn5LCBLTlpSQVwoM/HVvASHi3ZXia4qaU7IzXIaI6mpnZTKkDDBIk7KjNez+ldJSnrAycNthJ27cJ6AD05JpkH0z1JOoDdgwS0DXi9Qj1RM8nC7b6HM784LwdVXu1iRDf+XdjNHqmYPy1EhDUF1H6/y/TjYLfXMN2ciBZKhZP4NcvQQZG4o/8IsRlewB+oaiGLAs5QcGjQPZlMZgqHSW4HFA+CppqzTX6f3X4bss40ULCp+2s6Dqux7piANfjZ890mC2CjXdLa3hn3djCWnmUjSiIeqVOme2mC0u7aZYr02PVbctTYrFUdUiIc8G/HkG5x8fBVksPdI1RzHgFw/N63tRF/uGXeRdM3eTUSGyhob95M57Dl2HJUYVTgK02K7PVRQUJIirbdH+ASNTvOb6q8Btj7EKdxHaDY+1ESzLCjn1MZIwQy+Jw+4e1mrLIMl0Grx1pq3dADemBs/imcz/dx4WVSdf60/EdL+aOmjovA/ZrUaPk5AKkBAaw1gYMsmWn8dPoRSSFYseL7X8kAJWwHeVYXUi6iCN7sTEYYWozeoBV+ORSVrpDUB0OIA5NQPdNztmdXeRPs1x/ohKwkPUD46GCwjmoZ8sqobTCyZjDybIB+dMglGrEXutWVU7fCFumOoY8MT1/dcpT050JGAcCAAYS61qW0XGANYibNqB/R6ev1D0RgJVBIhPdjc97mUfOKpBpuPAPswzy1+ksBsL+0XT6i4DaP5p5pE1SgKurUb61RAfwvkfyB/YSvubARx9Wivw6iSrva7lil2CzA32eUimUr3VCNU729E3fslZrr28+ElwhZAT//dbkBpCD8d2AOSa1dmf5op+J2PMfzjdshivhu1shyeKnggTdggj+NN9pQwRXJYgfdBf10QEj01FRq+S6KxzJjPJeKjk2G+2ihcyBsQAzEYZsIrk40h4YmvL9qAXZs650ULA/MN9x0nXV74H+vX3xhGFMWjITzSnHH8Jq8e+9wSeMn/3LPNnVS4ARRD2+aA=="
+      }
+    ]
+  },
+  {
+    "role": "function",
+    "parts": [
+      {
+        "functionResponse": {
+          "name": "file_manager",
+          "response": {
+            "result": "Files in data dir:\ntest_contacts.csv\nweb3_devs.csv"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "functionCall": {
+          "name": "web_search_and_scrape",
+          "args": {
+            "query": "\"miles anime engine\" scene 1 \"cooking at 720p\" scene 2"
+          },
+          "id": "jgoshm8g"
+        },
+        "thoughtSignature": "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"
+      }
+    ]
+  },
+  {
+    "role": "function",
+    "parts": [
+      {
+        "functionResponse": {
+          "name": "web_search_and_scrape",
+          "response": {
+            "result": "[]"
+          }
+        }
+      }
+    ]
+  }
+]

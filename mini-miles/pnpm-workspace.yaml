@@ -1,0 +1,6 @@
+allowBuilds:
+  bufferutil: false
+  canvas: false
+  es5-ext: false
+  ffmpeg-static: false
+  utf-8-validate: false
