@@ -40,37 +40,48 @@ Master User is ${config.MASTER_USER_ID}.`;
    * @param {Array} tools - List of tool definitions
    * @returns {Promise<Object>} - Response object
    */
-  async chat(history, tools = [], retry = true) {
-    try {
-      const chat = this.model.startChat({
-        history: history.slice(0, -1),
-        tools: tools.length > 0 ? [{ functionDeclarations: tools }] : []
-      });
+  async chat(history, tools = []) {
+    const totalKeys = keyManager.keys.length || 1;
 
-      const lastMessage = history[history.length - 1];
-      const result = await chat.sendMessage(lastMessage.parts);
-      const response = await result.response;
-      const content = response.candidates[0].content;
-      
-      return {
-        text: response.text(),
-        parts: content.parts, // Return all parts (text, functionCall, thought, etc.)
-        toolCalls: content.parts.filter(p => !!p.functionCall).map(p => p.functionCall),
-        raw: response
-      };
-    } catch (err) {
-      if (retry && (
-        err.message.includes('429') ||
-        err.message.includes('503') ||
-        err.message.toLowerCase().includes('rate limit') ||
-        err.message.toLowerCase().includes('service unavailable')
-      )) {
-        log('LLM: Rate limit or overload. Rotating key and retrying...');
-        this.refreshModel();
-        return this.chat(history, tools, false);
+    for (let attempt = 0; attempt < totalKeys; attempt++) {
+      try {
+        const chat = this.model.startChat({
+          history: history.slice(0, -1),
+          tools: tools.length > 0 ? [{ functionDeclarations: tools }] : []
+        });
+
+        const lastMessage = history[history.length - 1];
+        const result = await chat.sendMessage(lastMessage.parts);
+        const response = await result.response;
+        const content = response.candidates[0].content;
+
+        return {
+          text: response.text(),
+          parts: content.parts,
+          toolCalls: content.parts.filter(p => !!p.functionCall).map(p => p.functionCall),
+          raw: response
+        };
+      } catch (err) {
+        const isRetryable =
+          err.message.includes('429') ||
+          err.message.includes('503') ||
+          err.message.toLowerCase().includes('rate limit') ||
+          err.message.toLowerCase().includes('service unavailable') ||
+          err.message.toLowerCase().includes('quota');
+
+        if (isRetryable && attempt < totalKeys - 1) {
+          log(`LLM: Key ${attempt + 1}/${totalKeys} hit quota/overload. Rotating to next key...`);
+          this.refreshModel();
+          continue; // Try next key
+        }
+
+        // Either not retryable, or we've exhausted all keys
+        if (isRetryable) {
+          error(`LLM: All ${totalKeys} keys exhausted. Please wait for quota reset.`);
+        }
+        error('LLM Chat Error:', err.message);
+        throw err;
       }
-      error('LLM Chat Error:', err.message);
-      throw err;
     }
   }
 
