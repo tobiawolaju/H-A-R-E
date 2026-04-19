@@ -34,9 +34,12 @@ class Orchestrator {
   }
 
   async handleEvent(event) {
-    const { platform, channelId, userId, content, reply } = event;
+    const { platform, channelId, userId, content, reply, startTyping } = event;
     const sessionKey = memory.getSessionKey(platform, channelId, userId);
     
+    // Start typing immediately to show we are thinking
+    if (typeof startTyping === 'function') startTyping();
+
     core(`Handling event from ${userId} on ${platform}`);
 
     try {

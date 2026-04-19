@@ -4,7 +4,7 @@ const { skill } = require('../utils/logger');
 module.exports = {
   definition: {
     name: "github_operation",
-    description: "Performs GitHub operations like reading files, listing repos, or creating repositories. ONLY available to MASTER user.",
+    description: "DIRECTLY manages GitHub repositories. Use this when the user asks to 'create', 'list', 'read', or 'write' code to GitHub. DO NOT use web search for these actions.",
     parameters: {
       type: "object",
       properties: {
@@ -25,8 +25,9 @@ module.exports = {
   execute: async (args, context) => {
     const { action, repo, path, content, description } = args;
     const { userId, masterId } = context;
+    const isMaster = (userId || "").toLowerCase() === (masterId || "").toLowerCase();
 
-    if (userId !== masterId) {
+    if (!isMaster) {
       return "Error: This tool is restricted to the Master user.";
     }
 

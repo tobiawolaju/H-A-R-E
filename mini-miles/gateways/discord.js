@@ -31,10 +31,13 @@ class DiscordGateway {
       // User requested: listen to to them get info, etc.
       // We partition by user automatically.
       
-      const isMaster = msg.author.username === config.MASTER_USER_ID || msg.author.id === config.MASTER_USER_ID;
+      const username = (msg.author.username || "").toLowerCase();
+      const masterUname = (config.MASTER_USER_ID || "").toLowerCase();
+      const isMaster = username === masterUname || msg.author.id === config.MASTER_USER_ID;
       
+      gateway(`Discord Message from: ${username} (Master: ${isMaster})`);
+
       // Basic filter: only respond to direct messages or specific mentions for now
-      // (Or any message in a private channel)
       const shouldRespond = msg.channel.type === 'DM' || isMaster; 
 
       if (shouldRespond) {
@@ -45,6 +48,9 @@ class DiscordGateway {
           content: msg.content,
           reply: async (text) => {
             await this._sendHumanMessage(msg.channel, text, msg);
+          },
+          startTyping: async () => {
+            await msg.channel.sendTyping().catch(() => {});
           }
         };
 

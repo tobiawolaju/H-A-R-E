@@ -5,7 +5,7 @@ const { skill } = require('../utils/logger');
 module.exports = {
   definition: {
     name: "web_search_and_scrape",
-    description: "Searches Google or scrapes a specific URL to gather information.",
+    description: "Searches the INTERNET for general information, current news, or external documentation. Use this ONLY if you need to research something outside of the current project or GitHub.",
     parameters: {
       type: "object",
       properties: {
