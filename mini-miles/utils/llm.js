@@ -59,10 +59,15 @@ Master User is ${config.MASTER_USER_ID}.`;
         raw: response
       };
     } catch (err) {
-      if (retry && (err.message.includes('429') || err.message.toLowerCase().includes('rate limit'))) {
-        log('LLM: Rate limit hit. Rotating key and retrying...');
+      if (retry && (
+        err.message.includes('429') ||
+        err.message.includes('503') ||
+        err.message.toLowerCase().includes('rate limit') ||
+        err.message.toLowerCase().includes('service unavailable')
+      )) {
+        log('LLM: Rate limit or overload. Rotating key and retrying...');
         this.refreshModel();
-        return this.chat(history, tools, false); // Retry once
+        return this.chat(history, tools, false);
       }
       error('LLM Chat Error:', err.message);
       throw err;
