@@ -1,0 +1,17 @@
+{
+  "name": "mini-miles",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "@google/generative-ai": "latest",
+    "axios": "^1.6.0",
+    "cheerio": "^1.2.0",
+    "debug": "^4.4.3",
+    "discord.js-selfbot-v13": "^3.7.1",
+    "dotenv": "^16.0.0",
+    "fs-extra": "^11.2.0"
+  }
+}
