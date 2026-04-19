@@ -1,4 +1,4 @@
-const { LlmAgent, Gemini, FunctionTool } = require('@google/adk');
+const { InMemoryRunner, LlmAgent, Gemini, FunctionTool } = require('@google/adk');
 const path = require('path');
 require('dotenv').config({ path: path.resolve(__dirname, '../../.env') });
 
@@ -13,7 +13,7 @@ const { searchGoogle } = require('../tools/search');
 const discord = new DiscordTool(process.env.DISCORD_BOT_TOKEN);
 
 // ==========================================
-// 1. TOOL DEFINITIONS
+// 1. BASE TOOLS (used by specialist agents)
 // ==========================================
 
 // --- Social Networking Tools ---
@@ -68,17 +68,16 @@ const automateNetworkingTool = new FunctionTool({
     execute: async ({ guildId, limit = 10, message }) => {
         try {
             const members = await discord.getTopMembers(guildId, limit);
-            
-            // Start the batch process in the background (no await)
+
             (async () => {
                 for (const member of members) {
                     try {
                         await discord.sendFriendRequest(member.id);
                         if (message) await discord.sendDM(member.id, message);
-                        await sheets.addProjectNode({ 
-                            id: `net_${Date.now()}`, 
-                            name: "Networking", 
-                            desc: `Sent request to ${member.tag}` 
+                        await sheets.addProjectNode({
+                            id: `net_${Date.now()}`,
+                            name: "Networking",
+                            desc: `Sent request to ${member.tag}`
                         });
                         console.log(`[Networking] Request sent to ${member.tag}. Waiting for jitter delay...`);
                     } catch (e) {
@@ -277,54 +276,202 @@ const writeGithubFilesTool = new FunctionTool({
 });
 
 // ==========================================
-// 2. AGENT INITIALIZATION
+// 2. MULTI-AGENT HIERARCHY
 // ==========================================
 
-function createOrchestratorModel() {
+function createModel() {
     return new Gemini({
         model: "gemini-3-flash-preview",
         apiKey: keyManager.getKey()
     });
 }
 
+function buildSpecialistAgent({ name, instruction, tools }) {
+    return new LlmAgent({ name, model: createModel(), instruction, tools });
+}
+
+const researchAgent = buildSpecialistAgent({
+    name: "Miles-Research-Agent",
+    instruction: `You are the RESEARCH AGENT.
+Goal: gather accurate, current, decision-ready information.
+Workflow:
+1) Run google_search to discover relevant sources.
+2) Run browse_url on the most useful URLs.
+3) Produce concise findings with assumptions and uncertainties clearly labeled.
+Do not handle code edits or social automation unless explicitly requested.`,
+    tools: [googleSearchTool, browseUrlTool]
+});
+
+const codeAgent = buildSpecialistAgent({
+    name: "Miles-Code-Agent",
+    instruction: `You are the CODE AGENT.
+Goal: analyze and execute GitHub/code operations precisely.
+Workflow:
+1) Inspect repos/files before mutating.
+2) Make minimal, safe, targeted edits.
+3) Return machine-actionable summaries of what changed.
+Use GitHub tools only when needed and avoid unrelated exploration.`,
+    tools: [getFileTool, listReposTool, createRepoTool, writeGithubFilesTool]
+});
+
+const webAgent = buildSpecialistAgent({
+    name: "Miles-Web-Agent",
+    instruction: `You are the WEB AGENT.
+Goal: extract clean, useful content from websites for downstream reasoning.
+Use browse_url to fetch content and provide structured extraction summaries.
+If browsing fails, state the failure reason and suggest a fallback URL strategy.`,
+    tools: [browseUrlTool]
+});
+
+const reviewerAgent = buildSpecialistAgent({
+    name: "Miles-Reviewer-Agent",
+    instruction: `You are the REVIEWER AGENT.
+Goal: validate and refine aggregated outputs before user delivery.
+Checklist:
+- Verify completeness against the user request.
+- Highlight contradictions, missing steps, and risky claims.
+- Rewrite into a final clear answer with zero filler.
+If information is insufficient, request targeted follow-up work items.`,
+    tools: []
+});
+
+const specialistRunners = {
+    research: new InMemoryRunner({ agent: researchAgent, appName: 'miles_research' }),
+    code: new InMemoryRunner({ agent: codeAgent, appName: 'miles_code' }),
+    web: new InMemoryRunner({ agent: webAgent, appName: 'miles_web' }),
+    reviewer: new InMemoryRunner({ agent: reviewerAgent, appName: 'miles_reviewer' })
+};
+
+async function runSpecialistAgent(agentKey, sessionId, userId, input, maxPasses = 2) {
+    const runner = specialistRunners[agentKey];
+    if (!runner) return `Error: Unknown specialist ${agentKey}`;
+
+    let aggregated = '';
+
+    for (let pass = 1; pass <= maxPasses; pass++) {
+        const prompt = pass === 1
+            ? input
+            : `Refine/continue from previous result. Previous output:\n${aggregated}\n\nContinue only if there is meaningful new work.`;
+
+        let out = '';
+        const stream = runner.runAsync({
+            userId,
+            sessionId: `${sessionId}:${agentKey}`,
+            newMessage: { role: 'user', parts: [{ text: prompt }] }
+        });
+
+        for await (const event of stream) {
+            if (event.content?.parts) {
+                for (const part of event.content.parts) {
+                    if (part.text) out += part.text;
+                }
+            }
+        }
+
+        if (!out.trim()) break;
+        aggregated = aggregated ? `${aggregated}\n\n---\nPass ${pass}:\n${out.trim()}` : out.trim();
+
+        if (pass > 1 && out.trim().length < 60) break;
+    }
+
+    return aggregated || 'No output produced.';
+}
+
+function makeDelegationTool(name, specialistKey, description) {
+    return new FunctionTool({
+        name,
+        description,
+        parameters: {
+            type: 'object',
+            properties: {
+                task: { type: 'string', description: 'Task details for the specialist agent.' },
+                sessionId: { type: 'string' },
+                userId: { type: 'string' }
+            },
+            required: ['task']
+        },
+        execute: async ({ task, sessionId = 'default_session', userId = 'default_user' }) => runSpecialistAgent(
+            specialistKey,
+            sessionId,
+            userId,
+            task
+        )
+    });
+}
+
+const delegateResearchTool = makeDelegationTool(
+    'delegate_to_research_agent',
+    'research',
+    'Delegates research and source-gathering work to the research specialist.'
+);
+
+const delegateCodeTool = makeDelegationTool(
+    'delegate_to_code_agent',
+    'code',
+    'Delegates GitHub/code analysis or mutation work to the code specialist.'
+);
+
+const delegateWebTool = makeDelegationTool(
+    'delegate_to_web_agent',
+    'web',
+    'Delegates website extraction and content parsing work to the web specialist.'
+);
+
+const reviewOutputTool = makeDelegationTool(
+    'delegate_to_reviewer_agent',
+    'reviewer',
+    'Sends aggregated specialist outputs to reviewer for final validation and rewrite.'
+);
+
+// ==========================================
+// 3. ORCHESTRATOR AGENT
+// ==========================================
+
 const orchestratorAgent = new LlmAgent({
-    name: "Miles-Orchestrator",
-    model: createOrchestratorModel(),
-    instruction: `You are Miles, the proactive Hackathon Orchestrator for 'tobiawolaju'.
+    name: 'Miles-Orchestrator',
+    model: createModel(),
+    instruction: `You are the ORCHESTRATOR (planner) in a multi-agent hierarchy.
 
---- MASTER PROFILE ---
-Master Username: tobiawolaju
-Master GitHub: tobiawolaju
-Primary Goal: Crunch 10 hackathons/month and WIN. Focus on high-complexity technical demos and AI agents.
-----------------------
+Hierarchy:
+- RESEARCH AGENT: live research and source synthesis
+- CODE AGENT: GitHub/code operations
+- WEB AGENT: webpage extraction/parsing
+- REVIEWER AGENT: validates and polishes final output
 
-RESPONSE CONTRACT (ZERO FILLER):
-- ABSOLUTELY NO ROLEPLAY. Do not say "Understood", "Miles online", or "Awaiting instructions".
-- If the user asks a factual or simple question (e.g., "2+2"), output ONLY the answer.
-- Prioritize winning build strategies over chit-chat.
-- Return your final user-facing response as plain text.
-- Maximum 3 tool calls per request.
+Operating loop (must follow):
+1) PLAN: decide what workstreams are needed.
+2) DELEGATE: call one or more delegate tools with clear task briefs.
+3) OBSERVE: inspect returned outputs and decide if more specialist work is required.
+4) REPEAT delegation if needed (max 3 total delegation rounds).
+5) REVIEW: call delegate_to_reviewer_agent with all collected outputs.
+6) RESPOND: return only the reviewer-approved final answer.
 
-NETWORKING & SOCIAL:
-- Proactively find admins and high-value contacts for networking.
-
-RESEARCH & DISCOVERY:
-- Use all GitHub tools to manage repositories and commit code. You HAVE full control over 'tobiawolaju' account.
-- Use 'google_search' and 'browse_url' to deeply understand judging criteria.
-
-GENERAL:
-- Your objective is 10 Wins. Be technical, be bold, and be fast.`,
+Rules:
+- No filler or roleplay.
+- Keep answers direct and execution-focused.
+- For simple factual requests, you may skip specialists and answer directly.
+- For non-trivial requests, always run reviewer before final response.`,
     tools: [
-        googleSearchTool, browseUrlTool,
-        friendRequestTool, getAdminsTool, automateNetworkingTool,
-        startMonitoringTool, stopMonitoringTool, listMonitoringTool,
-        getFileTool, listReposTool, createRepoTool, writeGithubFilesTool
+        delegateResearchTool,
+        delegateCodeTool,
+        delegateWebTool,
+        reviewOutputTool,
+        friendRequestTool,
+        getAdminsTool,
+        automateNetworkingTool,
+        startMonitoringTool,
+        stopMonitoringTool,
+        listMonitoringTool
     ]
 });
 
 function refreshAgentModel() {
-    console.log("[Orchestrator] Refreshing model with new key...");
-    orchestratorAgent.model = createOrchestratorModel();
+    console.log('[Orchestrator] Refreshing models with new key...');
+    orchestratorAgent.model = createModel();
+    researchAgent.model = createModel();
+    codeAgent.model = createModel();
+    webAgent.model = createModel();
+    reviewerAgent.model = createModel();
 }
 
 module.exports = { orchestratorAgent, discord, refreshAgentModel };
