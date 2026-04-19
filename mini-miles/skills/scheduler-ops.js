@@ -15,7 +15,7 @@ module.exports = {
       properties: {
         action: {
           type: 'string',
-          enum: ['schedule_in', 'list_tasks', 'cancel_task'],
+          enum: ['schedule_in', 'list_tasks', 'cancel_task', 'cancel_all'],
           description: 'Scheduling action to perform'
         },
         label: {
@@ -80,6 +80,9 @@ module.exports = {
         }
         case 'cancel_task': {
           return await sched.cancelTask(task_id);
+        }
+        case 'cancel_all': {
+          return await sched.cancelAll();
         }
         default:
           return `Error: Unknown action ${action}`;

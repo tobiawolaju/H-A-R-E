@@ -49,8 +49,13 @@ async function createRepo(name, description = "New repo", isPrivate = false) {
       private: isPrivate,
       auto_init: true
     });
-    return `Created: ${data.full_name}`;
+    return `✅ Created: ${data.html_url}`;
   } catch (err) {
+    // 422 = repo already exists
+    if (err.status === 422) {
+      const { data: user } = await octokit.users.getAuthenticated();
+      return `ℹ️ Repo already exists: https://github.com/${user.login}/${name}`;
+    }
     return `Error: ${err.message}`;
   }
 }

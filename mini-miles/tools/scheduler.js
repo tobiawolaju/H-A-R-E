@@ -48,6 +48,13 @@ function _scheduleTimer(task) {
   const delay = new Date(task.runAt) - Date.now();
   if (delay < 0) return; // Past tasks are skipped
   setTimeout(async () => {
+    // Check if task was cancelled before the timer fired
+    const currentTask = tasks.get(task.id);
+    if (!currentTask || currentTask.done) {
+      log(`Scheduler: Task "${task.label}" was cancelled or completed, skipping execution.`);
+      return;
+    }
+
     log(`Scheduler: Running task "${task.label}"`);
     task.done = true;
     tasks.set(task.id, task);
@@ -95,6 +102,21 @@ function listTasks() {
 }
 
 /**
+ * Cancel ALL pending tasks at once (nuclear stop).
+ */
+async function cancelAll() {
+  let count = 0;
+  for (const [id, task] of tasks.entries()) {
+    if (!task.done) {
+      task.done = true;
+      count++;
+    }
+  }
+  await _saveTasks();
+  return count > 0 ? `✅ Cancelled ${count} pending tasks.` : 'No pending tasks to cancel.';
+}
+
+/**
  * Cancel a task by ID.
  */
 async function cancelTask(id) {
@@ -109,4 +131,4 @@ async function cancelTask(id) {
 // Load persisted tasks on startup
 _loadTasks();
 
-module.exports = { schedule, scheduleIn, listTasks, cancelTask, setOrchestrator };
+module.exports = { schedule, scheduleIn, listTasks, cancelTask, cancelAll, setOrchestrator };
