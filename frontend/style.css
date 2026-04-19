@@ -338,7 +338,7 @@ body {
     font-size: 2rem;
     font-weight: 900;
     line-height: 1;
-    color: #4fc3f7; /* High contrast cyan for commits */
+    color: #ff007f; /* High contrast pink for commits */
     display: flex;
     flex-direction: column;
 }
@@ -381,7 +381,7 @@ body {
 .unified-handle {
     margin-top: auto;
     font-size: 0.85rem;
-    color: #4fc3f7; /* Cyan */
+    color: #ff007f; /* Pink */
     font-weight: 800;
     text-align: center;
     letter-spacing: 0.5px;
