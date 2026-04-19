@@ -177,9 +177,8 @@ async function runBot() {
         // Log to our frontend UI database (Fire and Forget)
         sheets.logHistory(sessionId, "user", msg.content).catch(()=>{});
 
-        const currentDate = new Date().toISOString();
-        // ZERO ROLEPLAY DIRECTIVE: Force the AI to be surgical and stop yapping preamble.
-        const aiPrompt = `[SURGICAL MODE]\nDate: ${currentDate}\nMaster: tobiawolaju\nPlatform: ${platform}\n\nUSER: "${msg.content}"\n\nCRITICAL: Answer directly. Absolutely NO roleplay, NO "Understood", NO "Online", NO "Awaiting command". Just the answer.`;
+        // ADK's runner already tracks session history, so only pass the latest user message.
+        const aiPrompt = msg.content;
 
         // Telegram uses string ID for typing, Discord requires the raw channel object
         tool.startTyping(platform === 'telegram' ? msg.channelId : msg.channelObj);
