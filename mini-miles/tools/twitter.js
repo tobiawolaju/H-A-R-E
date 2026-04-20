@@ -122,12 +122,21 @@ async function getTimeline(type, username = null) {
 async function postTweet(text) {
   const client = getClient();
   try {
-    // Note: The library README doesn't explicitly show client.tweets.create
-    // but the search suggested it might be available.
-    // If not, we might need to check the source.
     if (client.tweets && typeof client.tweets.create === 'function') {
-      const tweet = await client.tweets.create(text);
-      return `✅ Tweet posted: ${tweet.id}`;
+      const response = await client.tweets.create(text);
+      
+      // Check for GraphQL errors
+      if (response.errors) {
+        throw new Error(response.errors.map(e => e.message).join(', '));
+      }
+
+      const tweetId = response.data?.create_tweet?.tweet_results?.result?.rest_id;
+      if (tweetId) {
+        return `✅ Tweet posted! ID: ${tweetId}`;
+      } else {
+        log('Tweet might have been posted (no ID in response):', JSON.stringify(response));
+        return '✅ Tweet posted successfully.';
+      }
     } else {
       throw new Error('Tweet creation not supported by this version of the library.');
     }

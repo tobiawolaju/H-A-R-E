@@ -31,14 +31,12 @@ export class NotificationsManager {
    */
   stream(interval: number) {
     if (interval < 5000) console.warn('\x1b[33m%s\x1b[0m', 'Notification streaming interval is below 5000ms, which may lead to rate limiting.');
-    let isFirst = true;
-    setInterval(async () => {
-      const counts = await this.fetchUnreadCounts();
-      // console.log("Unread Counts:", counts);
-      if(counts.ntab_unread_count > 0) {
-        if(isFirst) this.all.emitLastXNotifications(counts.ntab_unread_count), isFirst = false;
-        else this.all.fetchLatest().then((data) => this.client.emit('unreadNotifications', data.notifications));
-      }
-    }, interval);
+    
+    // Direct polling of the notifications timeline instead of relying on badge_count.json
+    this.all.stream(interval, {
+      lastSortIndex: 0,
+      onlyStreamPastNow: true,
+      emitLastXNotifications: 0
+    });
   }
 }

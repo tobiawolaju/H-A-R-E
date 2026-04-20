@@ -462,7 +462,7 @@ export const Queries = {
   },
   profiles: {
     byScreenName: {
-      queryId: 'Ww3msXHEuukH8UdL-GXJDg',
+      queryId: 'IGgvgiOx4QZndDHuD3x9TQ',
       operationName: 'UserByScreenName',
       operationType: 'query',
       metadata: {
@@ -508,8 +508,37 @@ export const Queries = {
       },
     },
   },
+  mutations: {
+    createTweet: {
+      queryId: 'c50A_puUoQGK_4SXseYz3A',
+      operationName: 'CreateTweet',
+      operationType: 'mutation',
+      metadata: {
+        featureSwitches: [
+          'tweetypie_unmention_optimization_enabled',
+          'responsive_web_edit_tweet_api_enabled',
+          'graphql_is_translatable_rweb_tweet_is_translatable_enabled',
+          'view_counts_everywhere_api_enabled',
+          'longform_notetweets_consumption_enabled',
+          'responsive_web_twitter_article_tweet_consumption_enabled',
+          'tweet_awards_web_tipping_enabled',
+          'freedom_of_speech_not_reach_fetch_enabled',
+          'standardized_nudges_misinfo',
+          'tweet_with_visibility_results_prefer_gql_limited_actions_policy_enabled',
+          'longform_notetweets_rich_text_read_enabled',
+          'longform_notetweets_inline_media_enabled',
+          'responsive_web_graphql_exclude_directive_enabled',
+          'verified_phone_label_enabled',
+          'responsive_web_graphql_skip_user_profile_image_extensions_enabled',
+          'responsive_web_graphql_timeline_navigation_enabled',
+          'responsive_web_enhance_cards_enabled',
+        ],
+      },
+    },
+  },
 };
 
 export type Queries =
   | (typeof Queries.profiles)[keyof typeof Queries.profiles]
-  | (typeof Queries.timelines)[keyof typeof Queries.timelines];
+  | (typeof Queries.timelines)[keyof typeof Queries.timelines]
+  | (typeof Queries.mutations)[keyof typeof Queries.mutations];

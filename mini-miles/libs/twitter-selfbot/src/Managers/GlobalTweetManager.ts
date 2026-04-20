@@ -27,4 +27,29 @@ export class GlobalTweetManager {
   addManager(manager: TimelineTweetManager<TweetEntryTypes>) {
     this.cache.push(manager);
   }
+
+  async create(text: string) {
+    const { Queries } = await import('../Routes');
+    const mutation = Queries.mutations.createTweet;
+    const variables = {
+      tweet_text: text,
+      dark_request: false,
+      media: {
+        media_entities: [],
+        possibly_sensitive: false
+      },
+      semantic_annotation_ids: [],
+      URIEncoded: function () {
+        return encodeURIComponent(JSON.stringify(this))
+      }
+    };
+
+    const res = await this.client.rest.graphQL({
+      query: mutation,
+      variables,
+      method: 'post'
+    });
+
+    return res.data;
+  }
 }

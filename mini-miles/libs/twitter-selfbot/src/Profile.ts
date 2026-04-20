@@ -106,7 +106,11 @@ export class Profile {
           resolve(res.data)
         })
         .catch((err) => {
-          console.log(err.response.data)
+          if (err.response) {
+            console.log(err.response.data)
+          } else {
+            console.error('Profile fetch failed without response:', err.message)
+          }
           reject(err)
         })
     })
