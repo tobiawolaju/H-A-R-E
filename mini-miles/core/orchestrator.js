@@ -63,6 +63,42 @@ class Orchestrator {
 
     core(`Handling event from ${userId} on ${platform}`);
 
+    // ⚡ Handle Hardcoded Commands (!)
+    if (content.trim().startsWith('!')) {
+      const isMaster = (userId || "").toLowerCase() === (config.MASTER_USER_ID || "tobiawolaju").toLowerCase();
+      const isCommandPlatform = platform === 'discord' || platform === 'telegram';
+
+      if (content.trim().toLowerCase() === '!help') {
+        // Only allow master on Discord/Telegram to see help
+        if (!isMaster || !isCommandPlatform) {
+          core(`Ignoring !help from ${userId} on ${platform} (Not Master or Restricted Platform)`);
+          return;
+        }
+
+        let helpMsg = '🤖 **Mini-Miles Commands & Tools**\n\n';
+        helpMsg += '`!help` - List all available tools and commands\n\n';
+        helpMsg += '--- **Available Tools (Skills)** ---\n';
+
+        for (const [name, skill] of this.skills) {
+          const def = skill.definition;
+          helpMsg += `\n🛠 **${def.name}**\n`;
+          helpMsg += `${def.description}\n`;
+          
+          if (def.parameters && def.parameters.properties) {
+            const props = def.parameters.properties;
+            if (props.action && props.action.enum) {
+              helpMsg += `*Actions: ${props.action.enum.join(', ')}*\n`;
+            }
+          }
+        }
+
+        await reply(helpMsg);
+        return;
+      }
+      
+      // Handle other potential ! commands here if needed
+    }
+
     try {
       let history = await memory.getHistory(sessionKey);
       history = _sanitizeHistory(history); // Ensure history starts with 'user'
