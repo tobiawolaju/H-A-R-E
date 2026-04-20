@@ -18,6 +18,6 @@
     "dotenv": "^17.2.3",
     "puppeteer": "^22.10.0",
     "ts-node": "^10.9.2",
-    "x-client-transaction-id": "^0.1.8"
+    "x-client-transaction-id": "^0.2.0"
   }
 }
