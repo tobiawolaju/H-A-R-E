@@ -1,37 +1,84 @@
-# Mini-Miles Test Prompts
+# Mini-Miles Comprehensive Feature Tests
 
-Use these prompts to verify the Twitter integration and the new Orchestrator commands.
+Use these prompts to verify all tools and skills currently integrated into Mini-Miles.
 
-## 🛠 Hardcoded Commands (Master Only, Discord/Telegram)
-*These must be sent as exact matches.*
-
+## 🤖 Core Commands (Discord/Telegram Only)
 - `!help`
-  - *Expected: Returns a structured list of all loaded skills and actions.*
+  - *Expected: Instant listing of all tools and their available actions.*
 
-## 🐦 Twitter Gateway Prompts (Master Only, from @tobiawolaju)
-*Mention the bot account on Twitter with these prompts.*
+---
 
-- `@MiniMilesBot what is the current price of $MON?`
-  - *Expected: Orchestrator triggers search tool and replies.*
-- `@MiniMilesBot remind me to check the hackathon results in 2 hours`
-  - *Expected: Orchestrator triggers scheduler skill and replies.*
+## 🐦 Twitter (X) Integration
+### Gateway (Master Only)
+- Mention the bot account from `@tobiawolaju`:
+  - "Search for latest Monad alpha"
+  - "Post a tweet: Mini-Miles is scaling! 🚀"
 
-## 🔍 Twitter Skill Prompts (via Discord/Telegram)
-*Ask these via your primary chat gateways to test the tool usage.*
+### Skills (via any gateway)
+- "What is @elonmusk's follower count?"
+- "Search Twitter for #MonadTestnet news"
+- "Show me my following timeline"
 
-- "Search Twitter for the latest news about Monad blockchain"
-  - *Goal: Verify `twitter_actions` search action.*
-- "Who is @elonmusk? Give me his profile stats."
-  - *Goal: Verify `twitter_actions` get_profile action.*
-- "Fetch the latest posts from @Monad_xyz"
-  - *Goal: Verify `twitter_actions` get_timeline action.*
-- "Post a tweet saying: Mini-Miles is now live on X! 🚀"
-  - *Goal: Verify `twitter_actions` post_tweet action (Requires permission).*
+---
 
-## 🔒 Restriction Verification
-- Ask another user to send `!help` on Discord.
-  - *Expected: No response.*
-- Send `!help` on Twitter.
-  - *Expected: No response.*
-- Mention the bot on Twitter from an account that is NOT `@tobiawolaju`.
-  - *Expected: Log shows "Ignoring mention", no reply.*
+## 💎 Monad Ecosystem (Monad Ops)
+- "Hunt for $200+ bounties in the Monad ecosystem"
+- "Give me the latest news on Monad ecosystem projects"
+- "Log a new job: Title 'Smart Contract Dev', Reward '500 USDC', Platform 'Gitcoin'"
+- "List all my logged jobs"
+
+---
+
+## 📅 Scheduling (Scheduler Ops)
+- "Remind me to check the crypto markets in 30 minutes"
+- "Schedule a task for tomorrow at 10 AM: 'Weekly team sync'"
+- "List all my active reminders"
+- "Cancel task #1"
+
+---
+
+## 📂 File & Document Management
+- "What files are in the research folder?"
+- "Summarize the contents of research_notes.txt"
+- "Move all .png files to the assets directory"
+- "Create a new text file called 'todo.txt' with content: '1. Update Twitter tools'"
+
+---
+
+## 🌍 Web & Social Media
+### Scraper & Search
+- "Search the web for the current price of Bitcoin"
+- "Scrape the content of https://monad.xyz/blog"
+
+### Discord Ops
+- "Summarize the last 50 messages in the #alpha-leaks channel"
+- "Send a DM to @user123: 'Hey, I checked the transaction!'"
+
+### Telegram Ops
+- "Broadcast this message to the alpha-group: 'New bounty alert!'"
+- "Read the last 10 messages from the Monad Global chat"
+
+---
+
+## 💻 Tech & Dev Tools
+### GitHub
+- "List all my repositories on GitHub"
+- "Create a new issue in 'mini-miles': 'Implement media support for Twitter'"
+
+### Video Ops
+- "Merge all clips in the 'recap' folder into a single video"
+- "Add a fade-in effect to the first 5 seconds of tutorial.mp4"
+
+### Hackathon Kit
+- "Generate a project description for a Monad DeFi dashboard"
+- "Compile a list of resources for building on Monad"
+
+---
+
+## 🔒 Security Tests
+1. **Platform Check**: Try `!help` on Twitter.
+   - *Expected: No response.*
+2. **User Check**: Ask a friend to mention the bot on Twitter.
+   - *Expected: Log shows "Ignoring mention".*
+3. **Master Check**: Try `!help` from a secondary Discord account.
+   - *Expected: No response.*
