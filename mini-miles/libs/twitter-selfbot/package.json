@@ -1,0 +1,23 @@
+{
+  "name": "twitter-selfbot-library",
+  "version": "0.1.0",
+  "description": "",
+  "main": "dist/main.js",
+  "scripts": {
+    "example": "tsx example/example.ts",
+    "test": "tsx tests/test.ts"
+  },
+  "author": "Xeukxz",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^20.12.12",
+    "typescript": "^6.0.3"
+  },
+  "dependencies": {
+    "axios": "^1.7.2",
+    "dotenv": "^17.2.3",
+    "puppeteer": "^22.10.0",
+    "ts-node": "^10.9.2",
+    "x-client-transaction-id": "^0.1.8"
+  }
+}
