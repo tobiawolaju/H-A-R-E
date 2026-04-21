@@ -489,17 +489,24 @@ async function retweet(tweetUrlOrId) {
 
   const response = await withRetry('Twitter retweet', () =>
     client.rest.post(
-      `https://x.com/i/api/1.1/statuses/retweet/${tweetId}.json`,
-      '',
+      `https://api.x.com/1.1/statuses/retweet/${tweetId}.json`,
+      {},
       {
-        'content-type': 'application/x-www-form-urlencoded'
+        'content-type': 'application/json'
       }
     )
   );
   if (response.status >= 400) {
     throw new Error('Failed to retweet.');
   }
-  return 'Tweet reposted.';
+  const retweetId =
+    response.data?.current_user_retweet?.id_str ||
+    response.data?.current_user_retweet?.id ||
+    response.data?.retweeted_status?.current_user_retweet?.id_str ||
+    response.data?.retweeted_status?.current_user_retweet?.id ||
+    null;
+
+  return retweetId ? `Tweet reposted. Retweet ID: ${retweetId}` : 'Tweet reposted.';
 }
 
 async function unretweet(tweetUrlOrId) {
@@ -507,12 +514,25 @@ async function unretweet(tweetUrlOrId) {
   const tweetId = extractTweetId(tweetUrlOrId);
   if (!tweetId) throw new Error('Invalid tweet link or tweet id.');
 
+  const tweet = await withRetry('Twitter lookup retweet id', () =>
+    client.rest.get(`https://api.x.com/1.1/statuses/show.json?id=${tweetId}&include_my_retweet=true`)
+  );
+  const retweetId =
+    tweet.data?.current_user_retweet?.id_str ||
+    tweet.data?.current_user_retweet?.id ||
+    tweet.data?.retweeted_status?.current_user_retweet?.id_str ||
+    tweet.data?.retweeted_status?.current_user_retweet?.id;
+
+  if (!retweetId) {
+    throw new Error('No existing retweet found for this tweet.');
+  }
+
   const response = await withRetry('Twitter unretweet', () =>
     client.rest.post(
-      `https://x.com/i/api/1.1/statuses/unretweet/${tweetId}.json`,
-      '',
+      `https://api.x.com/1.1/statuses/unretweet/${retweetId}.json`,
+      {},
       {
-        'content-type': 'application/x-www-form-urlencoded'
+        'content-type': 'application/json'
       }
     )
   );
