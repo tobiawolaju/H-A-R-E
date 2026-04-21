@@ -44,6 +44,10 @@ class Orchestrator {
     return require('../tools/twitter');
   }
 
+  _getDiscordTool() {
+    return require('../tools/discord-actions');
+  }
+
   _getSkillGroups() {
     return [
       {
@@ -96,6 +100,12 @@ class Orchestrator {
       '- `tweet: your text here` Post a tweet immediately',
       '- `!like <tweet link>` Like a tweet',
       '- `!unlike <tweet link>` Remove a like from a tweet',
+      '- `!friends` List your Discord friends',
+      '- `!incoming` List incoming friend requests',
+      '- `!outgoing` List outgoing friend requests',
+      '- `!friendstatus <user>` Check friendship status with a user',
+      '- `!friendreq <user>` Send a friend request',
+      '- `!unfriend <user>` Remove a friend or cancel a pending request',
       '- `!reply <tweet link> <text>` Reply to a tweet',
       '- `!comment <tweet link> <text>` Alias for `!reply`',
       '- `!quote <tweet link> <text>` Quote a tweet',
@@ -109,6 +119,12 @@ class Orchestrator {
       '- `!quote https://x.com/user/status/1234567890 good point`',
       '- `!like https://x.com/user/status/1234567890`',
       '- `!unlike https://x.com/user/status/1234567890`',
+      '- `!friends`',
+      '- `!incoming`',
+      '- `!outgoing`',
+      '- `!friendstatus @someuser`',
+      '- `!friendreq @someuser`',
+      '- `!unfriend @someuser`',
       '- `Search Twitter for I follow back`',
       '- `Fetch my GitHub profile and latest repo activity`',
       '',
@@ -207,6 +223,49 @@ class Orchestrator {
     }
   }
 
+  async _handleDiscordRelationshipCommand(action, text, reply, userId) {
+    const discordActions = this._getDiscordTool();
+    const trimmed = (text || '').trim();
+
+    switch (action) {
+      case 'friends':
+        await reply(JSON.stringify(await discordActions.listFriends(), null, 2));
+        return true;
+      case 'incoming':
+        await reply(JSON.stringify(await discordActions.listIncomingRequests(), null, 2));
+        return true;
+      case 'outgoing':
+        await reply(JSON.stringify(await discordActions.listOutgoingRequests(), null, 2));
+        return true;
+      case 'friendstatus': {
+        if (!trimmed) {
+          await reply('Usage: `!friendstatus <user id | @username | mention>`');
+          return true;
+        }
+        await reply(JSON.stringify(await discordActions.getFriendStatus(trimmed), null, 2));
+        return true;
+      }
+      case 'friendreq': {
+        if (!trimmed) {
+          await reply('Usage: `!friendreq <user id | @username | mention>`');
+          return true;
+        }
+        await reply(await discordActions.sendFriendRequest(trimmed));
+        return true;
+      }
+      case 'unfriend': {
+        if (!trimmed) {
+          await reply('Usage: `!unfriend <user id | @username | mention>`');
+          return true;
+        }
+        await reply(await discordActions.removeRelationship(trimmed));
+        return true;
+      }
+      default:
+        return false;
+    }
+  }
+
   async _handleBangCommand(event) {
     const { platform, userId, content, reply } = event;
     const trimmed = content.trim();
@@ -231,6 +290,21 @@ class Orchestrator {
       }
 
       return this._handleTweetCommand(trimmed.slice('!tweet'.length), reply, userId);
+    }
+
+    const relationshipMatch = trimmed.match(/^!(friends|incoming|outgoing|friendstatus|friendreq|unfriend)\s*([\s\S]*)$/i);
+    if (relationshipMatch) {
+      if (!isMaster) {
+        core(`Ignoring ${relationshipMatch[1]} from ${userId} on ${platform} (Not Master)`);
+        return true;
+      }
+
+      return this._handleDiscordRelationshipCommand(
+        relationshipMatch[1].toLowerCase(),
+        relationshipMatch[2],
+        reply,
+        userId
+      );
     }
 
     const linkActionMatch = trimmed.match(/^!(like|unlike|retweet|unretweet|reply|comment|quote)\s+([\s\S]+)$/i);

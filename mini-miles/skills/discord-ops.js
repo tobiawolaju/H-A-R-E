@@ -17,7 +17,7 @@ module.exports = {
       properties: {
         action: {
           type: 'string',
-          enum: ['read_channel', 'analyze_channel', 'send_dm', 'bulk_dm_from_csv', 'find_user'],
+          enum: ['read_channel', 'analyze_channel', 'send_dm', 'bulk_dm_from_csv', 'find_user', 'friend_status', 'list_friends', 'incoming_requests', 'outgoing_requests', 'send_friend_request', 'remove_relationship'],
           description: 'Discord action to perform'
         },
         channel_id: {
@@ -47,6 +47,10 @@ module.exports = {
         query: {
           type: 'string',
           description: 'Search query for find_user'
+        },
+        target_user: {
+          type: 'string',
+          description: 'Discord user ID, mention, or username for relationship actions'
         }
       },
       required: ['action']
@@ -59,7 +63,7 @@ module.exports = {
       return 'Error: discord_ops is restricted to the Master user.';
     }
 
-    const { action, channel_id, guild_id, user_id, message, csv_file, limit = 100, query } = args;
+    const { action, channel_id, guild_id, user_id, message, csv_file, limit = 100, query, target_user } = args;
     skill(`Discord Ops: ${action}`);
 
     try {
@@ -85,6 +89,24 @@ module.exports = {
         case 'find_user': {
           const members = await da.findUser(guild_id, query);
           return JSON.stringify(members, null, 2);
+        }
+        case 'friend_status': {
+          return JSON.stringify(await da.getFriendStatus(target_user), null, 2);
+        }
+        case 'list_friends': {
+          return JSON.stringify(await da.listFriends(), null, 2);
+        }
+        case 'incoming_requests': {
+          return JSON.stringify(await da.listIncomingRequests(), null, 2);
+        }
+        case 'outgoing_requests': {
+          return JSON.stringify(await da.listOutgoingRequests(), null, 2);
+        }
+        case 'send_friend_request': {
+          return await da.sendFriendRequest(target_user);
+        }
+        case 'remove_relationship': {
+          return await da.removeRelationship(target_user);
         }
         default:
           return `Error: Unknown action ${action}`;

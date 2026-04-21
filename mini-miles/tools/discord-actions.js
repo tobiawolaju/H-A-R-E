@@ -5,6 +5,7 @@
  */
 
 const discord = require('../gateways/discord');
+const { RelationshipTypes } = require('../node_modules/discord.js-selfbot-v13/src/util/Constants');
 
 function normalizeUserQuery(input) {
   return String(input || '').trim().replace(/^@/, '');
@@ -42,6 +43,59 @@ async function resolveUserId(identifier) {
   }
 
   return null;
+}
+
+async function refreshRelationships() {
+  await discord.client.relationships.fetch();
+  return discord.client.relationships;
+}
+
+function formatRelationship(user, type, nickname = null) {
+  return {
+    id: user?.id,
+    username: user?.username || null,
+    globalName: user?.globalName || user?.global_name || null,
+    nickname,
+    relationship: type
+  };
+}
+
+async function listFriends() {
+  const relationships = await refreshRelationships();
+  return relationships.friendCache.map((user, id) =>
+    formatRelationship(user, 'FRIEND', relationships.friendNicknames.get(id) || null)
+  );
+}
+
+async function listIncomingRequests() {
+  const relationships = await refreshRelationships();
+  return relationships.incomingCache.map((user, id) =>
+    formatRelationship(user, 'PENDING_INCOMING', relationships.friendNicknames.get(id) || null)
+  );
+}
+
+async function listOutgoingRequests() {
+  const relationships = await refreshRelationships();
+  return relationships.outgoingCache.map((user, id) =>
+    formatRelationship(user, 'PENDING_OUTGOING', relationships.friendNicknames.get(id) || null)
+  );
+}
+
+async function getFriendStatus(identifier) {
+  const relationships = await refreshRelationships();
+  const resolvedUserId = await resolveUserId(identifier);
+  if (!resolvedUserId) {
+    return { id: null, status: 'UNRESOLVED' };
+  }
+
+  const type = relationships.cache.get(resolvedUserId);
+  const user = discord.client.users.cache.get(resolvedUserId) || null;
+  return {
+    id: resolvedUserId,
+    username: user?.username || null,
+    status: type !== undefined ? RelationshipTypes[type] : 'NONE',
+    nickname: relationships.friendNicknames.get(resolvedUserId) || null
+  };
 }
 
 /**
@@ -100,6 +154,58 @@ async function sendDM(userId, message) {
   }
 }
 
+async function sendFriendRequest(identifier) {
+  const relationships = await refreshRelationships();
+  const resolvedUserId = await resolveUserId(identifier);
+  const resolvedUsername = normalizeUserQuery(identifier);
+
+  if (resolvedUserId) {
+    const existing = relationships.cache.get(resolvedUserId);
+    if (existing === RelationshipTypes.FRIEND) {
+      return `Already friends with ${resolvedUserId}`;
+    }
+
+    await discord.client.api.users['@me'].relationships[resolvedUserId].put({
+      data: {},
+      DiscordContext: { location: 'ContextMenu' }
+    });
+    return `Friend request sent to ${resolvedUserId}`;
+  }
+
+  if (!resolvedUsername) {
+    return 'Failed to resolve Discord user ID or username for friend request';
+  }
+
+  await discord.client.api.users['@me'].relationships.post({
+    versioned: true,
+    data: {
+      username: resolvedUsername,
+      discriminator: null
+    },
+    DiscordContext: { location: 'Add Friend' }
+  });
+
+  return `Friend request sent to @${resolvedUsername}`;
+}
+
+async function removeRelationship(identifier) {
+  const relationships = await refreshRelationships();
+  const resolvedUserId = await resolveUserId(identifier);
+  if (!resolvedUserId) {
+    return `Failed to resolve Discord user ID from ${identifier}`;
+  }
+
+  const existing = relationships.cache.get(resolvedUserId);
+  if (!existing) {
+    return `No relationship found for ${resolvedUserId}`;
+  }
+
+  await discord.client.api.users['@me'].relationships[resolvedUserId].delete({
+    DiscordContext: { location: 'ContextMenu' }
+  });
+  return `Removed relationship with ${resolvedUserId}`;
+}
+
 /**
  * Send DMs to a list of users from a pre-loaded array.
  * Returns results array.
@@ -136,4 +242,17 @@ async function findUser(guildId, query) {
   }));
 }
 
-module.exports = { readChannel, analyzeChannel, sendDM, bulkDM, findUser, resolveUserId };
+module.exports = {
+  readChannel,
+  analyzeChannel,
+  sendDM,
+  bulkDM,
+  findUser,
+  resolveUserId,
+  listFriends,
+  listIncomingRequests,
+  listOutgoingRequests,
+  getFriendStatus,
+  sendFriendRequest,
+  removeRelationship
+};

@@ -24,6 +24,8 @@ function createCollection(items) {
   return {
     map: (fn) => list.map(fn),
     filter: (fn) => createCollection(list.filter(fn)),
+    find: (fn) => list.find(fn),
+    values: () => list.values(),
     get size() {
       return list.length;
     },
@@ -212,6 +214,36 @@ async function testDiscord() {
     }
   ]);
 
+  const relationshipState = {
+    cache: new Map([
+      ['10', 1],
+      ['11', 3],
+      ['12', 4]
+    ]),
+    friendNicknames: new Map([
+      ['10', 'Al']
+    ]),
+    sinceCache: new Map([
+      ['10', new Date('2024-01-01T00:00:00Z')],
+      ['11', new Date('2024-01-02T00:00:00Z')],
+      ['12', new Date('2024-01-03T00:00:00Z')]
+    ]),
+    friendCache: createCollection([
+      ['10', { id: '10', username: 'alpha', globalName: 'Alpha' }]
+    ].map(([id, user]) => [user, id])),
+    incomingCache: createCollection([
+      ['11', { id: '11', username: 'beta', globalName: 'Beta' }]
+    ].map(([id, user]) => [user, id])),
+    outgoingCache: createCollection([
+      ['12', { id: '12', username: 'gamma', globalName: 'Gamma' }]
+    ].map(([id, user]) => [user, id])),
+    async fetch() {
+      return this;
+    }
+  };
+
+  const relationshipCalls = [];
+
   discordGateway.client = {
     channels: {
       async fetch() {
@@ -225,6 +257,11 @@ async function testDiscord() {
       }
     },
     users: {
+      cache: new Map([
+        ['10', { id: '10', username: 'alpha', globalName: 'Alpha' }],
+        ['11', { id: '11', username: 'beta', globalName: 'Beta' }],
+        ['12', { id: '12', username: 'gamma', globalName: 'Gamma' }]
+      ]),
       async fetch() {
         return {
           username: 'alpha',
@@ -239,6 +276,7 @@ async function testDiscord() {
       }
     },
     guilds: {
+      cache: createCollection([{ id: 'guild-1', members: { fetch: async () => guildMembers, cache: guildMembers } }]),
       async fetch() {
         return {
           members: {
@@ -248,6 +286,30 @@ async function testDiscord() {
             cache: guildMembers
           }
         };
+      }
+    },
+    relationships: relationshipState,
+    api: {
+      users: {
+        '@me': {
+          relationships: {
+            async get() {
+              return [
+                { id: '10', type: 1, nickname: 'Al', since: '2024-01-01T00:00:00Z' },
+                { id: '11', type: 3, nickname: null, since: '2024-01-02T00:00:00Z' },
+                { id: '12', type: 4, nickname: null, since: '2024-01-03T00:00:00Z' }
+              ];
+            },
+            async post(payload) {
+              relationshipCalls.push({ kind: 'post', payload });
+              return undefined;
+            }
+          },
+          async delete() {
+            relationshipCalls.push({ kind: 'delete' });
+            return undefined;
+          }
+        }
       }
     }
   };
@@ -272,6 +334,24 @@ async function testDiscord() {
 
   const users = await discordActions.findUser('guild-1', 'alp');
   assert(Array.isArray(users) && users.length === 1, 'findUser did not return expected results');
+
+  const status = await discordActions.getFriendStatus('@alpha');
+  assert(status.status === 'FRIEND', 'getFriendStatus did not report FRIEND');
+
+  const friends = await discordActions.listFriends();
+  assert(Array.isArray(friends) && friends.length === 1, 'listFriends did not return expected friends');
+
+  const incoming = await discordActions.listIncomingRequests();
+  assert(Array.isArray(incoming) && incoming.length === 1, 'listIncomingRequests did not return expected requests');
+
+  const outgoing = await discordActions.listOutgoingRequests();
+  assert(Array.isArray(outgoing) && outgoing.length === 1, 'listOutgoingRequests did not return expected requests');
+
+  const friendReq = await discordActions.sendFriendRequest('@delta');
+  assert(friendReq.includes('Friend request sent'), 'sendFriendRequest did not acknowledge request');
+
+  const removed = await discordActions.removeRelationship('@alpha');
+  assert(removed.includes('Removed relationship') || removed.includes('No relationship'), 'removeRelationship returned unexpected output');
 }
 
 async function testTwitter() {
