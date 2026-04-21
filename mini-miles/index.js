@@ -1,5 +1,5 @@
 const discord = require('./gateways/discord');
-// const telegram = require('./gateways/telegram'); // Paused
+const telegram = require('./gateways/telegram');
 const twitter = require('./gateways/twitter');
 const heartbeat = require('./core/heartbeat');
 const { log, error } = require('./utils/logger');
@@ -11,11 +11,11 @@ async function main() {
     // 1. Initialize Gateways
     log('Connecting to Gateways...');
     await discord.connect();
-    // await telegram.connect(); // Paused
+    await telegram.connect();
     await twitter.connect();
 
     // 2. Start Heartbeat
-    heartbeat.start([discord, twitter]);
+    heartbeat.start([discord, telegram, twitter]);
 
     log('✅ Mini-Miles is online and running.');
     

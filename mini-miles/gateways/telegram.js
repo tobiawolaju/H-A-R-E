@@ -16,6 +16,11 @@ class TelegramGateway {
     const apiHash = process.env.TELEGRAM_API_HASH;
     const stringSession = new StringSession(process.env.TELEGRAM_SESSION_STRING || "");
 
+    if (!apiId || !apiHash || !process.env.TELEGRAM_SESSION_STRING) {
+      error('Telegram: Missing TELEGRAM_API_ID, TELEGRAM_API_HASH, or TELEGRAM_SESSION_STRING.');
+      return false;
+    }
+
     this.client = new TelegramClient(stringSession, apiId, apiHash, {
       connectionRetries: 5,
     });
@@ -29,8 +34,10 @@ class TelegramGateway {
       await this.client.invoke(new Api.account.UpdateStatus({ offline: false }));
       
       this._setupListeners();
+      return true;
     } catch (err) {
       error('Telegram: Connection failed:', err.message);
+      return false;
     }
   }
 
