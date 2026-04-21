@@ -12,7 +12,7 @@ class TwitterGateway {
   constructor() {
     this.name = 'twitter';
     this.client = null;
-    this.masterUsername = (config.TWITTER_MASTER_USERNAME || 'tobiawolaju').replace(/^@/, '').toLowerCase();
+    this.masterUsername = (config.TWITTER_MASTER_USERNAME || 'omoonchain').replace(/^@/, '').toLowerCase();
     this.seenNotifications = new Set();
   }
 

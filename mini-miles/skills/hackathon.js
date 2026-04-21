@@ -34,7 +34,7 @@ module.exports = {
         },
         owner: {
           type: 'string',
-          description: 'GitHub owner/username (defaults to tobiawolaju)'
+          description: 'GitHub owner/username (defaults to omoonchain)'
         },
         repo: {
           type: 'string',
@@ -71,7 +71,7 @@ module.exports = {
       return 'Error: hackathon_ops is restricted to the Master user.';
     }
 
-    const { action, name, description, stack, owner = 'tobiawolaju', repo, features, demo_url, problem, solution, impact } = args;
+    const { action, name, description, stack, owner = 'omoonchain', repo, features, demo_url, problem, solution, impact } = args;
     skill(`Hackathon Ops: ${action} — ${name || repo}`);
 
     try {

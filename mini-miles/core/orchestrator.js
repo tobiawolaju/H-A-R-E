@@ -33,7 +33,7 @@ class Orchestrator {
   }
 
   _isMasterUser(userId) {
-    return (userId || '').toLowerCase() === (config.MASTER_USER_ID || 'tobiawolaju').toLowerCase();
+    return (userId || '').toLowerCase() === (config.MASTER_USER_ID || 'omoonchain').toLowerCase();
   }
 
   _getTwitterSkill() {
@@ -131,7 +131,7 @@ class Orchestrator {
       '- `Fetch my GitHub profile and latest repo activity`',
       '',
       'Bot rules',
-      `- Twitter live commands are limited to @${config.TWITTER_MASTER_USERNAME || 'tobiawolaju'}`,
+      `- Twitter live commands are limited to @${config.TWITTER_MASTER_USERNAME || 'omoonchain'}`,
       '- Discord and Telegram are the primary command surfaces',
       '- Twitter mentions can still route into the agent, but `!tweet` and `tweet:` are the deterministic post paths',
       '- Tweet-link commands only work for the master account',
@@ -151,7 +151,7 @@ class Orchestrator {
       'Live prompts',
       '- `@bot !tweet status update` on Twitter',
       '- `search Twitter for I follow back`',
-      '- `get profile for tobiawolaju`',
+      '- `get profile for omoonchain`',
       '- `show me my posts timeline`'
     );
 

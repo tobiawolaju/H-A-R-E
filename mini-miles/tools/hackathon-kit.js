@@ -37,7 +37,7 @@ const BOILERPLATES = {
 /**
  * Generate a full hackathon project: create a GitHub repo and push all boilerplate files.
  */
-async function generateProject({ name, description, stack = 'nextjs', owner = 'tobiawolaju', isPrivate = false }) {
+async function generateProject({ name, description, stack = 'nextjs', owner = 'omoonchain', isPrivate = false }) {
   const template = BOILERPLATES[stack] || BOILERPLATES.nextjs;
 
   // Create the GitHub repo first
