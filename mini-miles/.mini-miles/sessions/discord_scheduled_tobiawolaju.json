@@ -1,0 +1,220 @@
+[
+  {
+    "role": "function",
+    "parts": [
+      {
+        "functionResponse": {
+          "name": "file_manager",
+          "response": {
+            "result": "Files in data dir:\nengaged_tweets.json\nmonadKOL.csv\ntest_contacts.csv\nweb3_devs.csv"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "functionCall": {
+          "name": "file_manager",
+          "args": {
+            "filename": "engaged_tweets.json",
+            "action": "read"
+          },
+          "id": "dbyuaykf"
+        },
+        "thoughtSignature": "EqcBCqQBAQw51sf1aO0DIEez3kdx7Ucch/MEgUfnqNrNCoRPsj/gS+RN1u6BCYJn/2qaVW/wE8iG+LPr6yCeiuMzJ/GXZymvF3QgFfhi/nRxm63LmpqNB4algC17uNcuonlwJns5Lfr1qYc0WM5ag7ofq8wi5QnFceC98fPdmrDS7Ke3zQvn9QOXPoX9g8cFAEhZcIGQa1wk7A2pG2TWWi6p5+3JQGGfc1Q="
+      }
+    ]
+  },
+  {
+    "role": "function",
+    "parts": [
+      {
+        "functionResponse": {
+          "name": "file_manager",
+          "response": {
+            "result": "[\n  {\n    \"id\": \"2046249875436704256\",\n    \"author\": \"keoneHD\",\n    \"timestamp\": \"2026-04-21T08:15:29Z\"\n  }\n]"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "functionCall": {
+          "name": "twitter_actions",
+          "args": {
+            "action": "get_timeline",
+            "type": "posts",
+            "username": "monad_intern"
+          },
+          "id": "lgwwwhs2"
+        },
+        "thoughtSignature": "EsYCCsMCAQw51se+7NXkSX1XL2gLL4mWxvTIVfugJBMsdMZ8FIlYckx5l/bGIJAerkHiVVKCiMRi39G7rMtWNW0f/R7CwsHaRUuHXmZkewrDSS3dyNvF2Ja/QAdTwh9Vef2kxRP1gRLbqlXalZBMrE/BJtqo+js2G0LiUwqgtpxp7eBOsY+YVyZeqwq27lMQe+sjz0cf4mNVLRoCjqG5QG6X9TthxY++koSh6V04ThdHCtQLloALnaQg5xr0kkoRp8uy4JxEQ0/vBD5TNlX7910dCJM4kJMTv0r55OCuOMZwAyod7Xdb51rUYL8tq8GONp7Fsd0optTvOCzoqahScrm8UA+bZL1Jo4cePFgJZrovspin6XnzE2URZbMq7Xfr3wVKAbOesbUtK7I2LdhXu9ctUE+2LDGkYmbRMv8jvOmbcPo0o6I2fgk="
+      }
+    ]
+  },
+  {
+    "role": "function",
+    "parts": [
+      {
+        "functionResponse": {
+          "name": "twitter_actions",
+          "response": {
+            "result": "[]"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "functionCall": {
+          "name": "twitter_actions",
+          "args": {
+            "action": "search",
+            "query": "monad intern"
+          },
+          "id": "8062wwll"
+        },
+        "thoughtSignature": "EocCCoQCAQw51sct+NM6JA9FpF+/fFxMqziZ56C0NYhsPBpNFod1L8PNAILxb941YTcSbEPd759prSGgOa0o9Edgop1FJokCCrKQTk5sueeONyUngsJqV036ulk81lz4c1Nf9I8VQnYUnjBaGzIEhSeoou6mk/AazH918i9OXhe/PdhE3l5o5sESqIjNQFnTxUudlKaV5BbtKKkfiedifa3cZKmuCU/onWZItiL396qnT/5/NZfYz1vB8v6Yks/emb+SceabQ6KbqX40WmHscQ00NzkXPv4D3hZgDk0v5u4PohbWP3wiB0MiJWkuFE4sT9u5gjgsd6HRghw8zsTjwUmDUtUtsEC8fNs="
+      }
+    ]
+  },
+  {
+    "role": "function",
+    "parts": [
+      {
+        "functionResponse": {
+          "name": "twitter_actions",
+          "response": {
+            "result": "[\n  {\n    \"id\": \"2046483747399491656\",\n    \"text\": \"@0xSachy @intern @monad Facts only\",\n    \"author\": \"meiji_ft\",\n    \"createdAt\": \"2026-04-21T06:58:41.000Z\"\n  },\n  {\n    \"id\": \"2046472310849204686\",\n    \"text\": \"@meiji_ft @intern @monad Finally, someone said that\",\n    \"author\": \"0xSachy\",\n    \"createdAt\": \"2026-04-21T06:13:15.000Z\"\n  },\n  {\n    \"id\": \"2046427729105682511\",\n    \"text\": \"Monad AI กำลังมา หรือว่ายุคใหม่มาถึงแล้ว 💜\\n\\nล่าสุด @monad โพสรูปภาพด้านล่าง ตอนแรก Intern นึกว่าจะ x กับ @aave หรือยังไง เลยไปดูคอมเม้นว่าคิดเป็นไรกัน\\n\\n🔸Molandak new friend / mascot ตัวใหม่\\n🔹Monad AI assistant หรือ AI agent อะไรสักอย่าง\\n🔸New dApp / social / platform บน Monad\\n🔹บางคนล้อเล่นว่า HomePod, Baymax สีม่วง\\n\\nเพื่อนๆคิดว่าคืออาราย 👇🏻\",\n    \"author\": \"Gnad_InternTH\",\n    \"createdAt\": \"2026-04-21T03:16:06.000Z\"\n  },\n  {\n    \"id\": \"2046423090197049596\",\n    \"text\": \"@GiaTran150722 @intern @monad Thanks for playing\",\n    \"author\": \"meiji_ft\",\n    \"createdAt\": \"2026-04-21T02:57:40.000Z\"\n  },\n  {\n    \"id\": \"2046380427443855864\",\n    \"text\": \"@cryptunez @intern Sir I'm not eligible for monad card\",\n    \"author\": \"ArjunCom182\",\n    \"createdAt\": \"2026-04-21T00:08:08.000Z\"\n  },\n  {\n    \"id\": \"2046369152143954265\",\n    \"text\": \"@_Rafael0X @intern @monad Hope you can make it in wave 4 bro\",\n    \"author\": \"meiji_ft\",\n    \"createdAt\": \"2026-04-20T23:23:20.000Z\"\n  },\n  {\n    \"id\": \"2046368155103359363\",\n    \"text\": \"@meiji_ft @intern @monad Hope wave 4 500K\",\n    \"author\": \"_Rafael0X\",\n    \"createdAt\": \"2026-04-20T23:19:22.000Z\"\n  },\n  {\n    \"id\": \"2046367415609774587\",\n    \"text\": \"Tunez asking @intern for 1M $MON to be eligible for @monad cards V3.\\n\\nNo airdrop for card holders 😘\\n\\nThank you for your attention to this matter 😎\",\n    \"author\": \"meiji_ft\",\n    \"createdAt\": \"2026-04-20T23:16:26.000Z\"\n  },\n  {\n    \"id\": \"2046358833313001555\",\n    \"text\": \"@sailorninis @monad Justice for intern\",\n    \"author\": \"0xBANDAL\",\n    \"createdAt\": \"2026-04-20T22:42:20.000Z\"\n  },\n  {\n    \"id\": \"2046348680232386964\",\n    \"text\": \"@intern @gainzy222 its a fantastic chain\\n\\nand if you hold leveraged monad there you can retire your bloodling\\n\\n$emo https://t.co/1W0mJEnmBL\",\n    \"author\": \"LordEmo\",\n    \"createdAt\": \"2026-04-20T22:01:59.000Z\"\n  },\n  {\n    \"id\": \"2046334034305843594\",\n    \"text\": \"@monad Finally the intern starts interning\",\n    \"author\": \"panditdhamdhere\",\n    \"createdAt\": \"2026-04-20T21:03:47.000Z\"\n  },\n  {\n    \"id\": \"2046326607850184987\",\n    \"text\": \"@monad Sorry intern, I can see it\",\n    \"author\": \"chief__hq\",\n    \"createdAt\": \"2026-04-20T20:34:16.000Z\"\n  },\n  {\n    \"id\": \"2046159074266624286\",\n    \"text\": \"@4ormund @monad the intern is taking notes\",\n    \"author\": \"GweiIntern\",\n    \"createdAt\": \"2026-04-20T09:28:33.000Z\"\n  },\n  {\n    \"id\": \"2046075388678574181\",\n    \"text\": \"จากเคสวิกฤต $AAVE ที่คนเอาเงินปลอมมาค้ำประกันแล้วกู้เงิน จริงๆมันมีทางแก้\\n\\nIntern เอาความเห็นมาจาก @keoneHD หัวเรือ @monad \\n\\nตอนนี้ lending protocol ส่วนใหญ่ใช้ Supply Cap โดย Keone เสนอว่า ควรมี Rate Limit (จำกัดอัตราการฝาก) \\n\\n📌ยกตัวอย่างเคส AAVE Hacker ใช้ infinite mint เหรียญได้ไม่จำกัดแล้วเอามาปล่อยกู้\\n\\nตัวอย่าง rsETH hack เสีย $200m\\n\\nถ้ามี rate limit อาจเสียแค่ $10-20m เพราะ hacker ฝากไม่ได้หมดในทันที \\n\\nขอกู้ได้น้อยลงนั่นเอง\",\n    \"author\": \"Gnad_InternTH\",\n    \"createdAt\": \"2026-04-20T03:56:01.000Z\"\n  },\n  {\n    \"id\": \"2046031650321215557\",\n    \"text\": \"@sailorninis Monad need new intern\",\n    \"author\": \"0xposa\",\n    \"createdAt\": \"2026-04-20T01:02:13.000Z\"\n  },\n  {\n    \"id\": \"2046008080811389068\",\n    \"text\": \"@monad @category_xyz Intern aura farming with that cook https://t.co/d4WByySLoZ\",\n    \"author\": \"Lex_duck01\",\n    \"createdAt\": \"2026-04-19T23:28:34.000Z\"\n  },\n  {\n    \"id\": \"2045957507131003031\",\n    \"text\": \"@monad thank intern https://t.co/sR9Goaj52e\",\n    \"author\": \"antgeo13\",\n    \"createdAt\": \"2026-04-19T20:07:36.000Z\"\n  },\n  {\n    \"id\": \"2045947594355147197\",\n    \"text\": \"@DosRojos @monad the intern is already in the bunker gmonad\",\n    \"author\": \"GweiIntern\",\n    \"createdAt\": \"2026-04-19T19:28:13.000Z\"\n  },\n  {\n    \"id\": \"2045945060139655449\",\n    \"text\": \"@monad Intern at it again\",\n    \"author\": \"Just_Kellie_69\",\n    \"createdAt\": \"2026-04-19T19:18:08.000Z\"\n  },\n  {\n    \"id\": \"2045937446203036124\",\n    \"text\": \"@monad Monad is so down bad\\nIntern start engagement farming\",\n    \"author\": \"N01Dude\",\n    \"createdAt\": \"2026-04-19T18:47:53.000Z\"\n  }\n]"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "functionCall": {
+          "name": "file_manager",
+          "args": {
+            "filename": "monadKOL.csv",
+            "action": "read"
+          },
+          "id": "odgzi37p"
+        },
+        "thoughtSignature": "Eo4ECosEAQw51sf0hjgSmTbhoiqEI1T49d6DgkPalwTl5xct+iTr5dSibpC+8087JD7sll8H0G8UGDrM/fMUAA3u2UEao34GRAufny1fBY2Z2AaY3dihrxeE7fEsLg7AR9supDd1NpxYkYae69O7/Y+eMfRSzWDgX0Y2bZ2w2ddZN8WHUHsNOlW6zx/zXDiSTp1UJJQ05iDFGsFapW3NPbIIYB/FJdtU6XFCYiPFZhXG7J526o7Z91MVW1Lmgjw+UuPSH55i16I4xjJMgrMbYolb9Z4PWHcXvNuKDJtqnIFhbFaB3Fmjs/xevuXYHXojfINz46TfPFCsMdx1IBDRS2wr5Y9ghCrS+wVnbj9iT/DY9KrUgK8nTP7ptTidS2X8wgnLPTQKNtYKLH3XmgDI0itYJAhXwV3BzUnRf2uZyoO4IeqsE1KZ8mcGej91i8o2Gu//F5okggmcDPsFpxHdwZZxILNSJdHT6rTqxx+fbOvI28LLruSbZi6qQl8w7yEbZwA62Qaz2vi2rPMuyFYqcKDaumGUEdwidg/awSCzTf3p9XSJOt6G4hCt8ATAu5GSLIpLDfYyulvSR3ZE9pn4tqOwNRwcC6t3rpPzYH6vmrzjDVH42cPbZ4m9Ir5dik6mvH5B4svYPeGW+37NyU55t7+9MEcM/AMd0mNA2QiekC6AjIioP2zpcfTeVfMeCB6HWg=="
+      }
+    ]
+  },
+  {
+    "role": "function",
+    "parts": [
+      {
+        "functionResponse": {
+          "name": "file_manager",
+          "response": {
+            "result": "[\n  {\n    \"name\": \"Keone Hon\",\n    \"twitter\": \"keoneHD\",\n    \"role\": \"CEO/Co-founder\",\n    \"enhancement\": \"Maximum\"\n  },\n  {\n    \"name\": \"Intern\",\n    \"twitter\": \"intern\",\n    \"role\": \"Community/Official\",\n    \"enhancement\": \"High\"\n  },\n  {\n    \"name\": \"Internbrah\",\n    \"twitter\": \"internbrah\",\n    \"role\": \"Strategist\",\n    \"enhancement\": \"High\"\n  },\n  {\n    \"name\": \"Rwlk\",\n    \"twitter\": \"rwlk\",\n    \"role\": \"Cultural Lead\",\n    \"enhancement\": \"High\"\n  },\n  {\n    \"name\": \"Bunty\",\n    \"twitter\": \"buntyverse\",\n    \"role\": \"Ecosystem Scout\",\n    \"enhancement\": \"Medium-High\"\n  },\n  {\n    \"name\": \"Yash\",\n    \"twitter\": \"0x_yash21\",\n    \"role\": \"Curator/Technical\",\n    \"enhancement\": \"High\"\n  },\n  {\n    \"name\": \"Bill\",\n    \"twitter\": \"billmondays\",\n    \"role\": \"Pulse/Activity\",\n    \"enhancement\": \"Medium\"\n  },\n  {\n    \"name\": \"0xSyvra\",\n    \"twitter\": \"0xSyvra\",\n    \"role\": \"Analyst\",\n    \"enhancement\": \"High\"\n  },\n  {\n    \"name\": \"BigJo\",\n    \"twitter\": \"__BigJo\",\n    \"role\": \"Reporter/Analytics\",\n    \"enhancement\": \"High\"\n  },\n  {\n    \"name\": \"Validator\",\n    \"twitter\": \"Validator247\",\n    \"role\": \"Alpha/Strategy\",\n    \"enhancement\": \"Medium-High\"\n  }\n]"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "functionCall": {
+          "name": "twitter_actions",
+          "args": {
+            "type": "posts",
+            "username": "intern",
+            "action": "get_timeline"
+          },
+          "id": "rl2a1gdn"
+        },
+        "thoughtSignature": "EowBCokBAQw51scY1wj+wyB2qfVtyIb1JfVeNI4XBdYCGtphiOS2Fs1SusC323uuZ5Es7+FC8gLrMJaq6V5eLofzMNnM0QsB7/pLU7y8SEdpHp+NI7uaVXsihuE8DvP4f7ZXREJD45+iMW5cDTn9Bv7d29E5+vkhqTo6PRZ0DQD1iwpX7SaGFUye+himIIc="
+      }
+    ]
+  },
+  {
+    "role": "function",
+    "parts": [
+      {
+        "functionResponse": {
+          "name": "twitter_actions",
+          "response": {
+            "result": "[\n  {\n    \"id\": \"2044805336171766232\",\n    \"text\": \"thanks for giving us Opus 4.7 with Mythos mogging it ur actually goated for that. it’s probably the coolest thing ive seen in my life, you released an AI model to AI users but you put Mythos there so we know it's the mid version. heroic. i love worse models thats fire bro thanks https://t.co/zuIYlrgsnF\",\n    \"author\": \"intern\",\n    \"createdAt\": \"2026-04-16T15:49:17.000Z\"\n  },\n  {\n    \"id\": \"2044068204536828235\",\n    \"text\": \"yes https://t.co/1K9aL9fsin\",\n    \"author\": \"intern\",\n    \"createdAt\": \"2026-04-14T15:00:11.000Z\"\n  },\n  {\n    \"id\": \"2043737490142454175\",\n    \"text\": \"so it appears there are only like 2000 of us left on here\",\n    \"author\": \"intern\",\n    \"createdAt\": \"2026-04-13T17:06:03.000Z\"\n  },\n  {\n    \"id\": \"2042923346715631803\",\n    \"text\": \"there is a palpable feeling of anxiety in the market when a coin keeps going up &amp; its apparent ppl dont own enough\",\n    \"author\": \"intern\",\n    \"createdAt\": \"2026-04-11T11:10:56.000Z\"\n  },\n  {\n    \"id\": \"2042610865392791994\",\n    \"text\": \"Monad is not just another L1, it is the most innovative EVM L1 ever created:\\n\\n- Sub second finality\\n- 200 validators (distributed + inexpensive)\\n- Can handle 10,000+ real TPS\\n- Completely open sourced\\n- MIP-8 incoming\\n\\nThe more you dig, the better it gets. Monad is the real deal.\",\n    \"author\": \"intern\",\n    \"createdAt\": \"2026-04-10T14:29:14.000Z\"\n  },\n  {\n    \"id\": \"2042551456247533940\",\n    \"text\": \"Most everyone I saw identified the same coin as looking the best and it has ended up doin the best, pretty bullish tbh\",\n    \"author\": \"intern\",\n    \"createdAt\": \"2026-04-10T10:33:10.000Z\"\n  },\n  {\n    \"id\": \"2042424340159848501\",\n    \"text\": \"really feels like there’s a bullish wave slowly brewing in crypto\\n\\nthere’re inklings, traces, little rotations, new energy emerging, a small charge in the air, momentum building at the edges\\n\\na tingling sensation in the plums\\n\\nyou can feel it\",\n    \"author\": \"intern\",\n    \"createdAt\": \"2026-04-10T02:08:03.000Z\"\n  },\n  {\n    \"id\": \"2041933119444423041\",\n    \"text\": \"i think about this clip often https://t.co/QhZCU110qH\",\n    \"author\": \"intern\",\n    \"createdAt\": \"2026-04-08T17:36:07.000Z\"\n  },\n  {\n    \"id\": \"2041680451383746619\",\n    \"text\": \"Some alts look horrendously shitty\\nSome look alright\\nSome look great\\n\\nThe ones that have been getting bid while everything else went to shit are the ones I expect to outperform no matter the market conditions\\n\\nIf you like alts, focus on those\",\n    \"author\": \"intern\",\n    \"createdAt\": \"2026-04-08T00:52:06.000Z\"\n  },\n  {\n    \"id\": \"2041608564947431512\",\n    \"text\": \"ThreadGuy had me in the 70s on his list\\n\\njust came in at number 10 on Coinbase's list\\n\\nstrong indicator that this industry remains extremely bad at valuing anything properly\",\n    \"author\": \"intern\",\n    \"createdAt\": \"2026-04-07T20:06:27.000Z\"\n  },\n  {\n    \"id\": \"2041352475903438887\",\n    \"text\": \"gym guys will be like “i can’t believe they took the covid vaccine”\\n\\nand then inject BPC-157, ipamorelin, MOTS-c, and an unpronounceable peptide shipped from Nicaragua after reading a subreddit comment from liverkingdisciple69 about mice getting jacked\",\n    \"author\": \"intern\",\n    \"createdAt\": \"2026-04-07T03:08:51.000Z\"\n  },\n  {\n    \"id\": \"2041186518056706526\",\n    \"text\": \"Citrini Analyst #3 went swimming in the Strait of Hormuz as part of their diligence process but your VC couldn't open a docsend ahead of the call\",\n    \"author\": \"intern\",\n    \"createdAt\": \"2026-04-06T16:09:23.000Z\"\n  },\n  {\n    \"id\": \"2039417193578824034\",\n    \"text\": \"at least the chain didnt go down https://t.co/GEyN3OA66P\",\n    \"author\": \"intern\",\n    \"createdAt\": \"2026-04-01T18:58:44.000Z\"\n  },\n  {\n    \"id\": \"2039407352848187712\",\n    \"text\": \"hey man just wanted to reach out and say i loved how much you drank at the networking event last night\",\n    \"author\": \"intern\",\n    \"createdAt\": \"2026-04-01T18:19:37.000Z\"\n  },\n  {\n    \"id\": \"2038994424454115796\",\n    \"text\": \"so in the last 48 hours:\\n\\n- quantum computers could break crypto (Google + Oratomic papers)\\n- critical supply-cain attack on the Axious npm package\\n- FBI Director Kash Patel’s gmail account hacked\\n- Claude code source code leaked\\n\\nwhat just happened to global cybersecurity?\",\n    \"author\": \"intern\",\n    \"createdAt\": \"2026-03-31T14:58:48.000Z\"\n  },\n  {\n    \"id\": \"2038735217083511089\",\n    \"text\": \"imagine putting your kid through college and they end up France doing cryptocurrency\",\n    \"author\": \"intern\",\n    \"createdAt\": \"2026-03-30T21:48:48.000Z\"\n  },\n  {\n    \"id\": \"2037185367816671509\",\n    \"text\": \"its crazy how much more active u get in groupchats once you're unemployed\",\n    \"author\": \"intern\",\n    \"createdAt\": \"2026-03-26T15:10:15.000Z\"\n  },\n  {\n    \"id\": \"2036869680095219766\",\n    \"text\": \"&gt;QRT with a oneliner\\n&gt;the world is changed forever\\n&gt;AI something something\\n&gt;bookmark this or you're cooked\\n&gt;insert that DiCaprio or Peaky Blinders reaction video\\n&gt;7 million impressions for no reason whatsoever\\n&gt;what happened to our timeline smfh https://t.co/VlBRKfip8t\",\n    \"author\": \"intern\",\n    \"createdAt\": \"2026-03-25T18:15:49.000Z\"\n  },\n  {\n    \"id\": \"2036156338095497402\",\n    \"text\": \"we finally found the perfect use for this clip https://t.co/N0Xw3yYYzd\",\n    \"author\": \"intern\",\n    \"createdAt\": \"2026-03-23T19:01:15.000Z\"\n  },\n  {\n    \"id\": \"2022058797229908385\",\n    \"text\": \"https://t.co/NJttCMYjRP\",\n    \"author\": \"intern\",\n    \"createdAt\": \"2026-02-12T21:22:39.000Z\"\n  }\n]"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "functionCall": {
+          "name": "twitter_actions",
+          "args": {
+            "text": "The tech stack is undeniable. While the market gets distracted by noise, Monad's focus on sub-second finality and 10k real TPS is setting a new standard for the EVM. Parallelized execution isn't just a buzzword here; it's the foundation for the next wave of high-frequency DeFi. 🟣⚡️ #Monad #EVM #Scalability\n\nhttps://twitter.com/intern/status/2042610865392791994",
+            "action": "post_tweet"
+          },
+          "id": "jprbj2ya"
+        },
+        "thoughtSignature": "EvwICvkIAQw51se0Kq9Wn/WM+NVxDa/rHw+0Y8yM5gl7N+4Y9FyXWWX8yORWmJ1o8xaPBKD6KJJ0Hxk3sjlGesZGueQzXX7TpHiJRsSWpfJ9dXBouQYbqEJ/2zLnRNrVks6Xg64vpHV2Lw38wotByynSEtt5VBF9tlMCh1VSy6Al8KCasBZxPsEM4uxMXjvlw+iisEU60Mq/veNMOEWP8Vo6xXvejBN4qrRSQuZanJKfgR2kvndt+AMEZe1HSUfThlBiJPtdzMCkaSoflB5SXRDxqlWU5rpEoQ9OKNaO2XrAQky1VfVBVofzh3fbATL2CS3T2pC5tkHOE1x0csXz1UYOY8o55AcGnRs147wG1iHUOdG/+0hz8TsJCYVoIRCpmvzJlEESOsHdDeEd58F4eYBH311lsGRTVRh2pyIEN1qndyAceZbO398RGdTEKMHqwmtH24lIFac+dZjp2rC/sHPNNHWfgkdYOIXjSd0YWfnBfEUoqhlknfbx0i5N3WXJgLn0Dk1FoRykJfqFuImH32OIsbNLlNakpCFSMgXM81OHXdHKD7zxCtqY8ssOF3A3eLzTbVT/LngGHXTR0AFveRU84TeIafdxj/RzrOPd2ZJ9EWK6/RX/q3as6X1dc/6GzFYSSUE69WrYXERRQmDGggQCzJZ/NfDU3XwBS0UNZ09nhLOQI5qyok2vtTm5t94xoPja6Y5iVKGUTHx4LBuinx6iiN5tksvzhV7sl5h0LRpj2q0PC1RCABZlcL+i0Eaipmxm/DigB+Xra6T7QA0Jb06znGR1C7+wM4TGWZTsWDjuT+Ft381xS3MkAumXx9HQQS7Xfx9zpeaaRrDbXlPvyq2Qz5VVklITiIi6LFoMQE8rx7gb6KzrxZYn5wKywlZAdjoQF2Fg4IqqVBCSiCaEMeHvtMK9Ejxl8f2HcwUSuXdgptmIZQjkVzPNG1R3joL0Iad03rLAyjZd0HgvdjyUKfJvRRFsVJ8jR+ekTaZNUdf7PDY+9NIbpsaFVJbb/Y9E7rvts9orGhoSiQV9GlZB3W+sQ9Cs5dmqmEIyUIdqwE55YPQcC4Sn2ZJ0NNlIk1/4Ol6/zwVbc4LNUighvjaIlJWiAG7LQWZlFc1q2dXxn9fWVihn/Hql65B2VctCFBNrcH0/qLPVWc4foJoujg5iPe5SjoWxJc3XQ9qH7p1HeEub3FlQRiYJepcQ0h8dC2yg1wS8rk60uUj1eQJw2JO5JRE9ZbPAljGk0YnU6mh9KZpEUam7LD6xHoCx8v/MUt5qN7SdDw2uPsrM9KjrUiEFBL9tbzSVWxvoVUyoiRJZ3mhSbpaEY7T76g1fMjM//5sqNqK5ZeJzJ3FL+QuuJ6uw+X/eG46zxa3aSpEWUM5cXPtvV6o0A409R3IlRfaQrl11OoKs6wFswndniu19RU9v0c0cH73cozxrFNEju2lqwH029Ml2ZSri5VxNjkNF3oAi520eERzGwan7HGTFLfap96ebZDL+pZM/BUwsbcRZSDD845o9vmYINhF5yl32V/0="
+      }
+    ]
+  },
+  {
+    "role": "function",
+    "parts": [
+      {
+        "functionResponse": {
+          "name": "twitter_actions",
+          "response": {
+            "result": "Twitter Error: Authorization: Tweet needs to be a bit shorter. (186)"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "functionCall": {
+          "name": "twitter_actions",
+          "args": {
+            "text": "The tech stack is undeniable. Sub-second finality and 10k real TPS sets a new standard for the EVM. Parallelized execution is the foundation for the next wave of high-frequency DeFi on @monad. 🟣⚡️ #Monad #EVM\n\nhttps://twitter.com/intern/status/2042610865392791994",
+            "action": "post_tweet"
+          },
+          "id": "otaf4rfi"
+        },
+        "thoughtSignature": "EpkDCpYDAQw51sfdvaXXAXIdXUwT0LCwh1foqqHLyp6L7GlCHnEqsO8zoHZ+PhEaCxxaosAZ+ylKvFiko8I4lTHYpkJKgy4QiFNmn8sStLAHLHz7Rc6D/1/FM/z0GPwV4Jti29x/mlK5/5DKniFw1V9j+VqdD5t2BO9nD3RPQ09YpGk7GUzumrh9uwG89oRFdeGkwJM3H0QW9eCkLZfG+en2adsvPvEG1t1AxjL9Ha8ZKFd4JyTN63RXllSDHjNqFb1mcWnQEL64TSidsVcgolkQCoXNTlxBP0JxEBXeiPTMFksZi05MTHBjyDhXCebTiF8CSOecjFlsABLoBzoRkLsDWlGhPMuGGQN4UyDqhHeP0tapSbC+WF66rJRNiigCRKJYqrK+tMwxLgZ4N/F1MkccfOXeqaq/W5S9DACqLqy+JUjV+N8Xk42CcU/pWL9sBdXsFLwTF30Wq4BXJObOeCXwM6gtlLP6KQP/J+LPRzlDu/9o3eeSVboZSxg4Y/xlnG0MkuRvrPyCcYp7MltQ9muy4oWphV9eo2WDwQ=="
+      }
+    ]
+  },
+  {
+    "role": "function",
+    "parts": [
+      {
+        "functionResponse": {
+          "name": "twitter_actions",
+          "response": {
+            "result": "Tweet posted. ID: 2046510571151872021"
+          }
+        }
+      }
+    ]
+  }
+]
