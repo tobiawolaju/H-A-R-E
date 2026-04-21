@@ -487,19 +487,17 @@ async function retweet(tweetUrlOrId) {
   const tweetId = extractTweetId(tweetUrlOrId);
   if (!tweetId) throw new Error('Invalid tweet link or tweet id.');
 
-  const query = buildMutationQuery('CreateRetweet', 'ojPdsZsimiJrUGLR1sjUtA');
   const response = await withRetry('Twitter retweet', () =>
-    client.rest.graphQL({
-      query,
-      variables: {
-        tweet_id: tweetId,
-        dark_request: false,
-        URIEncoded: function () {
-          return encodeURIComponent(JSON.stringify(this));
-        }
-      },
-      method: 'post'
-    })
+    client.rest.post(
+      'https://x.com/i/api/graphql/ojPdsZsimiJrUGLR1sjUtA/CreateRetweet',
+      {
+        variables: {
+          tweet_id: tweetId,
+          dark_request: false
+        },
+        queryId: 'ojPdsZsimiJrUGLR1sjUtA'
+      }
+    )
   );
   if (!response.data?.create_retweet?.retweet_results?.result && !response.data?.data?.create_retweet?.retweet_results?.result) {
     throw new Error('Failed to retweet.');
@@ -512,18 +510,16 @@ async function unretweet(tweetUrlOrId) {
   const tweetId = extractTweetId(tweetUrlOrId);
   if (!tweetId) throw new Error('Invalid tweet link or tweet id.');
 
-  const query = buildMutationQuery('DeleteRetweet', 'iQtK4dl5hBmXewYZuEOKVw');
   const response = await withRetry('Twitter unretweet', () =>
-    client.rest.graphQL({
-      query,
-      variables: {
-        source_tweet_id: tweetId,
-        URIEncoded: function () {
-          return encodeURIComponent(JSON.stringify(this));
-        }
-      },
-      method: 'post'
-    })
+    client.rest.post(
+      'https://x.com/i/api/graphql/iQtK4dl5hBmXewYZuEOKVw/DeleteRetweet',
+      {
+        variables: {
+          source_tweet_id: tweetId
+        },
+        queryId: 'iQtK4dl5hBmXewYZuEOKVw'
+      }
+    )
   );
   if (!response.data?.delete_retweet?.source_tweet_results?.result && !response.data?.data?.delete_retweet?.source_tweet_results?.result) {
     throw new Error('Failed to unretweet.');
