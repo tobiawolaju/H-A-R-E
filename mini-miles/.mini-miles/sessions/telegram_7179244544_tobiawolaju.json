@@ -1,0 +1,214 @@
+[
+  {
+    "role": "function",
+    "parts": [
+      {
+        "functionResponse": {
+          "name": "discord_ops",
+          "response": {
+            "result": "Failed to DM tobiawolaju: Invalid Form Body\nuser_id: Value \"tobiawolaju\" is not snowflake."
+          }
+        }
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "functionCall": {
+          "name": "discord_ops",
+          "args": {
+            "query": "tobiawolaju",
+            "action": "find_user"
+          },
+          "id": "mkgdfx5w"
+        },
+        "thoughtSignature": "EtAECs0EAQw51sfQKurIeyPpN5/zEp6EKu/UVgAcdC9qSEUSl7csQI11df3Dvw0SvU7uHW/EHCL88feDBPm6wEFPiJisxApiOboNZd0QipVYtOH6OcSkvhZEaPNqR4Cn+077OielYHhBWzRuXBIXHgqQMrXHBlOCeuKSYyxRTtdCCJjJX+jEJjno4eEFOxIAyJLaw9h5DnQdMaM50BcE74dKPaD8+HXexMx2YePgDZAgXwPCJmRO4GBQz9WwUiU/ua71DZGmCMtQSGM0EdzVp5BeJvk0aFi3/NSyn/Y+fyBN5quFWlWOOcX2RmwJ4GVkY2Z/U3qrEOi+EtsgdvHMhSCY43h2643FpCzP+sS7YCZvEmInty+V2RvThGMXf4bn4u9+fTHubfVGLH1Z9WYczafH9LqQdCV9jGb111wHTH6Hy1JmQnD7h/68NS9YLE4E0cHmnwW+MqbvIojMKStnP+HSbwkgp2QdjE2SR0y0Ft4izUHlCmduXrpR7nBo6DOHIi0FSwgbvQ4kOvywzqttx81WpU8h/IEu4L/ArHLIJhmTLUQepz5a5tzx9bhMWXTuA971LM6m40GDME71YfChp7Q1cxLLHChSoS9l+oifakSovpqcO9tEmMjnsmgY7fs0Pvn2Z73yoRk9dMEjDkC4dC/++fSawagpd70GK7+mDAMOqpId1zPB3b1f+WNf3y5Sx4pmwc0jlzkhA29XqRCc7tcfb+aKHzDPjmCGP0iHDpkkRh9QxzjTnnWV7+KACEUHTOtpR5oqfbUEPBYmw5gwpUXwNw=="
+      }
+    ]
+  },
+  {
+    "role": "function",
+    "parts": [
+      {
+        "functionResponse": {
+          "name": "discord_ops",
+          "response": {
+            "result": "Discord Ops Error: Cannot read properties of undefined (reading 'fetch')"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "functionCall": {
+          "name": "twitter_actions",
+          "args": {
+            "action": "get_profile",
+            "username": "tobiawolaju"
+          },
+          "id": "a8k7amc7"
+        },
+        "thoughtSignature": "EtoHCtcHAQw51scA2OgNDUIbNdgoaYdMvAUYouC1lbWRtUlawafVZ2LPNw2TNVr2QjeqUEX3vT0kBNafDza2mmv5zQgtkwfEDG/3MF8yg6uzI4/XjKKah1nlNnkrlmGDnoUk05B2PWdwzKKR/8co3YmetGW4uqIcmhse0QImESWPZkwT8KIumRuM9ppiy1eJ/ar6+dgONkJ1PvLEFTHt3Lh9TGzb6LdjdDEC95rvaR/x857stnmwpF/2HjKJ1MLz3b2Z+LlDwke7epS3uZ3Jwc/ZhuOcxT1y5hb/G51GDyGZkhfHyYPsnpMiwWR0GDLPWx7umu2b+A9bYSE4nJbDejPu6reLdRGWbTFih+C2DHX+KoU0bhsfJLoa15MpEOXUjeX6drwdiVin9sXpjxI/rI+JD6aBIZqpz68TPYsdFKqKf3MHDCeN6fNkhqp39PujkXW6ZWvbris3VOukFjENdA3dTLpSDnfCyb0li/RlxL4/lk4yjT5TpHlRCHwo/L6YAh6nOrKNY4YfWoZiY3KBdYycsCHCauoDywe5Jux2pw6BUxawDWkgjB1lHb5/fVo6V6A/InZV6aNT1q0akreirorkXLIKs/Jil/7bvP/zKGJbmqbrnZePKvroKqmaqcCY3WJhY5dEGiNgpci6vJnkbo1n5eAOjlnYW0RlcIQsXybN90kGD8K9ONLLDTXKnD7SqSJ5xKljws3qegGi/sMn1vOgaCN7ImnISVt8/h5bRif22/9sAc8nhnerCCrbNAxGOzNTVmSnDgYLBUtTk4dJrOwOvKUBo6bO7wou/4Pu1gnVUvaCUhvMq21DqiC0IVR5AlN5Mtr2Lq6A5AunTCRCDG6rrxcAnUZFQ10H2NNIfh72cANnAPha5knMKCZH0E32bkLgE6cAQ9U/+EStuV6HVF4sS4oRBNr7m2Edp5ecMgwTaqRnxHEVPN8DJ/YvVV876iFgVwHzTlDqErALG/eVzWZRGl6Ty03qlKp7Oz2b87I0d8TnyWVteXuXvwuos9IeBDJmpYAyKQZrKUCX6VFczMwN/jZC5zHgCWHFzgxx1nj7TchDFdQK5XEv6BYmA3dhqygYGkG4H8TNfb1XwiOv/sO5x0CdcdghE1/veNZeHZu2CrclxCHioC6vHNZeB2DQtmy1qtVGvuRc2OyDdau2Kf9VyXRdIWxpjQCUJHtJTm1SsjgYiyQeNW78EWlnzvzIPlPO6fomBdRcT1DQekpBSLgNxDO2L0Dl8Lsjh3xNXQZQmAYFkP4SDD+IJ2yHS/2cGnrM2NciSwgPvmuG9/KG6yaexx/HPBxRx2TDBX0="
+      }
+    ]
+  },
+  {
+    "role": "function",
+    "parts": [
+      {
+        "functionResponse": {
+          "name": "twitter_actions",
+          "response": {
+            "result": "{\n  \"id\": \"1484291749275176964\",\n  \"name\": \"Tobi\",\n  \"username\": \"tobiawolaju\",\n  \"description\": \"artist founder @worldofnads\",\n  \"followers\": 3220,\n  \"following\": 2708,\n  \"location\": \"Earth\"\n}"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "functionCall": {
+          "name": "web_search_and_scrape",
+          "args": {
+            "query": "Monad Discord server ID"
+          },
+          "id": "aw6kgpj6"
+        },
+        "thoughtSignature": "ErQECrEEAQw51scnWWZs6IzsGCNbPWdh6E4BAASOJcfm/Gu8RAi3w1Rjfe5TKokJp/DCYdT1ZSaRsl82zX6/YATHK8XptsZL9zVeqFvPpsskS9M+mcYNvQNWyFprZODVtWUWibkQVLOo2O+kLYmhA54AFJPhGPGL8XmQcidUwtSP108iI21MojmWXs7bhMyEdE4I3SWye8Cqsg69d/QGHlCly0Ou6ESS4rMMtETFxsl2WqwabdfXkHQs4kfvKRsN45EVHHDDE1gGCJKLGqgkHwpv6A7vfwESSwbCqz8eNDsc5wfgMvsF67ajl9cAgp+ih71DAagxQEwjj75tqBSAMre1oLKLAfrG+g26YB62yPw5bG+O/orRzlaHUa5ixe3MZX5fNO3TusBRULKfUklTlirCMPNMVEB1y+X/Xfnb5nEZVdgjDWzT4ZKSTG5hnwLLpsiWE6z61/tiiz4TGfdy1JMwGBSjpzptEZxumSip+qMbDussnF6Da0+enuz7RwjyuE9Fq5Zmvxgs6aGCBbfniw2mgzZ6ITQavEzDwSmd6CmJUZmpF4Ae7l8YHUSFVjD6u7VPryliiD2M0LqGOkVIsGTwjfPNPv5t1pAKWKEjkzUcQ2HP1GwOLsS94f47oPZ3X9IiyDA9uHmObYjjbdPSC57AV0JIaXkWYGMY1i8pIIL2ZyJA41xcO9+b3lLbkhcfFYtAjNK3HZGUwunmbKm1UimFMxeGCs/xMeRCMdwJoPjC+mJ7uWKO"
+      }
+    ]
+  },
+  {
+    "role": "function",
+    "parts": [
+      {
+        "functionResponse": {
+          "name": "web_search_and_scrape",
+          "response": {
+            "result": "[\n  {\n    \"title\": \"link to discord:\",\n    \"link\": \"https://x.com/monad/status/1725204611181461942\",\n    \"snippet\": \"Join the Monad Discord Server! discord.com. 9. 16. 81. 7875 · · Explore Trending StoriesGo to HomeSearch XNews.\",\n    \"date\": \"Nov 16, 2023\",\n    \"attributes\": {\n      \"Missing\": \"ID | Show results with:ID\"\n    },\n    \"position\": 1\n  },\n  {\n    \"title\": \"Official Links - Monad Documentation\",\n    \"link\": \"https://docs.monad.xyz/official-links\",\n    \"snippet\": \"​. Developer Community ; DevNads on X · https://x.com/monad_dev ; Developer Discord, https://discord.gg/monaddev ; Research Forum, https://forum.monad.xyz.\",\n    \"attributes\": {\n      \"Missing\": \"ID | Show results with:ID\"\n    },\n    \"position\": 2\n  },\n  {\n    \"title\": \"Full Access, Roles & How It All Works #monad #monadtestnet\",\n    \"link\": \"https://www.youtube.com/watch?v=UBGnjwRmhW4\",\n    \"snippet\": \"... monad #web3. Unlocking Monad Discord: Full Access, Roles & How It All Works #monad #monadtestnet. 1.2K views · 8 months ago ...more. Krypto ...\",\n    \"date\": \"Aug 16, 2025\",\n    \"attributes\": {\n      \"Missing\": \"ID | Show results with:ID\"\n    },\n    \"position\": 3\n  },\n  {\n    \"title\": \"Monad discord is useless. - Reddit\",\n    \"link\": \"https://www.reddit.com/r/Monad/comments/1ng91km/monad_discord_is_useless/\",\n    \"snippet\": \"First of all if you join the discord and have no access you are stuck in a chat channel where people are just talking irrelevant stuffs. When ...\",\n    \"date\": \"Sep 13, 2025\",\n    \"attributes\": {\n      \"Missing\": \"ID | Show results with:ID\"\n    },\n    \"sitelinks\": [\n      {\n        \"title\": \"How to get FA on MONAD Discord?\",\n        \"link\": \"https://www.reddit.com/r/Monad/comments/1lw62zn/how_to_get_fa_on_monad_discord/\"\n      },\n      {\n        \"title\": \"DISCORD DOESN'T WORK, HELP, I CAN'T LIVE WITHOUT IT\",\n        \"link\": \"https://www.reddit.com/r/Monad/comments/1nc1yjx/discord_doesnt_work_help_i_cant_live_without_it/\"\n      }\n    ],\n    \"position\": 4\n  },\n  {\n    \"title\": \"Monad | Join Discord and Get a Role - AirDrop - CoinNess\",\n    \"link\": \"https://coinness.com/en/rewards/airdrop/mission/83\",\n    \"snippet\": \"(1) Finish the verify of the Monad discord server. https://asset.coinness.com/airdrop/mission/0b040a9072e0c1f844a8585775baac0a. (2) Get the \\\"NEWBIES\\\" role.\",\n    \"attributes\": {\n      \"Missing\": \"ID | Show results with:ID\"\n    },\n    \"position\": 5\n  }\n]"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "functionCall": {
+          "name": "web_search_and_scrape",
+          "args": {
+            "query": "Monad Discord server guild ID 1111"
+          },
+          "id": "mkxl3ryp"
+        },
+        "thoughtSignature": "EpoKCpcKAQw51schcv6GRJy/ZqVBS3oy9nTvGKt4TBDC+qJ1S0OdP/WXW9JfsUR9yyN/XkiNYjAGYVIGTtwwPyaQ/rNIaPjrj5aUK0eFDEuS6b54RNvU0hLu7xk3IO/vFRtBisAh2qPjdipsIhVgbfoIa9obUPtOZoFQbQSDnzgXYrfs+3Izto8GNiYjd6xD/hCt6m8qsRBOqfCaUx+qxx06C6IzKNUHemp+qFDbyRIUZS8yz/tU3RsZAiLy9uoi0aA+yHfvNHTtFyqEqvZ2dHdBNr4dmi7KpKufTSQU2XMPWsVO5HujEleA5EgqGVeMKQRGLc62oshzlWl4sYQYOV3pzOQEn7XZF0qlqD8zHCRCoC0eMRxtPJ9NTwzjYegK8K0hxpC20dlnPrEBDM4ZSM3mSDPhAYuk1T+JrwVB1dk0qMvNy1jpl7RkpA/3NCLnfu7S4Tv/YRdgFVjE4HSLyT2fehHVZ3PsBbVeCKjg3qb8jeIxe/5SKqh1obieNWxeTajglYuyRNvmsvsaLWjXQtJ4z7JiHtOFldtuIUeTG9AVZVTcTtwxdhsREFAD8KimtzVTyTJR9cqBflTKVtxCoSOAQEdLxu7WANqvQfRuFhssJLoa0xsQhys+KDt9EfrpwXMUlXzgddprjzGwBk5w45ZoLYG4nbsmkunKdqh+QVdkeEmTE9mHySH21+X3JSHMf1kpMnNuttomYybbwyjQdBLMSqjjwN86vd1v4Ixz32h2jBZOZfElo2ty8xjMtLy6XZXiGQNF7zSLxIzC6/YvQelUYSUoRirkcsSsuZsJei2so1oRwQgiDojx2U2/BepyZiyl94ZB+5Jb5GQvVurGfU8mDNyqYva9h6XA2i9sPlB/kiBV6ABVUAuvPCtJ83iN2c0IB/gaoM5BxKF0mmiPKQt4d4LCJukpsl3R/8TIY8TAYQk3SE0Xb9Qkat8CbAUiU9wb1OK5L1R9gqA7cFyu82WCHbwQHubycSl4rU4839bJ9aFrWIOWSDRVTE3TISMDQ2KCkj+ppeY1X3kNkmdVjp89uOHf86NtBZU+inawL7RZsjZmD0ptWgtX0dg7f/Uikcja8aeZJj9pcxvUYvPbnT5jGapchI9iZzK6yUh2QrSxUtsC+tWN66Kv8XeAl7rr9zzyfW1gld2C6nZnWbIyWRU1+w+6BdV1IlzNhDgvLTnUfUNbUYD5EbuVCP/7U+xCjDqh6tZu0axtDS3Kq/39NDTiJkM50ygVM/j2QxJxp9WhV6iN+9kayhtgAl70e6yVaJ1TGhexBvDxxffvPPQg6nmB1JkOk9WRaOSEBntnIGAgrQZZEjlrAgKNOPTOiagkqDMw+VvSN4HJBr8HEsdKy1lkuqHubPnazCXTrwGe4w3s2e4P8MHg4vlw3zBIwxqC95hG6tKo+E8sMhffbTOS7N/Y0TL2lIPnMh1reDNKm7AfhYITz7/P68cmjAhHSqGvz0Hel7x8u8H8rQcjSDfWhlgLOTXYskCS9XRACjtR7GF6URupbI0T+h3g5a6kZCnRDnGYO9Z750TVB1prlD8Cx1edAESTFFrwUY4BtCe3UxtVer1fUL2IVMOiN+oJLLacx7oBDPyq+8CmEOSjYKmELasKyENjGcIv7tL3UwzNNSs38ZbUv7wj/YPuyApKsEwpZHuJk5hI4hHlpWoeHgz6tXvTmLBASeZ5pnpD+cr5G/y25u4EtP6G+KGFuda2eo1rb4ebj/Na7qjLLocBJw=="
+      }
+    ]
+  },
+  {
+    "role": "function",
+    "parts": [
+      {
+        "functionResponse": {
+          "name": "web_search_and_scrape",
+          "response": {
+            "result": "[\n  {\n    \"title\": \"Weekly General Discussion - April 21, 2025 : r/Monad - Reddit\",\n    \"link\": \"https://www.reddit.com/r/Monad/comments/1k4mrx4/weekly_general_discussion_april_21_2025/\",\n    \"snippet\": \"This is the weekly general discussion on r/Monad. You can use this thread to discuss ideas, suggestions, directions, what you'd like to see more (or less) of, ...\",\n    \"date\": \"Apr 21, 2025\",\n    \"attributes\": {\n      \"Missing\": \"1111 | Show results with:1111\"\n    },\n    \"position\": 1\n  },\n  {\n    \"title\": \"link to discord:\",\n    \"link\": \"https://x.com/monad/status/1725204611181461942\",\n    \"snippet\": \"Join the Monad Discord Server! discord.com. 9. 16. 81. 7875 · · Explore Trending StoriesGo to HomeSearch XNews.\",\n    \"position\": 2\n  },\n  {\n    \"title\": \"Canz - Guild.xyz\",\n    \"link\": \"https://guild.xyz/canz\",\n    \"snippet\": \"Join our discord. 189. Join Guild. Canz OG Role. Confirm and submit verification only for this one if it's currently your highest role on the Monad Discord.\",\n    \"position\": 3\n  },\n  {\n    \"title\": \"Official Links - Monad Documentation\",\n    \"link\": \"https://docs.monad.xyz/official-links\",\n    \"snippet\": \"​. Developer Community ; DevNads on X · https://x.com/monad_dev ; Developer Discord, https://discord.gg/monaddev ; Research Forum, https://forum.monad.xyz.\",\n    \"attributes\": {\n      \"Missing\": \"guild ID 1111\"\n    },\n    \"position\": 4\n  },\n  {\n    \"title\": \"In this level of tonal accord, what becomes available to you as you ...\",\n    \"link\": \"https://www.facebook.com/paul.selig/posts/in-this-level-of-tonal-accord-what-becomes-available-to-you-as-you-allow-it-unde/1442706633889673/\",\n    \"snippet\": \"To understand that the Monad, or the God within you — we will call it the True Self or the Christed Self, the Monad, the Inner Light, the ...\",\n    \"date\": \"Feb 24, 2026\",\n    \"position\": 5\n  }\n]"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "functionCall": {
+          "name": "web_search_and_scrape",
+          "args": {
+            "query": "tobiawolaju discord id"
+          },
+          "id": "j3shvx0s"
+        },
+        "thoughtSignature": "EroICrcIAQw51ses51vG++aFTZ7S5v42903LKaXIFnToaAieN1Z8hnDFykJri2CbF3a3xSH84gE56XpzZlQph7HUR1pRgScchqG3cV+IY527U0USJqd6b0Gjm2tZQkJ/dQ9xyOne3qnN3hOZoRn/XG21SeRwpjizioqcdUrdxWDlARaWifnjI7UHh6E//JFP7iF/z8H/phcg/q8AhFeXIIJtV3nq/4gY3RdpY/12veUha6t/W/U3v1pqHkWdoVKK7horXcnsAmx6bBommRwibaPNWJp8Tv4hjBsSRV5z07+SDA9PBE7AGybicKSNOOl2bExZ3ATbERDc2HD32yBzraHiQXi46enb+dZQNDEQSGYZFSq8F5NxjcqzL45jjz5f4Q/rXwLoEn2QwozQ+t0B4fpQgKKOxK8NZ5G3pJjwI5s7TQeJ+yOPBSCL67VcQ30V1oRd/7bZoqdNojMgo6MjRhYgaA/RE9jgJ0ICh7+gOxiGlJdYsn3AyT7IaByKwMYk93NPgsJeTLofaLKOHL9WsQjA37BxEwozH8kh0B/Y1Wfvdd56KlrJDVasf7bw+zgUefB71lE1GRVxxevd4Zls5hbY4K1X40BvsPotuI8ErVPW0VjBX4C2VwITgmXU8FpnVTKXhnh3OjMaYP4INBUAAZQOo2OhlW0Q6J2vCOz1XJ9DFJQ296MUrjVhu3U9suIgy93WYJATPUNdsSPo8wu75wLlRPpXoS8k128RayIHxylVKRNsqhbER668cwle3r4cZDRHvobGWOB1frSFejd5K9EYgKattkrtWgfh9flFXoLFnB/MPTZC+WyWWiFN4y70APiUGjyYFgHZHxg4mPaKkD9aiycAT4HO3ftyX0gPZ0vFPlwq2UqCqLBzcTvHCE/gVNHRkP966zLSjGRHzx24d7Dlr0ZDo+32JlqQ40H5G/APc1naV7ZwjKGSXbokzQCkO2UoXR1jbQHFtBy0oiiubQ3npiAjsAKhWj7BVcP6ikAs6Ymaerj/7iPzl5IB0YK4a6bKzqOE+V38Y2/tTr+TxD3R0eXtO6oPaLlxSW08OWyUkdaWrBMCf7JwIr3vwH4sPrB2mB0WWMK8KV3zUwPEZkycgR2hG3qF2w1cVXQJr6QBvTnbvcxDaUKUOIAc3St5vHe51rHCTolXESUbnVvfoZWW6SOrUlTPMRLzVXrui1QhNDxqimFY3TiTwIBKp7NdSeWdiJmn0wY0xe2+f121zTYVouY2cyQbWzq/VgEmHweovOarn4L2M0PVi9fJcGwZCYqRPS6TzTCquN+/sSTl/9wxK1MBXmY6CkpoaZ/6iYOrucygcUZM4uDQ0UWmzIAjkp2PKvkNSYSlSDC0NaOJCwk2VDZKiBXpm+U4C3H3avCP0vxp/O/zY/lThkFKQ1/d7oGhoxGCaGr4B5Ls2dzyRVIZQWAbal6P9as9nWE="
+      }
+    ]
+  },
+  {
+    "role": "function",
+    "parts": [
+      {
+        "functionResponse": {
+          "name": "web_search_and_scrape",
+          "response": {
+            "result": "[\n  {\n    \"title\": \"discord.id — Unofficial Discord ID Lookup\",\n    \"link\": \"https://discord.id/\",\n    \"snippet\": \"Lookup Discord IDs in seconds. Enter a Discord user snowflake to fetch profile details via our community-powered API. We are not affiliated with Discord Inc ...\",\n    \"attributes\": {\n      \"Missing\": \"tobiawolaju | Show results with:tobiawolaju\"\n    },\n    \"position\": 1\n  },\n  {\n    \"title\": \"Discord ID Lookup Tool | Find Discord User IDs\",\n    \"link\": \"https://discorder.tools/discord-id-lookup/\",\n    \"snippet\": \"Find Discord user and server IDs easily with our free Discord ID lookup tool. Retrieve and verify Discord IDs quickly for better community management.\",\n    \"position\": 2\n  }\n]"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "functionCall": {
+          "name": "web_search_and_scrape",
+          "args": {
+            "query": "worldofnads discord server"
+          },
+          "id": "7auj82ft"
+        },
+        "thoughtSignature": "EtYCCtMCAQw51sfLQ4JvWbdmAirRFGz0hkK1KnN52+czL9QLYjeHpv1UMpezaw+euQeWBLwdH6KFxqL111FYn3IUQ9cCnVQxAGUZoFv/wxWN0+cY90r5BjAl/f7GfgyVUw5MGcZm6FwgnuYLqwxENtOCrq4HOY76VeRl/mKgoubLWGWBLCDgyZnmnybfqI7EdG3tjT3HR6J1aV1f88CUmBN7xBFsuTd2RJDOL6CFNnAuTQYSZiK2R187Ee3UpxkOdcZLo0jiMLCm5p8PyQtPmbzQFCIYGlx7U7EeGF18j/AJng1PIZiRpAAoP+BP7/uz6i3Tve5pptCxuKqk6MDzbQno+9Hnt1fFf4JLzqbIt2Nm8K47C4jCGmpqWiwBELm1JfLdbTJ5lkpEQPY/DFVcMrRpBIOMWfiBWcpAHbIqJOnaorT7Ld207h0b8K7Vcrq36ZdEpetfD5Vy"
+      }
+    ]
+  },
+  {
+    "role": "function",
+    "parts": [
+      {
+        "functionResponse": {
+          "name": "web_search_and_scrape",
+          "response": {
+            "result": "[\n  {\n    \"title\": \"World of Stands - Discord\",\n    \"link\": \"https://discord.com/invite/worldofstands\",\n    \"snippet\": \"Official server for the Roblox JJBA inspired game \\\"World of Stands\\\" | 126108 members.\",\n    \"attributes\": {\n      \"Missing\": \"worldofnads | Show results with:worldofnads\"\n    },\n    \"position\": 1\n  },\n  {\n    \"title\": \"World - Discord\",\n    \"link\": \"https://discord.com/invite/worldnetwork\",\n    \"snippet\": \"Identity, finance and community for every human. World.org | 85109 members.\",\n    \"attributes\": {\n      \"Missing\": \"worldofnads | Show results with:worldofnads\"\n    },\n    \"position\": 2\n  },\n  {\n    \"title\": \"Discord Servers - Home\",\n    \"link\": \"https://discord.com/servers\",\n    \"snippet\": \"Discord servers help organize conversation into topic-based channels. Discuss that newest game release, share what you're up to, or talk about whatever.\",\n    \"attributes\": {\n      \"Missing\": \"worldofnads | Show results with:worldofnads\"\n    },\n    \"position\": 3\n  },\n  {\n    \"title\": \"Discord Servers - Home\",\n    \"link\": \"https://discord.com/servers?query=youtuber.%20con\",\n    \"snippet\": \"DISCOVER YOUR NEXT FAVORITE SERVER. Find a new space to play games, chill with friends, and hang out. Categories.\",\n    \"attributes\": {\n      \"Missing\": \"worldofnads | Show results with:worldofnads\"\n    },\n    \"position\": 4\n  },\n  {\n    \"title\": \"Entertainment - Discord Servers\",\n    \"link\": \"https://discord.com/servers/entertainment?query=es%5B\",\n    \"snippet\": \"DISCOVER YOUR NEXT FAVORITE SERVER. Find a new space to play games, chill with friends, and hang out. Entertainment.\",\n    \"attributes\": {\n      \"Missing\": \"worldofnads | Show results with:worldofnads\"\n    },\n    \"position\": 5\n  }\n]"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "functionCall": {
+          "name": "twitter_actions",
+          "args": {
+            "query": "tobiawolaju discord",
+            "action": "search"
+          },
+          "id": "u4uh53iz"
+        },
+        "thoughtSignature": "Eo0BCooBAQw51scEirEUEf9vq6hHO+IfTd3C4U+VUwT0cUcq2hmEdaol386HQsJgAphjEanvb+Cwho4Xr7reB1sbM7+T94qgOu8Sci9XYD0en6HsJstdXn1pOi3zkVFx/Sa3NGOVrQoM+C/Ihl0v3wys5I5aMxHcmOjGatzeVPZOYpCckA1dxsP9v4ZOpYdh"
+      }
+    ]
+  },
+  {
+    "role": "function",
+    "parts": [
+      {
+        "functionResponse": {
+          "name": "twitter_actions",
+          "response": {
+            "result": "[\n  {\n    \"id\": \"2026216555244040456\",\n    \"text\": \"Check out @monad.\\nSerious devs. Researchers. Founders.\\nPeople actually building.\\nJoin the Discord. Show up daily. Build in public.\\nYou don’t need to leave your country to find your tribe.\\nYou just need to plug into the right network.m\",\n    \"author\": \"tobiawolaju\",\n    \"createdAt\": \"2026-02-24T08:44:06.000Z\"\n  },\n  {\n    \"id\": \"2026215121773568144\",\n    \"text\": \"If you’re a developer, researcher, or builder…\\nIf you’re new to blockchain or startups…\\nIf you care about solving real user and product problems…\\n\\nMonad is the best place to start.\\n\\nFollow @monad and @monaddev.\\nJoin the developer Discord.\\nExplore the ecosystem at monad_xyz.\",\n    \"author\": \"tobiawolaju\",\n    \"createdAt\": \"2026-02-24T08:38:24.000Z\"\n  },\n  {\n    \"id\": \"1979695135006097580\",\n    \"text\": \"@zen_llama @monad 😢 probably the person behind the account,I will message him, hopefully he replies. You're right tho, just confirmed on discord rn, most of the members (new don't know Salmonad)\",\n    \"author\": \"tobiawolaju\",\n    \"createdAt\": \"2025-10-18T23:44:35.000Z\"\n  },\n  {\n    \"id\": \"1960279264642638327\",\n    \"text\": \"💯 I don't even have full access to the general discord and within my heart,I know that I am a nad and if the whole world is against monad, it's me and monad against the world, I have made so many amazing friends through Monad (the early days on discord when I had full access) my career as gone from 0- 1000 all Thanks to my mentors on monad and before Mainnet, the best thing that can happen to you in monad before Mainnet isn't the roles, it's the network your build ,the progress and growth it all influenced and the hope of a certain better future it as carved. I thank God for the monad community (coming from someone without full access).\",\n    \"author\": \"tobiawolaju\",\n    \"createdAt\": \"2025-08-26T09:52:51.000Z\"\n  },\n  {\n    \"id\": \"1949541458001928605\",\n    \"text\": \"@berzan @0xMinhaj @sirdavi7_ 🥺 thank you so much big bro, 😭 I was still thinking of how to split my time so I can spend more time on monad discord.\",\n    \"author\": \"tobiawolaju\",\n    \"createdAt\": \"2025-07-27T18:44:38.000Z\"\n  },\n  {\n    \"id\": \"1939060359257825326\",\n    \"text\": \"@PavelRetail48 @monad_insiders Follow and trust accounts followed by most of the nads, join the discord, DYOR.\",\n    \"author\": \"tobiawolaju\",\n    \"createdAt\": \"2025-06-28T20:36:30.000Z\"\n  },\n  {\n    \"id\": \"1934723656254673395\",\n    \"text\": \"https://t.co/bi8Ig2UgFN\",\n    \"author\": \"tobiawolaju\",\n    \"createdAt\": \"2025-06-16T21:23:59.000Z\"\n  },\n  {\n    \"id\": \"1892334045259792510\",\n    \"text\": \"@JoguesCrypt @thexking_ 3d artists no too get time for discord\",\n    \"author\": \"tobiawolaju\",\n    \"createdAt\": \"2025-02-19T22:02:48.000Z\"\n  },\n  {\n    \"id\": \"1889831808336011685\",\n    \"text\": \"@tobiawolaju Finally a real trench warrior wants to play \\n\\nhttps://t.co/FwyFlu7EMq\",\n    \"author\": \"SlipSmokes\",\n    \"createdAt\": \"2025-02-13T00:19:49.000Z\"\n  },\n  {\n    \"id\": \"1889831462435954763\",\n    \"text\": \"@SlipSmokes  your discord please\",\n    \"author\": \"tobiawolaju\",\n    \"createdAt\": \"2025-02-13T00:18:26.000Z\"\n  },\n  {\n    \"id\": \"1881731543288434858\",\n    \"text\": \"@NlsNalees @keoneHD Yes https://t.co/Wrgvb08BPn\",\n    \"author\": \"tobiawolaju\",\n    \"createdAt\": \"2025-01-21T15:52:15.000Z\"\n  },\n  {\n    \"id\": \"1879200886318309444\",\n    \"text\": \"@tobiawolaju Done but still no access to event \\n\\nProof of build only\\n\\nDiscord id sgseelan#9762\\n\\nCan you explain what to do?\",\n    \"author\": \"NlsNalees\",\n    \"createdAt\": \"2025-01-14T16:16:19.000Z\"\n  },\n  {\n    \"id\": \"1879199472531673455\",\n    \"text\": \"@NlsNalees Join the server first.... https://t.co/Wrgvb08BPn\",\n    \"author\": \"tobiawolaju\",\n    \"createdAt\": \"2025-01-14T16:10:42.000Z\"\n  },\n  {\n    \"id\": \"1879190971986194568\",\n    \"text\": \"https://t.co/OXkT5oRJBb\\n\\nJoin in if you have some time! &lt;@&amp;1323416556415221901&gt;\",\n    \"author\": \"tobiawolaju\",\n    \"createdAt\": \"2025-01-14T15:36:56.000Z\"\n  },\n  {\n    \"id\": \"1878336372387254715\",\n    \"text\": \"@tobiawolaju @xeverade @zo_mon DM discord username\",\n    \"author\": \"WorldOfNads\",\n    \"createdAt\": \"2025-01-12T07:01:03.000Z\"\n  },\n  {\n    \"id\": \"1875793879951405380\",\n    \"text\": \"https://t.co/7EwcniqVVr https://t.co/er4RqwsJA9\",\n    \"author\": \"tobiawolaju\",\n    \"createdAt\": \"2025-01-05T06:38:06.000Z\"\n  },\n  {\n    \"id\": \"1860630102746243574\",\n    \"text\": \"Lemme go first, most of my friends on X think I'm a nad on discord\",\n    \"author\": \"tobiawolaju\",\n    \"createdAt\": \"2024-11-24T10:22:39.000Z\"\n  }\n]"
+          }
+        }
+      }
+    ]
+  }
+]
