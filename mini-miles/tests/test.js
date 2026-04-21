@@ -188,6 +188,10 @@ async function testTelegram() {
 }
 
 async function testDiscord() {
+  const alphaId = '907025302893523024';
+  const betaId = '907025302893523025';
+  const gammaId = '907025302893523026';
+
   const messages = createCollection([
     {
       author: { username: 'alpha' },
@@ -218,26 +222,26 @@ async function testDiscord() {
 
   const relationshipState = {
     cache: new Map([
-      ['10', 1],
-      ['11', 3],
-      ['12', 4]
+      [alphaId, 1],
+      [betaId, 3],
+      [gammaId, 4]
     ]),
     friendNicknames: new Map([
-      ['10', 'Al']
+      [alphaId, 'Al']
     ]),
     sinceCache: new Map([
-      ['10', new Date('2024-01-01T00:00:00Z')],
-      ['11', new Date('2024-01-02T00:00:00Z')],
-      ['12', new Date('2024-01-03T00:00:00Z')]
+      [alphaId, new Date('2024-01-01T00:00:00Z')],
+      [betaId, new Date('2024-01-02T00:00:00Z')],
+      [gammaId, new Date('2024-01-03T00:00:00Z')]
     ]),
     friendCache: createCollection([
-      ['10', { id: '10', username: 'alpha', globalName: 'Alpha' }]
+      [alphaId, { id: alphaId, username: 'alpha', globalName: 'Alpha' }]
     ].map(([id, user]) => [user, id])),
     incomingCache: createCollection([
-      ['11', { id: '11', username: 'beta', globalName: 'Beta' }]
+      [betaId, { id: betaId, username: 'beta', globalName: 'Beta' }]
     ].map(([id, user]) => [user, id])),
     outgoingCache: createCollection([
-      ['12', { id: '12', username: 'gamma', globalName: 'Gamma' }]
+      [gammaId, { id: gammaId, username: 'gamma', globalName: 'Gamma' }]
     ].map(([id, user]) => [user, id])),
     async fetch() {
       return this;
@@ -260,11 +264,12 @@ async function testDiscord() {
     },
     users: {
       cache: new Map([
-        ['10', { id: '10', username: 'alpha', globalName: 'Alpha' }],
-        ['11', { id: '11', username: 'beta', globalName: 'Beta' }],
-        ['12', { id: '12', username: 'gamma', globalName: 'Gamma' }]
+        [alphaId, { id: alphaId, username: 'alpha', globalName: 'Alpha' }],
+        [betaId, { id: betaId, username: 'beta', globalName: 'Beta' }],
+        [gammaId, { id: gammaId, username: 'gamma', globalName: 'Gamma' }]
       ]),
-      async fetch() {
+      async fetch(id) {
+        if (id) return this.cache.get(id);
         return {
           username: 'alpha',
           async createDM() {
@@ -297,42 +302,42 @@ async function testDiscord() {
           relationships: {
             async get() {
               return [
-                { id: '10', type: 1, nickname: 'Al', since: '2024-01-01T00:00:00Z' },
-                { id: '11', type: 3, nickname: null, since: '2024-01-02T00:00:00Z' },
-                { id: '12', type: 4, nickname: null, since: '2024-01-03T00:00:00Z' }
+                { id: alphaId, type: 1, nickname: 'Al', since: '2024-01-01T00:00:00Z' },
+                { id: betaId, type: 3, nickname: null, since: '2024-01-02T00:00:00Z' },
+                { id: gammaId, type: 4, nickname: null, since: '2024-01-03T00:00:00Z' }
               ];
             },
             async post(payload) {
               relationshipCalls.push({ kind: 'post', payload });
               return undefined;
             },
-            '10': {
+            [alphaId]: {
               async put(payload) {
-                relationshipCalls.push({ kind: 'put', id: '10', payload });
+                relationshipCalls.push({ kind: 'put', id: alphaId, payload });
                 return undefined;
               },
               async delete(payload) {
-                relationshipCalls.push({ kind: 'delete', id: '10', payload });
+                relationshipCalls.push({ kind: 'delete', id: alphaId, payload });
                 return undefined;
               }
             },
-            '11': {
+            [betaId]: {
               async put(payload) {
-                relationshipCalls.push({ kind: 'put', id: '11', payload });
+                relationshipCalls.push({ kind: 'put', id: betaId, payload });
                 return undefined;
               },
               async delete(payload) {
-                relationshipCalls.push({ kind: 'delete', id: '11', payload });
+                relationshipCalls.push({ kind: 'delete', id: betaId, payload });
                 return undefined;
               }
             },
-            '12': {
+            [gammaId]: {
               async put(payload) {
-                relationshipCalls.push({ kind: 'put', id: '12', payload });
+                relationshipCalls.push({ kind: 'put', id: gammaId, payload });
                 return undefined;
               },
               async delete(payload) {
-                relationshipCalls.push({ kind: 'delete', id: '12', payload });
+                relationshipCalls.push({ kind: 'delete', id: gammaId, payload });
                 return undefined;
               }
             }
@@ -352,7 +357,7 @@ async function testDiscord() {
   const summary = await discordActions.analyzeChannel('123', 5);
   assert(summary.totalMessages === 2, 'analyzeChannel returned the wrong count');
 
-  const dmResult = await discordActions.sendDM('123', 'hello');
+  const dmResult = await discordActions.sendDM(alphaId, 'hello');
   assert(dmResult.includes('DM sent') || dmResult.includes('Failed to DM'), 'sendDM returned an unexpected value');
 
   const usernameDmResult = await discordActions.sendDM('@alpha', 'hello');
@@ -367,7 +372,7 @@ async function testDiscord() {
   const users = await discordActions.findUser('guild-1', 'alp');
   assert(Array.isArray(users) && users.length === 1, 'findUser did not return expected results');
 
-  const status = await discordActions.getFriendStatus('@alpha');
+  const status = await discordActions.getFriendStatus(alphaId);
   assert(status.status === 'FRIEND', 'getFriendStatus did not report FRIEND');
 
   const friends = await discordActions.listFriends();
