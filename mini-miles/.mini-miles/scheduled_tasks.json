@@ -1,25 +1,13 @@
 [
   {
-    "id": "task_1776759951446",
-    "label": "Recurring Monad Search and Quote Task",
-    "runAt": "2026-04-21T08:26:51.445Z",
+    "id": "task_1776763661431",
+    "label": "Fix GitHub Credentials for tobiawolaju",
+    "runAt": "2026-04-21T10:27:41.431Z",
     "event": {
       "platform": "discord",
       "channelId": "scheduled",
       "userId": "tobiawolaju",
-      "content": "Search for 'monad' on X, research a relevant tweet, and quote it like a KOL. Then repeat."
-    },
-    "done": true
-  },
-  {
-    "id": "task_1776760791569",
-    "label": "Monad KOL Engagement - Next: intern",
-    "runAt": "2026-04-21T08:44:51.569Z",
-    "event": {
-      "platform": "discord",
-      "channelId": "scheduled",
-      "userId": "tobiawolaju",
-      "content": "Miles, run the Monad KOL engagement task. Next target: intern. Check engaged_tweets.json to avoid duplicates, find a high-value tweet, quote it with insightful commentary, update the log, and schedule the next KOL from monadKOL.csv in 5 minutes."
+      "content": "Your GitHub credentials returned a 'Bad credentials' error. Please update them to enable automated repo management and PRs."
     },
     "done": true
   }
