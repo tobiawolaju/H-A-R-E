@@ -26,7 +26,9 @@ function createCollection(items) {
       ? list.map(([value, key]) => fn(value, key))
       : list.map(fn)),
     filter: (fn) => createCollection(list.filter(fn)),
-    find: (fn) => list.find(fn),
+    find: (fn) => (list.every((item) => Array.isArray(item) && item.length === 2)
+      ? list.find(([value, key]) => fn(value, key))
+      : list.find(fn)),
     values: () => list.values(),
     get size() {
       return list.length;
@@ -386,6 +388,20 @@ async function testDiscord() {
 
   const friendReq = await discordActions.sendFriendRequest('@delta');
   assert(friendReq.includes('Friend request sent'), 'sendFriendRequest did not acknowledge request');
+
+  const accepted = await discordActions.acceptFriendRequest(betaId);
+  assert(accepted.includes('Accepted friend request'), 'acceptFriendRequest did not acknowledge acceptance');
+  assert(
+    relationshipCalls.some(
+      (call) =>
+        call.kind === 'put' &&
+        call.id === betaId &&
+        call.payload &&
+        call.payload.data &&
+        call.payload.data.confirm_stranger_request === true
+    ),
+    'acceptFriendRequest did not call the expected relationship confirmation endpoint'
+  );
 
   const removed = await discordActions.removeRelationship('@alpha');
   assert(removed.includes('Removed relationship') || removed.includes('No relationship'), 'removeRelationship returned unexpected output');

@@ -17,7 +17,7 @@ module.exports = {
       properties: {
         action: {
           type: 'string',
-          enum: ['read_channel', 'analyze_channel', 'send_dm', 'bulk_dm_from_csv', 'find_user', 'friend_status', 'list_friends', 'incoming_requests', 'outgoing_requests', 'send_friend_request', 'remove_relationship'],
+          enum: ['read_channel', 'analyze_channel', 'send_dm', 'bulk_dm_from_csv', 'find_user', 'friend_status', 'list_friends', 'incoming_requests', 'outgoing_requests', 'send_friend_request', 'accept_friend_request', 'remove_relationship'],
           description: 'Discord action to perform'
         },
         channel_id: {
@@ -104,6 +104,9 @@ module.exports = {
         }
         case 'send_friend_request': {
           return await da.sendFriendRequest(target_user);
+        }
+        case 'accept_friend_request': {
+          return await da.acceptFriendRequest(target_user);
         }
         case 'remove_relationship': {
           return await da.removeRelationship(target_user);

@@ -164,6 +164,9 @@ async function sendFriendRequest(identifier) {
     if (existing === RelationshipTypes.FRIEND) {
       return `Already friends with ${resolvedUserId}`;
     }
+    if (existing === RelationshipTypes.PENDING_INCOMING) {
+      return `Friend request already received from ${resolvedUserId}; use acceptFriendRequest instead.`;
+    }
 
     await discord.client.api.users['@me'].relationships[resolvedUserId].put({
       data: {},
@@ -186,6 +189,43 @@ async function sendFriendRequest(identifier) {
   });
 
   return `Friend request sent to @${resolvedUsername}`;
+}
+
+async function acceptFriendRequest(identifier) {
+  const relationships = await refreshRelationships();
+  const resolvedUserId = await resolveUserId(identifier);
+  const resolvedUsername = normalizeUserQuery(identifier);
+
+  if (resolvedUserId) {
+    const existing = relationships.cache.get(resolvedUserId);
+    if (existing === RelationshipTypes.FRIEND) {
+      return `Already friends with ${resolvedUserId}`;
+    }
+    if (existing !== RelationshipTypes.PENDING_INCOMING) {
+      return `No incoming friend request found for ${resolvedUserId}`;
+    }
+
+    await discord.client.api.users['@me'].relationships[resolvedUserId].put({
+      data: { confirm_stranger_request: true },
+      DiscordContext: { location: 'Friends' }
+    });
+    return `Accepted friend request from ${resolvedUserId}`;
+  }
+
+  if (!resolvedUsername) {
+    return 'Failed to resolve Discord user ID or username for accepting friend request';
+  }
+
+  const target = relationships.incomingCache.find((user) => (user?.username || '').toLowerCase() === resolvedUsername.toLowerCase());
+  if (!target?.id) {
+    return `No incoming friend request found for @${resolvedUsername}`;
+  }
+
+  await discord.client.api.users['@me'].relationships[target.id].put({
+    data: { confirm_stranger_request: true },
+    DiscordContext: { location: 'Friends' }
+  });
+  return `Accepted friend request from @${resolvedUsername}`;
 }
 
 async function removeRelationship(identifier) {
@@ -254,5 +294,6 @@ module.exports = {
   listOutgoingRequests,
   getFriendStatus,
   sendFriendRequest,
+  acceptFriendRequest,
   removeRelationship
 };

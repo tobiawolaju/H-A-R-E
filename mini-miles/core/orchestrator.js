@@ -105,6 +105,7 @@ class Orchestrator {
       '- `!outgoing` List outgoing friend requests',
       '- `!friendstatus <user>` Check friendship status with a user',
       '- `!friendreq <user>` Send a friend request',
+      '- `!acceptfriend <user>` Accept an incoming friend request',
       '- `!unfriend <user>` Remove a friend or cancel a pending request',
       '- `!reply <tweet link> <text>` Reply to a tweet',
       '- `!comment <tweet link> <text>` Alias for `!reply`',
@@ -124,6 +125,7 @@ class Orchestrator {
       '- `!outgoing`',
       '- `!friendstatus @someuser`',
       '- `!friendreq @someuser`',
+      '- `!acceptfriend @someuser`',
       '- `!unfriend @someuser`',
       '- `Search Twitter for I follow back`',
       '- `Fetch my GitHub profile and latest repo activity`',
@@ -253,6 +255,14 @@ class Orchestrator {
         await reply(await discordActions.sendFriendRequest(trimmed));
         return true;
       }
+      case 'acceptfriend': {
+        if (!trimmed) {
+          await reply('Usage: `!acceptfriend <user id | @username | mention>`');
+          return true;
+        }
+        await reply(await discordActions.acceptFriendRequest(trimmed));
+        return true;
+      }
       case 'unfriend': {
         if (!trimmed) {
           await reply('Usage: `!unfriend <user id | @username | mention>`');
@@ -292,7 +302,7 @@ class Orchestrator {
       return this._handleTweetCommand(trimmed.slice('!tweet'.length), reply, userId);
     }
 
-    const relationshipMatch = trimmed.match(/^!(friends|incoming|outgoing|friendstatus|friendreq|unfriend)\s*([\s\S]*)$/i);
+    const relationshipMatch = trimmed.match(/^!(friends|incoming|outgoing|friendstatus|friendreq|acceptfriend|unfriend)\s*([\s\S]*)$/i);
     if (relationshipMatch) {
       if (!isMaster) {
         core(`Ignoring ${relationshipMatch[1]} from ${userId} on ${platform} (Not Master)`);
