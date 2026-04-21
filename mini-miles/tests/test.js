@@ -22,7 +22,9 @@ const results = [];
 function createCollection(items) {
   const list = [...items];
   return {
-    map: (fn) => list.map(fn),
+    map: (fn) => (list.every((item) => Array.isArray(item) && item.length === 2)
+      ? list.map(([value, key]) => fn(value, key))
+      : list.map(fn)),
     filter: (fn) => createCollection(list.filter(fn)),
     find: (fn) => list.find(fn),
     values: () => list.values(),
@@ -303,6 +305,36 @@ async function testDiscord() {
             async post(payload) {
               relationshipCalls.push({ kind: 'post', payload });
               return undefined;
+            },
+            '10': {
+              async put(payload) {
+                relationshipCalls.push({ kind: 'put', id: '10', payload });
+                return undefined;
+              },
+              async delete(payload) {
+                relationshipCalls.push({ kind: 'delete', id: '10', payload });
+                return undefined;
+              }
+            },
+            '11': {
+              async put(payload) {
+                relationshipCalls.push({ kind: 'put', id: '11', payload });
+                return undefined;
+              },
+              async delete(payload) {
+                relationshipCalls.push({ kind: 'delete', id: '11', payload });
+                return undefined;
+              }
+            },
+            '12': {
+              async put(payload) {
+                relationshipCalls.push({ kind: 'put', id: '12', payload });
+                return undefined;
+              },
+              async delete(payload) {
+                relationshipCalls.push({ kind: 'delete', id: '12', payload });
+                return undefined;
+              }
             }
           },
           async delete() {
