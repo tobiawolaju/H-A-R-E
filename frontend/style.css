@@ -3,9 +3,9 @@
 */
 
 :root {
-    --bg-color: #000000;
-    --text-primary: #ffffff;
-    --text-secondary: #aaaaaa;
+    --bg-color: #f7f7f4;
+    --text-primary: #111111;
+    --text-secondary: #5f5f5f;
     --gap: 16px;
     --border-radius: 0px;
 }
@@ -54,7 +54,7 @@ body {
 }
 
 .tile:hover {
-    outline: 2px solid #ffffff;
+    outline: 2px solid #111111;
     z-index: 10;
 }
 
@@ -118,20 +118,21 @@ body {
     background-image: url('miles.jpg');
     background-size: cover;
     background-position: center;
-    filter: brightness(0.6) saturate(1.2);
+    filter: brightness(0.75) saturate(1.1);
     transition: transform 0.8s ease, filter 0.5s ease;
     z-index: 0;
 }
 
 .hero-tile:hover .hero-bg {
-    filter: brightness(0.4) saturate(1.4);
+    filter: brightness(0.68) saturate(1.2);
 }
 
 .hero-content {
     flex-direction: row;
     justify-content: space-between;
     align-items: flex-end;
-    background: rgba(0, 0, 0, 0.7);
+    background: rgba(255, 255, 255, 0.78);
+    color: var(--text-primary);
 }
 
 .hero-info {
@@ -197,8 +198,8 @@ body {
 .status-badge {
     display: inline-flex;
     align-items: center;
-    background: #ffffff;
-    color: #000000;
+    background: #111111;
+    color: #ffffff;
     padding: 0.4rem 0.8rem;
     border-radius: 0;
     font-size: 0.8rem;
@@ -244,8 +245,8 @@ body {
 }
 
 .highlight-tag {
-    background: #ffffff;
-    color: #000000;
+    background: #111111;
+    color: #ffffff;
     padding: 4px 10px;
     border-radius: 0;
     font-size: 0.8rem;
@@ -310,8 +311,8 @@ body {
 }
 
 .repo-card {
-    background: #1a1a1a;
-    border: 1px solid #333333;
+    background: #f0f0ed;
+    border: 1px solid #dddddd;
     flex: 1;
     padding: 18px;
     border-radius: 0;
@@ -322,8 +323,8 @@ body {
 }
 
 .repo-card:hover {
-    background: #333333;
-    border-color: #ffffff;
+    background: #e8e8e4;
+    border-color: #111111;
 }
 
 .repo-name {
@@ -369,9 +370,9 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #ffffff;
+    background: #f2f2ef;
     border: none;
-    color: #000000;
+    color: #111111;
     text-decoration: none;
     min-height: 56px;
     padding: 12px;
@@ -382,13 +383,13 @@ body {
 }
 
 .social-btn:hover {
-    background: #cccccc;
+    background: #e4e4df;
 }
 
 .unified-handle {
     margin-top: auto;
     font-size: 0.85rem;
-    color: #ff007f; /* Pink */
+    color: #b0005a;
     font-weight: 800;
     text-align: center;
     letter-spacing: 0.5px;
