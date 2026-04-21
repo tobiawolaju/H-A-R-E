@@ -1,7 +1,7 @@
 const llm = require('../utils/llm');
 const memory = require('./memory');
 const config = require('../config');
-const { core, log, error } = require('../utils/logger');
+const { core, error } = require('../utils/logger');
 const fs = require('fs-extra');
 const path = require('path');
 
@@ -10,11 +10,10 @@ const path = require('path');
  * Gemini SDK throws if the first entry is role 'model' or 'function'.
  * This strips any leading non-user entries caused by mid-turn crashes.
  */
-function _sanitizeHistory(history) {
+function sanitizeHistory(history) {
   if (!Array.isArray(history) || history.length === 0) return [];
-  // Find the first 'user' entry
-  const firstUserIdx = history.findIndex(h => h.role === 'user');
-  if (firstUserIdx === -1) return []; // No user turn at all - reset
+  const firstUserIdx = history.findIndex((entry) => entry.role === 'user');
+  if (firstUserIdx === -1) return [];
   return history.slice(firstUserIdx);
 }
 
@@ -23,85 +22,211 @@ class Orchestrator {
     this.skills = new Map();
     this._loadSkills();
 
-    // Wire up scheduler after skills loaded (lazy)
     setImmediate(() => {
       try {
         const sched = require('../tools/scheduler');
         sched.setOrchestrator(this);
-      } catch (e) { /* scheduler optional */ }
+      } catch (e) {
+        // Scheduler is optional.
+      }
     });
+  }
+
+  _isMasterUser(userId) {
+    return (userId || '').toLowerCase() === (config.MASTER_USER_ID || 'tobiawolaju').toLowerCase();
+  }
+
+  _getTwitterSkill() {
+    return this.skills.get('twitter_actions');
+  }
+
+  _getSkillGroups() {
+    return [
+      {
+        title: 'Social / Messaging',
+        names: ['discord-ops', 'telegram-ops', 'twitter_actions']
+      },
+      {
+        title: 'Research / Web',
+        names: ['github', 'scraper']
+      },
+      {
+        title: 'Media / Files',
+        names: ['file-manager', 'video_ops']
+      },
+      {
+        title: 'Monad / Hackathon',
+        names: ['monad_ops', 'hackathon']
+      },
+      {
+        title: 'Automation / Scheduling',
+        names: ['scheduler-ops']
+      }
+    ];
+  }
+
+  _formatSkillLine(name, skill) {
+    const def = skill.definition;
+    const actions = def.parameters?.properties?.action?.enum;
+    const actionText = Array.isArray(actions) && actions.length > 0 ? ` Actions: ${actions.join(', ')}` : '';
+    return `- \`${name}\`: ${def.description}${actionText}`;
+  }
+
+  _formatSkillGroup(group) {
+    const present = group.names.filter((name) => this.skills.has(name));
+    if (present.length === 0) return null;
+    return `- ${group.title}: ${present.map((name) => `\`${name}\``).join(', ')}`;
+  }
+
+  _getHelpMessage() {
+    const lines = [
+      'Mini-Miles Commands & Tools',
+      '',
+      'Core commands',
+      '- `!help` Show this help message',
+      '- `!tweet your text here` Post a tweet immediately',
+      '- `tweet: your text here` Post a tweet immediately',
+      '',
+      'Examples',
+      '- `!tweet building live bot tooling today`',
+      '- `tweet: shipping the new command surface`',
+      '- `Search Twitter for I follow back`',
+      '- `Fetch my GitHub profile and latest repo activity`',
+      '',
+      'Bot rules',
+      `- Twitter live commands are limited to @${config.TWITTER_MASTER_USERNAME || 'tobiawolaju'}`,
+      '- Discord and Telegram are the primary command surfaces',
+      '- Twitter mentions can still route into the agent, but `!tweet` and `tweet:` are the deterministic post paths',
+      '- Natural-language requests can still route through the LLM and loaded skills',
+      '- Background heartbeat keeps Discord presence and Spotify status updated',
+      '',
+      'Skill groups'
+    ];
+
+    for (const group of this._getSkillGroups()) {
+      const formatted = this._formatSkillGroup(group);
+      if (formatted) lines.push(formatted);
+    }
+
+    lines.push('', 'Loaded skills');
+
+    for (const [name, skill] of this.skills) {
+      lines.push(this._formatSkillLine(name, skill));
+    }
+
+    lines.push(
+      '',
+      'Live prompts',
+      '- `@bot !tweet status update` on Twitter',
+      '- `search Twitter for I follow back`',
+      '- `get profile for tobiawolaju`',
+      '- `show me my posts timeline`'
+    );
+
+    return lines.join('\n');
+  }
+
+  async _handleTweetCommand(text, reply, userId) {
+    const cleanText = (text || '').trim();
+    if (!cleanText) {
+      await reply('Usage: `!tweet your text here` or `tweet: your text here`');
+      return true;
+    }
+
+    const twitterSkill = this._getTwitterSkill();
+    if (!twitterSkill) {
+      await reply('Twitter posting is unavailable because `twitter_actions` is not loaded.');
+      return true;
+    }
+
+    const result = await twitterSkill.execute(
+      { action: 'post_tweet', text: cleanText },
+      { userId, masterId: config.MASTER_USER_ID }
+    );
+    await reply(result);
+    return true;
+  }
+
+  async _handleBangCommand(event) {
+    const { platform, userId, content, reply } = event;
+    const trimmed = content.trim();
+    const lower = trimmed.toLowerCase();
+    const isMaster = this._isMasterUser(userId);
+    const isCommandPlatform = platform === 'discord' || platform === 'telegram' || platform === 'twitter';
+
+    if (lower === '!help') {
+      if (!isMaster || !isCommandPlatform) {
+        core(`Ignoring !help from ${userId} on ${platform} (Not Master or Restricted Platform)`);
+        return true;
+      }
+
+      await reply(this._getHelpMessage());
+      return true;
+    }
+
+    if (lower.startsWith('!tweet')) {
+      if (!isMaster) {
+        core(`Ignoring !tweet from ${userId} on ${platform} (Not Master)`);
+        return true;
+      }
+
+      return this._handleTweetCommand(trimmed.slice('!tweet'.length), reply, userId);
+    }
+
+    return false;
+  }
+
+  async _handleInlineTweetCommand(event) {
+    const { userId, content, reply } = event;
+    if (!this._isMasterUser(userId)) return false;
+
+    const match = content.trim().match(/^tweet:\s*([\s\S]+)$/i);
+    if (!match) return false;
+
+    return this._handleTweetCommand(match[1], reply, userId);
   }
 
   async _loadSkills() {
     const skillsPath = path.resolve(__dirname, '../skills');
     const files = await fs.readdir(skillsPath);
     for (const file of files) {
-      if (file.endsWith('.js')) {
-        try {
-          const skill = require(path.join(skillsPath, file));
-          if (skill.definition && skill.execute) {
-            this.skills.set(skill.definition.name, skill);
-            core(`Loaded skill: ${skill.definition.name}`);
-          }
-        } catch (err) {
-          error(`Failed to load skill ${file}:`, err.message);
+      if (!file.endsWith('.js')) continue;
+
+      try {
+        const skill = require(path.join(skillsPath, file));
+        if (skill.definition && skill.execute) {
+          this.skills.set(skill.definition.name, skill);
+          core(`Loaded skill: ${skill.definition.name}`);
         }
+      } catch (err) {
+        error(`Failed to load skill ${file}:`, err.message);
       }
     }
   }
 
   getToolDefinitions() {
-    return Array.from(this.skills.values()).map(s => s.definition);
+    return Array.from(this.skills.values()).map((skill) => skill.definition);
   }
 
   async handleEvent(event) {
     const { platform, channelId, userId, content, reply, startTyping } = event;
     const sessionKey = memory.getSessionKey(platform, channelId, userId);
 
-    // Start typing immediately to show we are thinking
     if (typeof startTyping === 'function') startTyping();
 
     core(`Handling event from ${userId} on ${platform}`);
 
-    // ⚡ Handle Hardcoded Commands (!)
     if (content.trim().startsWith('!')) {
-      const isMaster = (userId || "").toLowerCase() === (config.MASTER_USER_ID || "tobiawolaju").toLowerCase();
-      const isCommandPlatform = platform === 'discord' || platform === 'telegram';
-
-      if (content.trim().toLowerCase() === '!help') {
-        // Only allow master on Discord/Telegram to see help
-        if (!isMaster || !isCommandPlatform) {
-          core(`Ignoring !help from ${userId} on ${platform} (Not Master or Restricted Platform)`);
-          return;
-        }
-
-        let helpMsg = '🤖 **Mini-Miles Commands & Tools**\n\n';
-        helpMsg += '`!help` - List all available tools and commands\n\n';
-        helpMsg += '--- **Available Tools (Skills)** ---\n';
-
-        for (const [name, skill] of this.skills) {
-          const def = skill.definition;
-          helpMsg += `\n🛠 **${def.name}**\n`;
-          helpMsg += `${def.description}\n`;
-          
-          if (def.parameters && def.parameters.properties) {
-            const props = def.parameters.properties;
-            if (props.action && props.action.enum) {
-              helpMsg += `*Actions: ${props.action.enum.join(', ')}*\n`;
-            }
-          }
-        }
-
-        await reply(helpMsg);
-        return;
-      }
-      
-      // Handle other potential ! commands here if needed
+      const handled = await this._handleBangCommand(event);
+      if (handled) return;
     }
+
+    const inlineTweetHandled = await this._handleInlineTweetCommand(event);
+    if (inlineTweetHandled) return;
 
     try {
       let history = await memory.getHistory(sessionKey);
-      history = _sanitizeHistory(history); // Ensure history starts with 'user'
+      history = sanitizeHistory(history);
       history.push({ role: 'user', parts: [{ text: content }] });
 
       let iterations = 0;
@@ -120,9 +245,12 @@ class Orchestrator {
         }
 
         if (response.toolCalls && response.toolCalls.length > 0) {
-          core(`Agent requested tools (parallel×${response.toolCalls.length}): ${response.toolCalls.map(tc => tc.name).join(', ')}`);
+          core(
+            `Agent requested tools (parallel x${response.toolCalls.length}): ${response.toolCalls
+              .map((toolCall) => toolCall.name)
+              .join(', ')}`
+          );
 
-          // ⚡ PARALLEL execution — all tool calls fire simultaneously
           const toolResults = await Promise.all(
             response.toolCalls.map(async (call) => {
               const skill = this.skills.get(call.name);
@@ -135,16 +263,14 @@ class Orchestrator {
             })
           );
 
-          // Push all results back into history
           for (const { name, result } of toolResults) {
             history.push(llm.formatToolResult(name, result));
           }
 
           iterations++;
-          continue; // Loop back to LLM with all tool results
+          continue;
         }
 
-        // No more tool calls — we're done
         break;
       }
 
@@ -153,8 +279,8 @@ class Orchestrator {
         await reply(lastText);
       }
     } catch (err) {
-      error(`Orchestrator error:`, err.stack);
-      await reply(`⚠️ Error: ${err.message}`);
+      error('Orchestrator error:', err.stack);
+      await reply(`Error: ${err.message}`);
     }
   }
 }

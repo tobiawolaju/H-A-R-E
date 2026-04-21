@@ -1,5 +1,14 @@
-const { Client } = require('./libs/twitter-selfbot/dist');
+const twitter = require('./tools/twitter');
 const config = require('./config');
+
+async function runStep(title, fn) {
+  try {
+    console.log(`\n--- ${title} ---`);
+    await fn();
+  } catch (err) {
+    console.error(`${title} failed:`, err.message);
+  }
+}
 
 async function test() {
   if (!config.TWITTER_AUTH_TOKEN) {
@@ -7,37 +16,51 @@ async function test() {
     process.exit(1);
   }
 
-  process.env.auth_token = config.TWITTER_AUTH_TOKEN;
-  const client = new Client();
-  
-  client.on('ready', async () => {
-    console.log('✅ Twitter Selfbot logged in.');
-    
-    try {
-        console.log('--- Testing Profile Fetch (@elonmusk) ---');
-        const profile = await client.profiles.fetch({ username: 'elonmusk' });
-        console.log('✅ Profile fetch success:', profile.name);
-    } catch(err) {
-        console.error('❌ Profile fetch failed:', err.message);
-        if (err.response?.data) console.error('Data:', err.response.data);
-    }
-    
-    try {
-        console.log('\n--- Testing Post Tweet ---');
-        const res = await client.tweets.create('Test tweet from mini-miles! ' + Date.now());
-        console.log('✅ Post tweet success:', JSON.stringify(res).substring(0, 200) + '...');
-    } catch(err) {
-        console.error('❌ Post tweet failed:', err.message);
-        if (err.response?.data) console.error('Data:', err.response.data);
-    }
+  try {
+    await twitter.init();
+    console.log('Twitter toolchain initialized.');
+
+    await runStep('Testing Search Tweets ("I follow back")', async () => {
+      const results = await twitter.searchTweets('I follow back');
+      console.log('Search success. Result count:', results.length);
+      console.log('First result:', results[0] || 'No results');
+    });
+
+    await runStep('Testing Profile Fetch (@tobiawolaju)', async () => {
+      const profile = await twitter.getProfile('tobiawolaju');
+      console.log('Profile fetch success:', profile);
+    });
+
+    await runStep('Testing Timeline Fetch (@tobiawolaju, posts)', async () => {
+      const timeline = await twitter.getTimeline('posts', 'tobiawolaju');
+      console.log('Timeline fetch success. Result count:', timeline.length);
+      console.log('First item:', timeline[0] || 'No timeline items');
+    });
+
+    await runStep('Testing Timeline Fetch (@tobiawolaju, media)', async () => {
+      const timeline = await twitter.getTimeline('media', 'tobiawolaju');
+      console.log('Timeline fetch success. Result count:', timeline.length);
+      console.log('First item:', timeline[0] || 'No timeline items');
+    });
+
+    await runStep('Testing Timeline Fetch (@tobiawolaju, replies)', async () => {
+      const timeline = await twitter.getTimeline('replies', 'tobiawolaju');
+      console.log('Timeline fetch success. Result count:', timeline.length);
+      console.log('First item:', timeline[0] || 'No timeline items');
+    });
+
+    /*
+    await runStep('Testing Post Tweet', async () => {
+      const result = await twitter.postTweet(`Test tweet from mini-miles ${Date.now()}`);
+      console.log('Post tweet success:', result);
+    });
+    */
 
     process.exit(0);
-  });
-
-  client.on('error', (err) => {
-    console.error('Client Error:', err.message);
+  } catch (err) {
+    console.error('Twitter test setup failed:', err.message);
     process.exit(1);
-  });
+  }
 }
 
 test();
