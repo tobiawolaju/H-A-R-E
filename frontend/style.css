@@ -359,6 +359,12 @@ body {
     gap: 10px;
 }
 
+.social-links-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+}
+
 .social-btn {
     display: flex;
     align-items: center;
@@ -367,15 +373,21 @@ body {
     border: none;
     color: #000000;
     text-decoration: none;
-    padding: 10px;
+    min-height: 56px;
+    padding: 12px;
     border-radius: 0;
     font-weight: 700;
     transition: background-color 0.2s;
-    font-size: 0.9rem;
+    font-size: 1.4rem;
 }
 
 .social-btn:hover {
     background: #cccccc;
+}
+
+.social-btn i {
+    font-size: 1.35rem;
+    line-height: 1;
 }
 
 .unified-handle {
@@ -386,6 +398,18 @@ body {
     text-align: center;
     letter-spacing: 0.5px;
     padding-top: 10px;
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
 }
 
 /* Animations */
@@ -454,6 +478,10 @@ body {
     .repo-card {
         padding: 12px;
     }
+
+    .social-links-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
 }
 
 /* Specific Small Screen Mobile */
@@ -473,5 +501,9 @@ body {
 
     .hero-tile {
         min-height: 300px;
+    }
+
+    .social-links-grid {
+        grid-template-columns: 1fr;
     }
 }
