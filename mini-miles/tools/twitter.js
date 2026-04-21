@@ -487,26 +487,24 @@ async function retweet(tweetUrlOrId) {
   const tweetId = extractTweetId(tweetUrlOrId);
   if (!tweetId) throw new Error('Invalid tweet link or tweet id.');
 
+  const query = buildMutationQuery('CreateRetweet', 'ojPdsZsimiJrUGLR1sjUtA');
   const response = await withRetry('Twitter retweet', () =>
-    client.rest.post(
-      `https://api.x.com/1.1/statuses/retweet/${tweetId}.json`,
-      {},
-      {
-        'content-type': 'application/json'
-      }
-    )
+    client.rest.graphQL({
+      query,
+      variables: {
+        tweet_id: tweetId,
+        dark_request: false,
+        URIEncoded: function () {
+          return encodeURIComponent(JSON.stringify(this));
+        }
+      },
+      method: 'post'
+    })
   );
-  if (response.status >= 400) {
+  if (!response.data?.create_retweet?.retweet_results?.result && !response.data?.data?.create_retweet?.retweet_results?.result) {
     throw new Error('Failed to retweet.');
   }
-  const retweetId =
-    response.data?.current_user_retweet?.id_str ||
-    response.data?.current_user_retweet?.id ||
-    response.data?.retweeted_status?.current_user_retweet?.id_str ||
-    response.data?.retweeted_status?.current_user_retweet?.id ||
-    null;
-
-  return retweetId ? `Tweet reposted. Retweet ID: ${retweetId}` : 'Tweet reposted.';
+  return 'Tweet reposted.';
 }
 
 async function unretweet(tweetUrlOrId) {
@@ -514,29 +512,20 @@ async function unretweet(tweetUrlOrId) {
   const tweetId = extractTweetId(tweetUrlOrId);
   if (!tweetId) throw new Error('Invalid tweet link or tweet id.');
 
-  const tweet = await withRetry('Twitter lookup retweet id', () =>
-    client.rest.get(`https://api.x.com/1.1/statuses/show.json?id=${tweetId}&include_my_retweet=true`)
-  );
-  const retweetId =
-    tweet.data?.current_user_retweet?.id_str ||
-    tweet.data?.current_user_retweet?.id ||
-    tweet.data?.retweeted_status?.current_user_retweet?.id_str ||
-    tweet.data?.retweeted_status?.current_user_retweet?.id;
-
-  if (!retweetId) {
-    throw new Error('No existing retweet found for this tweet.');
-  }
-
+  const query = buildMutationQuery('DeleteRetweet', 'iQtK4dl5hBmXewYZuEOKVw');
   const response = await withRetry('Twitter unretweet', () =>
-    client.rest.post(
-      `https://api.x.com/1.1/statuses/unretweet/${retweetId}.json`,
-      {},
-      {
-        'content-type': 'application/json'
-      }
-    )
+    client.rest.graphQL({
+      query,
+      variables: {
+        source_tweet_id: tweetId,
+        URIEncoded: function () {
+          return encodeURIComponent(JSON.stringify(this));
+        }
+      },
+      method: 'post'
+    })
   );
-  if (response.status >= 400) {
+  if (!response.data?.delete_retweet?.source_tweet_results?.result && !response.data?.data?.delete_retweet?.source_tweet_results?.result) {
     throw new Error('Failed to unretweet.');
   }
   return 'Tweet repost removed.';
