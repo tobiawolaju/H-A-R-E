@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "test": "node tests/test.js",
+    "test:twitter": "node tests/test-twitter.js"
   },
   "dependencies": {
     "@google/generative-ai": "latest",

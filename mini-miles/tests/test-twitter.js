@@ -1,5 +1,5 @@
-const twitter = require('./tools/twitter');
-const config = require('./config');
+const twitter = require('../tools/twitter');
+const config = require('../config');
 
 async function runStep(title, fn) {
   try {
@@ -61,6 +61,16 @@ async function test() {
       console.log('Unlike success:', result);
     });
 
+    await runStep('Testing Retweet Tweet (tweet link)', async () => {
+      const result = await twitter.retweet(tweetLink);
+      console.log('Retweet success:', result);
+    });
+
+    await runStep('Testing Unretweet Tweet (tweet link)', async () => {
+      const result = await twitter.unretweet(tweetLink);
+      console.log('Unretweet success:', result);
+    });
+
     await runStep('Testing Reply Tweet (tweet link)', async () => {
       const result = await twitter.replyToTweet(tweetLink, `Test reply from mini-miles (${new Date().toISOString()})`);
       console.log('Reply success:', result);
@@ -75,17 +85,6 @@ async function test() {
     // await runStep('Testing Post Tweet', async () => {
     //   const result = await twitter.postTweet(`Gmonad to those that gm back`);
     //   console.log('Post tweet success:', result);
-    // });
-
-    // Retweet/unretweet are still available in the wrapper, but they are not part
-    // of the default smoke path because X has been inconsistent on those routes.
-    // await runStep('Testing Retweet Tweet (tweet link)', async () => {
-    //   const result = await twitter.retweet(tweetLink);
-    //   console.log('Retweet success:', result);
-    // });
-    // await runStep('Testing Unretweet Tweet (tweet link)', async () => {
-    //   const result = await twitter.unretweet(tweetLink);
-    //   console.log('Unretweet success:', result);
     // });
 
 
