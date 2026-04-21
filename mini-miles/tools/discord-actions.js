@@ -6,6 +6,44 @@
 
 const discord = require('../gateways/discord');
 
+function normalizeUserQuery(input) {
+  return String(input || '').trim().replace(/^@/, '');
+}
+
+function extractMentionId(input) {
+  const match = String(input || '').trim().match(/^<@!?(\d{17,20})>$/);
+  return match ? match[1] : null;
+}
+
+async function resolveUserId(identifier) {
+  const directId = extractMentionId(identifier) || (String(identifier || '').trim().match(/^\d{17,20}$/)?.[0] || null);
+  if (directId) return directId;
+
+  const query = normalizeUserQuery(identifier).toLowerCase();
+  if (!query) return null;
+
+  const guilds = Array.from(discord.client.guilds.cache.values());
+  for (const guild of guilds) {
+    try {
+      await guild.members.fetch();
+    } catch {
+      // Ignore guild fetch failures and keep searching the rest.
+    }
+
+    const member = guild.members.cache.find((m) => {
+      const username = (m.user.username || '').toLowerCase();
+      const displayName = (m.displayName || m.nickname || '').toLowerCase();
+      return username === query || displayName === query;
+    });
+
+    if (member) {
+      return member.user.id;
+    }
+  }
+
+  return null;
+}
+
 /**
  * Read the last N messages from a channel by ID.
  */
@@ -48,7 +86,12 @@ async function analyzeChannel(channelId, limit = 200) {
  */
 async function sendDM(userId, message) {
   try {
-    const user = await discord.client.users.fetch(userId);
+    const resolvedUserId = await resolveUserId(userId);
+    if (!resolvedUserId) {
+      return `Failed to resolve Discord user ID from ${userId}`;
+    }
+
+    const user = await discord.client.users.fetch(resolvedUserId);
     const dm = await user.createDM();
     await dm.send(message);
     return `DM sent to ${user.username}`;
@@ -93,4 +136,4 @@ async function findUser(guildId, query) {
   }));
 }
 
-module.exports = { readChannel, analyzeChannel, sendDM, bulkDM, findUser };
+module.exports = { readChannel, analyzeChannel, sendDM, bulkDM, findUser, resolveUserId };

@@ -261,6 +261,12 @@ async function testDiscord() {
   const dmResult = await discordActions.sendDM('123', 'hello');
   assert(dmResult.includes('DM sent') || dmResult.includes('Failed to DM'), 'sendDM returned an unexpected value');
 
+  const usernameDmResult = await discordActions.sendDM('@alpha', 'hello');
+  assert(
+    usernameDmResult.includes('DM sent') || usernameDmResult.includes('Failed to DM') || usernameDmResult.includes('Failed to resolve'),
+    'username-based sendDM returned an unexpected value'
+  );
+
   const bulk = await discordActions.bulkDM([{ username: 'alpha', name: 'Alpha' }], 'Hello {name}');
   assert(Array.isArray(bulk) && bulk.length === 1, 'bulkDM did not return results');
 
