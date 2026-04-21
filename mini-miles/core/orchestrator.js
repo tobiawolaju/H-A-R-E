@@ -79,7 +79,11 @@ class Orchestrator {
   _formatSkillGroup(group) {
     const present = group.names.filter((name) => this.skills.has(name));
     if (present.length === 0) return null;
-    return `- ${group.title}: ${present.map((name) => `\`${name}\``).join(', ')}`;
+    const lines = [`- ${group.title}`];
+    for (const name of present) {
+      lines.push(`  - ${this._formatSkillLine(name, this.skills.get(name)).slice(2)}`);
+    }
+    return lines;
   }
 
   _getHelpMessage() {
@@ -116,18 +120,12 @@ class Orchestrator {
       '- Natural-language requests can still route through the LLM and loaded skills',
       '- Background heartbeat keeps Discord presence and Spotify status updated',
       '',
-      'Skill groups'
+      'Loaded skills'
     ];
 
     for (const group of this._getSkillGroups()) {
       const formatted = this._formatSkillGroup(group);
-      if (formatted) lines.push(formatted);
-    }
-
-    lines.push('', 'Loaded skills');
-
-    for (const [name, skill] of this.skills) {
-      lines.push(this._formatSkillLine(name, skill));
+      if (formatted) lines.push(...formatted);
     }
 
     lines.push(
