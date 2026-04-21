@@ -48,23 +48,23 @@ class Orchestrator {
     return [
       {
         title: 'Social / Messaging',
-        names: ['discord-ops', 'telegram-ops', 'twitter_actions']
+        names: ['discord_ops', 'telegram_ops', 'twitter_actions']
       },
       {
         title: 'Research / Web',
-        names: ['github', 'scraper']
+        names: ['github_operation', 'web_search_and_scrape']
       },
       {
         title: 'Media / Files',
-        names: ['file-manager', 'video_ops']
-      },
-      {
-        title: 'Monad / Hackathon',
-        names: ['monad_ops', 'hackathon']
+        names: ['file_manager', 'video_ops']
       },
       {
         title: 'Automation / Scheduling',
-        names: ['scheduler-ops']
+        names: ['scheduler_ops']
+      },
+      {
+        title: 'Monad / Hackathon',
+        names: ['monad_ops', 'hackathon_ops']
       }
     ];
   }
@@ -91,6 +91,7 @@ class Orchestrator {
       '- `!tweet your text here` Post a tweet immediately',
       '- `tweet: your text here` Post a tweet immediately',
       '- `!like <tweet link>` Like a tweet',
+      '- `!unlike <tweet link>` Remove a like from a tweet',
       '- `!reply <tweet link> <text>` Reply to a tweet',
       '- `!comment <tweet link> <text>` Alias for `!reply`',
       '- `!quote <tweet link> <text>` Quote a tweet',
@@ -103,6 +104,7 @@ class Orchestrator {
       '- `!reply https://x.com/user/status/1234567890 that is useful`',
       '- `!quote https://x.com/user/status/1234567890 good point`',
       '- `!like https://x.com/user/status/1234567890`',
+      '- `!unlike https://x.com/user/status/1234567890`',
       '- `Search Twitter for I follow back`',
       '- `Fetch my GitHub profile and latest repo activity`',
       '',
