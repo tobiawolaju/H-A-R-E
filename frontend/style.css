@@ -1,13 +1,16 @@
-/* 
-  Miles Portfolio - Premium Metro UI Style
-*/
-
 :root {
-    --bg-color: #f7f7f4;
+    --bg-color: #f4f1ea;
+    --surface: #ffffff;
+    --surface-muted: #fbf8f2;
+    --surface-alt: #f2ede5;
+    --border-color: #e4ddd2;
     --text-primary: #111111;
-    --text-secondary: #5f5f5f;
+    --text-secondary: #5f5b53;
+    --accent: #9b7d56;
+    --accent-soft: #ede4d8;
     --gap: 16px;
-    --border-radius: 0px;
+    --border-radius: 18px;
+    --tile-shadow: 0 14px 40px rgba(28, 21, 13, 0.08);
 }
 
 * {
@@ -17,6 +20,8 @@
 }
 
 body {
+    background:
+        radial-gradient(circle at top, rgba(255, 255, 255, 0.96), rgba(244, 241, 234, 0.9) 40%, rgba(236, 229, 218, 0.96) 100%);
     background-color: var(--bg-color);
     color: var(--text-primary);
     font-family: 'Outfit', sans-serif;
@@ -47,14 +52,19 @@ body {
     border-radius: var(--border-radius);
     overflow: hidden;
     cursor: default;
-    transition: background-color 0.2s ease, transform 0.2s ease;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
     opacity: 0;
     transform: translateY(20px);
     animation: tileEntrance 0.6s ease forwards;
+    box-shadow: var(--tile-shadow);
+    border: 1px solid var(--border-color);
+    backdrop-filter: blur(12px);
 }
 
 .tile:hover {
-    outline: 2px solid #111111;
+    transform: translateY(-4px);
+    box-shadow: 0 18px 50px rgba(28, 21, 13, 0.12);
+    border-color: rgba(155, 125, 86, 0.35);
     z-index: 10;
 }
 
@@ -118,21 +128,21 @@ body {
     background-image: url('miles.jpg');
     background-size: cover;
     background-position: center;
-    filter: brightness(0.75) saturate(1.1);
+    filter: brightness(0.96) saturate(0.95) contrast(1.02);
     transition: transform 0.8s ease, filter 0.5s ease;
     z-index: 0;
 }
 
 .hero-tile:hover .hero-bg {
-    filter: brightness(0.68) saturate(1.2);
+    filter: brightness(0.93) saturate(1);
 }
 
 .hero-content {
     flex-direction: row;
     justify-content: space-between;
     align-items: flex-end;
-    background: rgba(255, 0, 255, 0.3);
-    color: #ffffff;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.12), rgba(250, 246, 239, 0.5));
+    color: var(--text-primary);
 }
 
 .hero-info {
@@ -142,21 +152,21 @@ body {
 
 /* Wallet Widget */
 .wallet-widget {
-    background: rgba(0, 0, 0, 0.4);
+    background: rgba(255, 255, 255, 0.82);
     padding: 12px 18px;
     border-radius: 14px;
     cursor: pointer;
     text-align: right;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 10px 24px rgba(28, 21, 13, 0.08);
+    border: 1px solid rgba(228, 221, 210, 0.9);
     transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease, border 0.2s ease;
     backdrop-filter: blur(8px);
 }
 
 .wallet-widget:hover {
     transform: scale(1.05) translateY(-2px);
-    box-shadow: 0 8px 25px rgba(156, 39, 176, 0.2);
-    border: 1px solid rgba(156, 39, 176, 0.6);
+    box-shadow: 0 14px 28px rgba(28, 21, 13, 0.12);
+    border: 1px solid rgba(155, 125, 86, 0.35);
 }
 
 .wallet-widget:active {
@@ -167,14 +177,12 @@ body {
     font-size: 1.5rem;
     font-weight: 900;
     line-height: 1.1;
-    color: #b388ff;
-    /* Vibrant Purple */
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    color: var(--accent);
 }
 
 .wallet-address {
     font-size: 0.85rem;
-    color: rgba(255, 255, 255, 0.7);
+    color: var(--text-secondary);
     font-family: monospace;
     margin-top: 4px;
     letter-spacing: 0.5px;
@@ -202,7 +210,7 @@ body {
     background: #111111;
     color: #ffffff;
     padding: 0.4rem 0.8rem;
-    border-radius: 0;
+    border-radius: 999px;
     font-size: 0.8rem;
     font-weight: 700;
     align-self: flex-start;
@@ -264,8 +272,9 @@ body {
     font-size: 2.5rem;
     font-weight: 900;
     letter-spacing: 4px;
-    opacity: 0.3;
+    opacity: 0.25;
     transform: rotate(-90deg);
+    color: var(--text-secondary);
 }
 
 /* Social & Contact Tile */
@@ -289,26 +298,29 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #f2f2ef;
-    border: none;
-    color: #111111;
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
     text-decoration: none;
     min-height: 56px;
     padding: 12px;
-    border-radius: 0;
+    border-radius: 16px;
     font-weight: 700;
-    transition: background-color 0.2s;
+    transition: transform 0.2s ease, background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
     font-size: 1.4rem;
 }
 
 .social-btn:hover {
-    background: #e4e4df;
+    background: var(--surface-muted);
+    border-color: rgba(155, 125, 86, 0.38);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 22px rgba(28, 21, 13, 0.08);
 }
 
 .unified-handle {
     margin-top: auto;
     font-size: 0.85rem;
-    color: #b0005a;
+    color: var(--accent);
     font-weight: 800;
     text-align: center;
     letter-spacing: 0.5px;
