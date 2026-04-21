@@ -15,6 +15,27 @@ let _client = null;
 let _patchesApplied = false;
 let _routeSync = null;
 
+function disableProxyEnv() {
+  for (const key of ['HTTP_PROXY', 'HTTPS_PROXY', 'ALL_PROXY', 'http_proxy', 'https_proxy', 'all_proxy']) {
+    if (process.env[key]) {
+      delete process.env[key];
+    }
+  }
+  axios.defaults.proxy = false;
+}
+
+function buildMutationQuery(operationName, queryId) {
+  return {
+    queryId,
+    operationName,
+    operationType: 'mutation',
+    metadata: {
+      featureSwitches: [],
+      fieldToggles: []
+    }
+  };
+}
+
 function isRetryableTwitterTransportError(err) {
   const code = err?.code || '';
   const message = err?.message || '';
@@ -108,7 +129,9 @@ function extractProfile(rawProfile, username) {
 
 async function syncRouteIds(authToken, force = false) {
   if (_routeSync && !force) return _routeSync;
+  disableProxyEnv();
   const home = await axios.get('https://x.com/home', {
+    proxy: false,
     headers: {
       cookie: `auth_token=${authToken}`
     }
@@ -121,20 +144,34 @@ async function syncRouteIds(authToken, force = false) {
 
   const mainJs = (await axios.get(mainUrl)).data;
   const routeNames = {
-    search: 'SearchTimeline',
-    posts: 'UserTweets',
-    media: 'UserMedia',
-    replies: 'UserTweetsAndReplies'
+    search: { kind: 'timeline', operationName: 'SearchTimeline' },
+    posts: { kind: 'timeline', operationName: 'UserTweets' },
+    media: { kind: 'timeline', operationName: 'UserMedia' },
+    replies: { kind: 'timeline', operationName: 'UserTweetsAndReplies' },
+    like: { kind: 'mutation', operationName: 'FavoriteTweet' },
+    unlike: { kind: 'mutation', operationName: 'UnfavoriteTweet' },
+    retweet: { kind: 'mutation', operationName: 'CreateRetweet' },
+    unretweet: { kind: 'mutation', operationName: 'DeleteRetweet' }
   };
 
   const synced = {};
-  for (const [key, operationName] of Object.entries(routeNames)) {
+  for (const [key, route] of Object.entries(routeNames)) {
+    const { operationName, kind } = route;
     const match = mainJs.match(new RegExp(`queryId:"([^"]+)",operationName:"${operationName}"`));
     if (!match) {
       throw new Error(`Failed to extract ${operationName} query ID from X main.js.`);
     }
-    Queries.timelines[key].queryId = match[1];
+    if (kind === 'timeline') {
+      Queries.timelines[key].queryId = match[1];
+    } else if (kind === 'mutation') {
+      _routeSync = _routeSync || {};
+      _routeSync[key] = match[1];
+    }
     synced[key] = match[1];
+  }
+
+  if (Queries.mutations?.createTweet) {
+    synced.createTweet = Queries.mutations.createTweet.queryId;
   }
 
   _routeSync = synced;
@@ -157,6 +194,7 @@ async function createClientWithRetry(authToken, maxAttempts = 4) {
   for (let attempt = 1; attempt <= maxAttempts; attempt++) {
     try {
       applyLibraryPatches();
+      disableProxyEnv();
       await syncRouteIds(authToken);
       process.env.auth_token = authToken;
 
@@ -331,4 +369,184 @@ async function postTweet(text) {
   }
 }
 
-module.exports = { init, getClient, searchTweets, getProfile, getTimeline, postTweet };
+async function replyToTweet(tweetUrlOrId, text) {
+  const client = getClient();
+  const tweetId = extractTweetId(tweetUrlOrId);
+  if (!tweetId) throw new Error('Invalid tweet link or tweet id.');
+
+  await syncRouteIds(config.TWITTER_AUTH_TOKEN);
+  const response = await withRetry('Twitter reply tweet', () =>
+    client.rest.graphQL({
+      query: Queries.mutations.createTweet,
+      variables: {
+        tweet_text: text,
+        card_uri: null,
+        attachment_url: null,
+        reply: {
+          in_reply_to_tweet_id: tweetId,
+          exclude_reply_user_ids: []
+        },
+        dark_request: false,
+        media: {
+          media_entities: [],
+          possibly_sensitive: false
+        },
+        semantic_annotation_ids: [],
+        URIEncoded: function () {
+          return encodeURIComponent(JSON.stringify(this));
+        }
+      },
+      method: 'post'
+    })
+  );
+
+  const tweetIdResult = response.data?.create_tweet?.tweet_results?.result?.rest_id || response.data?.notetweet_create?.tweet_results?.result?.rest_id;
+  return tweetIdResult ? `Reply posted. ID: ${tweetIdResult}` : 'Reply posted successfully.';
+}
+
+async function quoteTweet(tweetUrlOrId, text) {
+  const client = getClient();
+  const tweetId = extractTweetId(tweetUrlOrId);
+  if (!tweetId) throw new Error('Invalid tweet link or tweet id.');
+
+  await syncRouteIds(config.TWITTER_AUTH_TOKEN);
+  const quoteUrl = normalizeTweetUrl(tweetUrlOrId, tweetId);
+  const response = await withRetry('Twitter quote tweet', () =>
+    client.rest.graphQL({
+      query: Queries.mutations.createTweet,
+      variables: {
+        tweet_text: text,
+        card_uri: null,
+        attachment_url: quoteUrl,
+        dark_request: false,
+        media: {
+          media_entities: [],
+          possibly_sensitive: false
+        },
+        semantic_annotation_ids: [],
+        URIEncoded: function () {
+          return encodeURIComponent(JSON.stringify(this));
+        }
+      },
+      method: 'post'
+    })
+  );
+
+  const tweetIdResult = response.data?.create_tweet?.tweet_results?.result?.rest_id || response.data?.notetweet_create?.tweet_results?.result?.rest_id;
+  return tweetIdResult ? `Quote tweet posted. ID: ${tweetIdResult}` : 'Quote tweet posted successfully.';
+}
+
+async function likeTweet(tweetUrlOrId) {
+  const client = getClient();
+  const tweetId = extractTweetId(tweetUrlOrId);
+  if (!tweetId) throw new Error('Invalid tweet link or tweet id.');
+
+  const response = await withRetry('Twitter like tweet', () =>
+    client.rest.post(
+      'https://x.com/i/api/1.1/favorites/create.json',
+      new URLSearchParams({ id: tweetId }).toString(),
+      {
+        'content-type': 'application/x-www-form-urlencoded'
+      }
+    )
+  );
+  if (response.status >= 400) {
+    throw new Error('Failed to like tweet.');
+  }
+  if (typeof response.data === 'string' && response.data.trim() !== '' && !response.data.includes('favorite_tweet')) {
+    error(`Unexpected like response: ${response.data}`);
+  }
+  return 'Tweet liked.';
+}
+
+async function unlikeTweet(tweetUrlOrId) {
+  const client = getClient();
+  const tweetId = extractTweetId(tweetUrlOrId);
+  if (!tweetId) throw new Error('Invalid tweet link or tweet id.');
+
+  const response = await withRetry('Twitter unlike tweet', () =>
+    client.rest.post(
+      'https://x.com/i/api/1.1/favorites/destroy.json',
+      new URLSearchParams({ id: tweetId }).toString(),
+      {
+        'content-type': 'application/x-www-form-urlencoded'
+      }
+    )
+  );
+  if (response.status >= 400) {
+    throw new Error('Failed to unlike tweet.');
+  }
+  if (typeof response.data === 'string' && response.data.trim() !== '' && !response.data.includes('unfavorite_tweet')) {
+    error(`Unexpected unlike response: ${response.data}`);
+  }
+  return 'Tweet unliked.';
+}
+
+async function retweet(tweetUrlOrId) {
+  const client = getClient();
+  const tweetId = extractTweetId(tweetUrlOrId);
+  if (!tweetId) throw new Error('Invalid tweet link or tweet id.');
+
+  await syncRouteIds(config.TWITTER_AUTH_TOKEN);
+  const query = buildMutationQuery('CreateRetweet', _routeSync.retweet || Queries.mutations.createTweet.queryId);
+  const response = await withRetry('Twitter retweet', () =>
+    client.rest.graphQL({
+      query,
+      variables: { tweet_id: tweetId, URIEncoded: function () { return encodeURIComponent(JSON.stringify(this)); } },
+      method: 'post'
+    })
+  );
+  if (!response.data?.create_retweet?.retweet_results?.result && !response.data?.data?.create_retweet?.retweet_results?.result) {
+    throw new Error('Failed to retweet.');
+  }
+  return 'Tweet reposted.';
+}
+
+async function unretweet(tweetUrlOrId) {
+  const client = getClient();
+  const tweetId = extractTweetId(tweetUrlOrId);
+  if (!tweetId) throw new Error('Invalid tweet link or tweet id.');
+
+  await syncRouteIds(config.TWITTER_AUTH_TOKEN);
+  const query = buildMutationQuery('DeleteRetweet', _routeSync.unretweet || Queries.mutations.createTweet.queryId);
+  const response = await withRetry('Twitter unretweet', () =>
+    client.rest.graphQL({
+      query,
+      variables: { source_tweet_id: tweetId, URIEncoded: function () { return encodeURIComponent(JSON.stringify(this)); } },
+      method: 'post'
+    })
+  );
+  if (!response.data?.delete_retweet?.source_tweet_results?.result && !response.data?.data?.delete_retweet?.source_tweet_results?.result) {
+    throw new Error('Failed to unretweet.');
+  }
+  return 'Tweet repost removed.';
+}
+
+function extractTweetId(input) {
+  if (!input) return null;
+  const text = String(input).trim();
+  const match = text.match(/(?:x\.com|twitter\.com)\/[^/]+\/status\/(\d+)/i) || text.match(/status\/(\d+)/i) || text.match(/^(\d{5,})$/);
+  return match ? match[1] : null;
+}
+
+function normalizeTweetUrl(input, tweetId) {
+  const text = String(input).trim();
+  if (/^https?:\/\//i.test(text)) return text;
+  return `https://x.com/i/web/status/${tweetId}`;
+}
+
+module.exports = {
+  init,
+  getClient,
+  searchTweets,
+  getProfile,
+  getTimeline,
+  postTweet,
+  replyToTweet,
+  quoteTweet,
+  likeTweet,
+  unlikeTweet,
+  retweet,
+  unretweet,
+  extractTweetId
+};

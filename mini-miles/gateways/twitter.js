@@ -13,6 +13,7 @@ class TwitterGateway {
     this.name = 'twitter';
     this.client = null;
     this.masterUsername = (config.TWITTER_MASTER_USERNAME || 'tobiawolaju').replace(/^@/, '').toLowerCase();
+    this.seenNotifications = new Set();
   }
 
   async connect() {
@@ -26,7 +27,11 @@ class TwitterGateway {
       this._setupListeners();
       
       // Start streaming notifications every 30 seconds
-      this.client.notifications.stream(30000);
+      if (this.client.notifications?.stream) {
+        this.client.notifications.stream(30000);
+      } else {
+        gateway('Twitter: Notification stream is unavailable on this client.');
+      }
       
       return true;
     } catch (err) {
@@ -40,34 +45,66 @@ class TwitterGateway {
       gateway(`Twitter: Received ${notifications.length} unread notifications.`);
 
       for (const notification of notifications) {
-        // We focus on Mention notifications for commands
-        if (notification.type === 'Mention') {
-          const tweet = notification.tweet;
-          const author = (tweet.user?.username || "").toLowerCase();
-          
-          gateway(`Twitter Mention from: @${author}`);
-
-          // Mandatory filter: only take commands from the master
-          if (author !== this.masterUsername) {
-            gateway(`Twitter: Ignoring mention from @${author} (Not Master)`);
-            continue;
-          }
-
-          const event = {
-            platform: 'twitter',
-            channelId: 'mentions', // Logical channel
-            userId: author,
-            content: tweet.text,
-            tweetId: tweet.id,
-            reply: async (text) => {
-              await this._replyToTweet(tweet.id, `@${author} ${text}`);
-            }
-          };
-
-          orchestrator.handleEvent(event);
+        const dedupeKey = String(notification.raw?.entryId || notification.sortIndex || notification.tweet?.id || '');
+        if (dedupeKey && this.seenNotifications.has(dedupeKey)) {
+          continue;
         }
+        if (dedupeKey) {
+          this.seenNotifications.add(dedupeKey);
+          if (this.seenNotifications.size > 500) {
+            this.seenNotifications.clear();
+          }
+        }
+
+        const summary = this._formatNotification(notification);
+        if (summary) {
+          gateway(summary);
+        }
+
+        if (notification.type !== 'Mention' && notification.type !== 'Reply') {
+          continue;
+        }
+
+        const tweet = notification.tweet;
+        const author = (tweet.user?.username || '').toLowerCase();
+        gateway(`Twitter ${notification.type} from: @${author}`);
+
+        // Mandatory filter: only take live command traffic from the master account.
+        if (author !== this.masterUsername) {
+          gateway(`Twitter: Ignoring ${notification.type.toLowerCase()} from @${author} (Not Master)`);
+          continue;
+        }
+
+        const event = {
+          platform: 'twitter',
+          channelId: notification.type.toLowerCase(),
+          userId: author,
+          content: tweet.text,
+          tweetId: tweet.id,
+          reply: async (text) => {
+            await this._replyToTweet(tweet.id, `@${author} ${text}`);
+          }
+        };
+
+        orchestrator.handleEvent(event);
       }
     });
+  }
+
+  _formatNotification(notification) {
+    const tweet = notification.tweet;
+    const author = (tweet?.user?.username || '').toLowerCase();
+
+    switch (notification.type) {
+      case 'Like':
+        return `Twitter Like notification received${tweet?.id ? ` for tweet ${tweet.id}` : ''}.`;
+      case 'Reply':
+        return `Twitter Reply from @${author}: ${tweet?.text || '(no text)'}`;
+      case 'Mention':
+        return `Twitter Mention from @${author}: ${tweet?.text || '(no text)'}`;
+      default:
+        return `Twitter ${notification.type} notification received.`;
+    }
   }
 
   async _replyToTweet(tweetId, content) {

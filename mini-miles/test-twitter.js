@@ -16,6 +16,8 @@ async function test() {
     process.exit(1);
   }
 
+  const tweetLink = 'https://x.com/tobiawolaju/status/2046026636420628929';
+
   try {
     await twitter.init();
     console.log('Twitter toolchain initialized.');
@@ -49,12 +51,43 @@ async function test() {
       console.log('First item:', timeline[0] || 'No timeline items');
     });
 
-    /*
-    await runStep('Testing Post Tweet', async () => {
-      const result = await twitter.postTweet(`Test tweet from mini-miles ${Date.now()}`);
-      console.log('Post tweet success:', result);
+    await runStep('Testing Like Tweet (tweet link)', async () => {
+      const result = await twitter.likeTweet(tweetLink);
+      console.log('Like success:', result);
     });
-    */
+
+    await runStep('Testing Unlike Tweet (tweet link)', async () => {
+      const result = await twitter.unlikeTweet(tweetLink);
+      console.log('Unlike success:', result);
+    });
+
+    await runStep('Testing Reply Tweet (tweet link)', async () => {
+      const result = await twitter.replyToTweet(tweetLink, `Test reply from mini-miles (${new Date().toISOString()})`);
+      console.log('Reply success:', result);
+    });
+
+    await runStep('Testing Quote Tweet (tweet link)', async () => {
+      const result = await twitter.quoteTweet(tweetLink, `Test quote from mini-miles (${new Date().toISOString()})`);
+      console.log('Quote success:', result);
+    });
+
+    // Keep this commented unless you want to post a standalone tweet during smoke tests.
+    // await runStep('Testing Post Tweet', async () => {
+    //   const result = await twitter.postTweet(`Gmonad to those that gm back`);
+    //   console.log('Post tweet success:', result);
+    // });
+
+    // Retweet/unretweet are still available in the wrapper, but they are not part
+    // of the default smoke path because X has been inconsistent on those routes.
+    // await runStep('Testing Retweet Tweet (tweet link)', async () => {
+    //   const result = await twitter.retweet(tweetLink);
+    //   console.log('Retweet success:', result);
+    // });
+    // await runStep('Testing Unretweet Tweet (tweet link)', async () => {
+    //   const result = await twitter.unretweet(tweetLink);
+    //   console.log('Unretweet success:', result);
+    // });
+
 
     process.exit(0);
   } catch (err) {

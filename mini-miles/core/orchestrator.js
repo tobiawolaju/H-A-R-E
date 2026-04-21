@@ -40,6 +40,10 @@ class Orchestrator {
     return this.skills.get('twitter_actions');
   }
 
+  _getTwitterTool() {
+    return require('../tools/twitter');
+  }
+
   _getSkillGroups() {
     return [
       {
@@ -86,10 +90,19 @@ class Orchestrator {
       '- `!help` Show this help message',
       '- `!tweet your text here` Post a tweet immediately',
       '- `tweet: your text here` Post a tweet immediately',
+      '- `!like <tweet link>` Like a tweet',
+      '- `!reply <tweet link> <text>` Reply to a tweet',
+      '- `!comment <tweet link> <text>` Alias for `!reply`',
+      '- `!quote <tweet link> <text>` Quote a tweet',
+      '- `!retweet <tweet link>` Repost a tweet (experimental)',
+      '- `!unretweet <tweet link>` Remove a repost (experimental)',
       '',
       'Examples',
       '- `!tweet building live bot tooling today`',
       '- `tweet: shipping the new command surface`',
+      '- `!reply https://x.com/user/status/1234567890 that is useful`',
+      '- `!quote https://x.com/user/status/1234567890 good point`',
+      '- `!like https://x.com/user/status/1234567890`',
       '- `Search Twitter for I follow back`',
       '- `Fetch my GitHub profile and latest repo activity`',
       '',
@@ -97,6 +110,7 @@ class Orchestrator {
       `- Twitter live commands are limited to @${config.TWITTER_MASTER_USERNAME || 'tobiawolaju'}`,
       '- Discord and Telegram are the primary command surfaces',
       '- Twitter mentions can still route into the agent, but `!tweet` and `tweet:` are the deterministic post paths',
+      '- Tweet-link commands only work for the master account',
       '- Natural-language requests can still route through the LLM and loaded skills',
       '- Background heartbeat keeps Discord presence and Spotify status updated',
       '',
@@ -147,6 +161,52 @@ class Orchestrator {
     return true;
   }
 
+  async _handleTweetLinkAction(action, text, reply, userId) {
+    const twitter = this._getTwitterTool();
+    const trimmed = (text || '').trim();
+    const firstToken = trimmed.split(/\s+/)[0];
+    const tweetId = twitter.extractTweetId(firstToken);
+
+    if (!tweetId) {
+      await reply('Usage: include a valid tweet link after the command.');
+      return true;
+    }
+
+    const remainder = trimmed.slice(firstToken.length).trim();
+
+    switch (action) {
+      case 'like':
+        await reply(await twitter.likeTweet(firstToken));
+        return true;
+      case 'unlike':
+        await reply(await twitter.unlikeTweet(firstToken));
+        return true;
+      case 'retweet':
+        await reply(await twitter.retweet(firstToken));
+        return true;
+      case 'unretweet':
+        await reply(await twitter.unretweet(firstToken));
+        return true;
+      case 'reply':
+      case 'comment':
+        if (!remainder) {
+          await reply('Usage: `!reply <tweet link> <your reply>`');
+          return true;
+        }
+        await reply(await twitter.replyToTweet(firstToken, remainder));
+        return true;
+      case 'quote':
+        if (!remainder) {
+          await reply('Usage: `!quote <tweet link> <your comment>`');
+          return true;
+        }
+        await reply(await twitter.quoteTweet(firstToken, remainder));
+        return true;
+      default:
+        return false;
+    }
+  }
+
   async _handleBangCommand(event) {
     const { platform, userId, content, reply } = event;
     const trimmed = content.trim();
@@ -171,6 +231,16 @@ class Orchestrator {
       }
 
       return this._handleTweetCommand(trimmed.slice('!tweet'.length), reply, userId);
+    }
+
+    const linkActionMatch = trimmed.match(/^!(like|unlike|retweet|unretweet|reply|comment|quote)\s+([\s\S]+)$/i);
+    if (linkActionMatch) {
+      if (!isMaster) {
+        core(`Ignoring ${linkActionMatch[1]} from ${userId} on ${platform} (Not Master)`);
+        return true;
+      }
+
+      return this._handleTweetLinkAction(linkActionMatch[1].toLowerCase(), linkActionMatch[2], reply, userId);
     }
 
     return false;
