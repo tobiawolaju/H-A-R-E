@@ -499,10 +499,18 @@ async function retweet(tweetUrlOrId) {
       }
     )
   );
-  if (!response.data?.create_retweet?.retweet_results?.result && !response.data?.data?.create_retweet?.retweet_results?.result) {
+  const retweetResult =
+    response.data?.create_retweet?.retweet_results?.result ||
+    response.data?.data?.create_retweet?.retweet_results?.result ||
+    response.data?.retweet?.retweet_results?.result ||
+    response.data?.data?.retweet?.retweet_results?.result;
+  const alreadyRetweeted = Array.isArray(response.data?.errors) &&
+    response.data.errors.some((err) => String(err?.code) === '327' || /already retweeted/i.test(err?.message || ''));
+
+  if (!retweetResult && !alreadyRetweeted) {
     throw new Error('Failed to retweet.');
   }
-  return 'Tweet reposted.';
+  return alreadyRetweeted ? 'Tweet already reposted.' : 'Tweet reposted.';
 }
 
 async function unretweet(tweetUrlOrId) {
@@ -521,7 +529,13 @@ async function unretweet(tweetUrlOrId) {
       }
     )
   );
-  if (!response.data?.delete_retweet?.source_tweet_results?.result && !response.data?.data?.delete_retweet?.source_tweet_results?.result) {
+  const unretweetResult =
+    response.data?.delete_retweet?.source_tweet_results?.result ||
+    response.data?.data?.delete_retweet?.source_tweet_results?.result ||
+    response.data?.unretweet?.source_tweet_results?.result ||
+    response.data?.data?.unretweet?.source_tweet_results?.result;
+
+  if (!unretweetResult) {
     throw new Error('Failed to unretweet.');
   }
   return 'Tweet repost removed.';

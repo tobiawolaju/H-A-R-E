@@ -9,13 +9,13 @@ const { skill } = require('../utils/logger');
 module.exports = {
   definition: {
     name: "twitter_actions",
-    description: "Interact with Twitter (X). Search for tweets, get user profiles, view timelines, post updates, and like tweets.",
+    description: "Interact with Twitter (X). Search for tweets, get user profiles, view timelines, post updates, like tweets, and repost tweets.",
     parameters: {
       type: "object",
       properties: {
         action: { 
           type: "string", 
-          enum: ['search', 'get_profile', 'get_timeline', 'post_tweet', 'like', 'unlike'],
+          enum: ['search', 'get_profile', 'get_timeline', 'post_tweet', 'like', 'unlike', 'retweet', 'unretweet'],
           description: "Action to perform"
         },
         query: { type: "string", description: "Search query or topic" },
@@ -60,6 +60,14 @@ module.exports = {
         }
         case 'unlike': {
           const result = await twitter.unlikeTweet(tweet_url);
+          return result;
+        }
+        case 'retweet': {
+          const result = await twitter.retweet(tweet_url);
+          return result;
+        }
+        case 'unretweet': {
+          const result = await twitter.unretweet(tweet_url);
           return result;
         }
         default:
