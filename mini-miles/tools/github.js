@@ -73,9 +73,19 @@ async function listUserRepos(username) {
   }
 }
 
+async function getAuthenticatedUsername() {
+  try {
+    const { data } = await octokit.users.getAuthenticated();
+    return data.login;
+  } catch (err) {
+    return `Error: ${err.message}`;
+  }
+}
+
 module.exports = {
   getFileContent,
   editFiles,
   createRepo,
-  listUserRepos
+  listUserRepos,
+  getAuthenticatedUsername
 };

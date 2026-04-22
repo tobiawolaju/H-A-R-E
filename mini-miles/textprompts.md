@@ -10,7 +10,7 @@ Use these prompts to verify all tools and skills currently integrated into Mini-
 
 ## 🐦 Twitter (X) Integration
 ### Gateway (Master Only)
-- Mention the bot account from `@omoonchain`:
+- Mention the bot account from `@tobiawolaju`:
   - "Search for latest Monad alpha"
   - "Post a tweet: Mini-Miles is scaling! 🚀"
 

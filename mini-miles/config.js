@@ -2,7 +2,12 @@ require('dotenv').config();
 const path = require('path');
 
 module.exports = {
-  MASTER_USER_ID: process.env.DISCORD_MASTER_ID || 'omoonchain',
+  MASTER_USER_ID: process.env.DISCORD_MASTER_ID || 'tobiawolaju',
+  MASTER_IDENTIFIERS: Array.from(new Set([
+    process.env.DISCORD_MASTER_ID,
+    'tobiawolaju',
+    'omoonchain'
+  ].filter(Boolean).map((value) => String(value).toLowerCase()))),
   DISCORD_TOKEN: process.env.DISCORD_TOKEN,
   GEMINI_API_KEY: process.env.GEMINI_API_KEY || process.env.GOOGLE_GENAI_API_KEY,
   LLM_MODEL: 'gemini-3-flash-preview',

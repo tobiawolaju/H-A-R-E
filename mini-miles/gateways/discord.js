@@ -32,8 +32,10 @@ class DiscordGateway {
       // We partition by user automatically.
       
       const username = (msg.author.username || "").toLowerCase();
-      const masterUname = (config.MASTER_USER_ID || "").toLowerCase();
-      const isMaster = username === masterUname || msg.author.id === config.MASTER_USER_ID;
+      const masterAliases = Array.isArray(config.MASTER_IDENTIFIERS) && config.MASTER_IDENTIFIERS.length > 0
+        ? config.MASTER_IDENTIFIERS
+        : [(config.MASTER_USER_ID || '').toLowerCase()];
+      const isMaster = masterAliases.includes(username) || masterAliases.includes(String(msg.author.id).toLowerCase());
       
       gateway(`Discord Message from: ${username} (Master: ${isMaster})`);
 

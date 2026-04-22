@@ -10,7 +10,7 @@ module.exports = {
       properties: {
         action: { 
           type: "string", 
-          enum: ["read_file", "list_repos", "create_repo", "write_files"],
+          enum: ["whoami", "read_file", "list_repos", "create_repo", "write_files"],
           description: "Action to perform on GitHub"
         },
         repo: { type: "string", description: "Repository name (e.g., 'owner/repo')" },
@@ -31,16 +31,23 @@ module.exports = {
       return "Error: This tool is restricted to the Master user.";
     }
 
-    skill(`Executing GitHub action: ${action} for ${userId}`);
-
     try {
       const [owner, repoName] = repo ? repo.split('/') : [];
+      const logTarget = action === 'list_repos'
+        ? (owner || 'authenticated GitHub user')
+        : (owner ? `${owner}/${repoName || ''}`.replace(/\/$/, '') : userId);
+
+      skill(`Executing GitHub action: ${action} for ${logTarget}`);
       
       switch (action) {
+        case "whoami":
+          return JSON.stringify({ login: await github.getAuthenticatedUsername() }, null, 2);
         case "read_file":
           return await github.getFileContent(owner, repoName, path);
-        case "list_repos":
-          return JSON.stringify(await github.listUserRepos(owner || userId), null, 2);
+        case "list_repos": {
+          const targetUser = owner || await github.getAuthenticatedUsername();
+          return JSON.stringify(await github.listUserRepos(targetUser), null, 2);
+        }
         case "create_repo":
           return await github.createRepo(repoName, description);
         case "write_files":

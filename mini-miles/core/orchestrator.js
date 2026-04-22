@@ -33,7 +33,11 @@ class Orchestrator {
   }
 
   _isMasterUser(userId) {
-    return (userId || '').toLowerCase() === (config.MASTER_USER_ID || 'omoonchain').toLowerCase();
+    const normalized = (userId || '').toLowerCase();
+    const aliases = Array.isArray(config.MASTER_IDENTIFIERS) && config.MASTER_IDENTIFIERS.length > 0
+      ? config.MASTER_IDENTIFIERS
+      : [(config.MASTER_USER_ID || 'tobiawolaju').toLowerCase()];
+    return aliases.includes(normalized);
   }
 
   _getTwitterSkill() {
@@ -107,6 +111,7 @@ class Orchestrator {
       '- `!friendreq <user>` Send a friend request',
       '- `!acceptfriend <user>` Accept an incoming friend request',
       '- `!unfriend <user>` Remove a friend or cancel a pending request',
+      '- `!githubwhoami` Show the authenticated GitHub login',
       '- `!reply <tweet link> <text>` Reply to a tweet',
       '- `!comment <tweet link> <text>` Alias for `!reply`',
       '- `!quote <tweet link> <text>` Quote a tweet',
@@ -127,6 +132,7 @@ class Orchestrator {
       '- `!friendreq @someuser`',
       '- `!acceptfriend @someuser`',
       '- `!unfriend @someuser`',
+      '- `!githubwhoami`',
       '- `Search Twitter for I follow back`',
       '- `Fetch my GitHub profile and latest repo activity`',
       '',
@@ -151,7 +157,7 @@ class Orchestrator {
       'Live prompts',
       '- `@bot !tweet status update` on Twitter',
       '- `search Twitter for I follow back`',
-      '- `get profile for omoonchain`',
+      '- `get profile for tobiawolaju`',
       '- `show me my posts timeline`'
     );
 
@@ -300,6 +306,23 @@ class Orchestrator {
       }
 
       return this._handleTweetCommand(trimmed.slice('!tweet'.length), reply, userId);
+    }
+
+    const githubWhoamiMatch = trimmed.match(/^!githubwhoami\s*$/i);
+    if (githubWhoamiMatch) {
+      if (!isMaster) {
+        core(`Ignoring !githubwhoami from ${userId} on ${platform} (Not Master)`);
+        return true;
+      }
+
+      const githubSkill = this.skills.get('github_operation');
+      if (!githubSkill) {
+        await reply('GitHub operations are unavailable because `github_operation` is not loaded.');
+        return true;
+      }
+
+      await reply(await githubSkill.execute({ action: 'whoami' }, { userId, masterId: config.MASTER_USER_ID }));
+      return true;
     }
 
     const relationshipMatch = trimmed.match(/^!(friends|incoming|outgoing|friendstatus|friendreq|acceptfriend|unfriend)\s*([\s\S]*)$/i);
