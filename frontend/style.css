@@ -304,6 +304,7 @@ body {
 }
 
 .won-tile .project-name {
+    color: #8a2be2;
     font-size: 1.8rem !important;
     line-height: 1;
     margin-bottom: 0;
