@@ -1,0 +1,138 @@
+[
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "Search for 'crypto giveaway' or 'monad giveaway' on X and reply with the 0x7D40a6dE781F82d7741AB3995bA4da96bE4e08fd address to a fresh tweet. Then schedule this again for 2 minutes."
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "functionCall": {
+          "name": "twitter_actions",
+          "args": {
+            "action": "search",
+            "query": "monad giveaway"
+          },
+          "id": "f8m6ahiy"
+        },
+        "thoughtSignature": "EpsECpgEAQw51sdBUZGW8VKIeERlNddxmrDJZGwvc2kd0OwIKLTDf3gTksDZp6jMRZo+fvJwUQoMYfIusGsEss56ievZ5iw9jslAzQ3fYY8cdfxJqBYCtdS/Wl6bObO7z4qVG/FtiYKxDG97/sKh7BMOy9XUpljGOaKZnPD4reykIMkUStW70LKC2AsVLb+Ls55tvAUS1BeHDJ1pSRt5UFJ3runIRb9P/e63VufiOOYwZbHXGCRqo0NambBmf4bavQP9jeyJydruOR6EwjdH9SxNtWDVoZ+JRQntEW9II5Y5eWaxJX1o3XfQmNSka8J5PWRrTnu1RoIC30UXG0CsSrvYpDl3hW93IebiO9dWWibXGRMVQ6OYmPkVbI73Ir6Pyt4w6h4tdjQlCaPhz8B5NMvE4+T3zvtv8KM/uS9iZL+7rXUxOmG4ydqqu5QbyqzjyZjAFgCXGRhQYqOBHNzWY0PjXbBAcw5HyPdTMZ1DJO692Vm0GVc03n5pom7m2ZNpsi9uhlQEyqhyc1wOvuvD7ytM8Q/hXJ3Ea1RDDGKYNBeH8X9Of8kxAuTLCmsyEysW/crdRHwZ9MSveyi76nzqTiIqnGM1/oPCbmaUktDG5Wf3GLAUouMey99Wq0UpSvztA1egmvTUpnUF4GZ1J4IY1Gw5OE05fT4NdNuLmtMsQMhTGaD2qnGMizBL26A4DXd0X3CV1DFLLxFsKbh94Qc="
+      }
+    ]
+  },
+  {
+    "role": "function",
+    "parts": [
+      {
+        "functionResponse": {
+          "name": "twitter_actions",
+          "response": {
+            "result": "[\n  {\n    \"id\": \"2044385070086037996\",\n    \"text\": \"@hypermassiv @monad Time to do a giveaway?\",\n    \"author\": \"Neverland_Money\",\n    \"createdAt\": \"2026-04-15T11:59:18.000Z\"\n  },\n  {\n    \"id\": \"2044075447919542310\",\n    \"text\": \"@silentt1738 @monad Do giveaway\",\n    \"author\": \"FZudonu\",\n    \"createdAt\": \"2026-04-14T15:28:58.000Z\"\n  },\n  {\n    \"id\": \"2043815882418213279\",\n    \"text\": \"@Igbashu @Dreiki10 @r3tardsNFT @monad Why r u asking for giveaway. Just buy and support the project 😀\",\n    \"author\": \"MDJV1222\",\n    \"createdAt\": \"2026-04-13T22:17:33.000Z\"\n  },\n  {\n    \"id\": \"2043725744619049312\",\n    \"text\": \"@_U9TICA @monad The giveaway idea isn’t bad to be honest 🤔\",\n    \"author\": \"MonadPriest\",\n    \"createdAt\": \"2026-04-13T16:19:22.000Z\"\n  },\n  {\n    \"id\": \"2042834355551113322\",\n    \"text\": \"Waking up and seeing that I won the Nft giveaway \\n\\nThanks @cryptobroforeve for nominating 🙏ily\\n\\nThanks @billmondays for honoring the nomination \\n\\nMonad is flourishing \\nCatto is flourishing \\n\\nGmonad 💜\",\n    \"author\": \"Cattobreed\",\n    \"createdAt\": \"2026-04-11T05:17:19.000Z\"\n  },\n  {\n    \"id\": \"2042449216468107325\",\n    \"text\": \"@Levr_Bet I hold some monad nft and staking 400 mon...do i qualify for this giveaway?\",\n    \"author\": \"claire75390356\",\n    \"createdAt\": \"2026-04-10T03:46:54.000Z\"\n  },\n  {\n    \"id\": \"2041887082692669730\",\n    \"text\": \"RE:VERSE early access spot giveaway \\n\\nMonad @monad で構築中のポケカガチャプロジェクト \\\"RE:VERSE\\\" アーリーアクセス枠を5名に✨\\n\\n・このポストをリポスト&いいね\\n・RE:VERSEのXアカウント( @reverse_tcg )をフォロー\",\n    \"author\": \"0xneaf\",\n    \"createdAt\": \"2026-04-08T14:33:11.000Z\"\n  },\n  {\n    \"id\": \"2041877007156342863\",\n    \"text\": \"I got it‼️🔥\\nI participated in giveaway from\\n @splrg_rwa x @Lootify_xyz \\nand already received my reward 🥳\\nIt’s a 🖼️ #3399 \\nThis FUZZMO associated with my path in @monad ecosystem \\nAnd this id# is very symbolical for me !\\nSo happy!\\nProud to be part of SPLRG! https://t.co/cBpj9i4Uzf\",\n    \"author\": \"UA1BARBER\",\n    \"createdAt\": \"2026-04-08T13:53:09.000Z\"\n  },\n  {\n    \"id\": \"2040134632210096258\",\n    \"text\": \"@monad wating an giveaway\",\n    \"author\": \"bari2220\",\n    \"createdAt\": \"2026-04-03T18:29:34.000Z\"\n  },\n  {\n    \"id\": \"2039569825081720946\",\n    \"text\": \"แจกรางวัลฟรี 6 รางวัล การ์ด Pokémon เกรดสูงสุด 👀\\n\\n@reverse_tcg  เกม TCG แบบ Pokémon ร่วมกับ @lootgo_official จัด Giveaway ตามเทรนด์บน @monad \\n\\n🏆รางวัล\\n🔹PSA10 Pokémon card (การ์ด Pokémon เกรดสูงสุด) × 1 รางวัล\\n🔸Early Beta Access × 5 รางวัล\\n\\nไปเล่นกัน หลักๆแค่ Social Campaign 👇🏻\",\n    \"author\": \"Gnad_InternTH\",\n    \"createdAt\": \"2026-04-02T05:05:14.000Z\"\n  },\n  {\n    \"id\": \"2039481630000386375\",\n    \"text\": \"@hyperpropcom You're Worse Than @monad\\n\\nAccount X Who Didn't Complete the Giveaway Task Is the Winner. You're exactly the same as everyone else, maybe even worse.\\n\\n😅😅😅😅😅😅😅😅😅 https://t.co/b01ww7CyPM\",\n    \"author\": \"Nabilla442\",\n    \"createdAt\": \"2026-04-01T23:14:46.000Z\"\n  },\n  {\n    \"id\": \"2038995791151513745\",\n    \"text\": \"@todamoonik12 @monad It's  giveaway time 🥳\",\n    \"author\": \"AshuGoutam17\",\n    \"createdAt\": \"2026-03-31T15:04:13.000Z\"\n  },\n  {\n    \"id\": \"2038363668765888882\",\n    \"text\": \"@Purple_Frens @opensea Excited to join this giveaway by @Purple_Frens ! definitely a top tier monad nft collection..love to get my chance to win 1 of these since it resonates with my believes and I am a diamond holder myself!\\nLet's pray hard for my chance!\\n#purple_frens\\n#monad\\n#giveaway https://t.co/4RHCbfbQ66\",\n    \"author\": \"aulwan\",\n    \"createdAt\": \"2026-03-29T21:12:24.000Z\"\n  },\n  {\n    \"id\": \"2038352957633089550\",\n    \"text\": \"Congratz to our Monad Blitz Giveaway winners 💜\\n\\nMonad Dev Bear: @setokaibaah \\n\\n3000 MON winners:\\n\\n1) @Gloryidowu3\\n0x64A1D4b0928B6bBe6D2cef5853Ab550e8641C31D\\n\\n2) @madrabazk \\n0xdf258f7250AdbaAeda814Fe5D6689C270E992e71\\n\\n3) @charmquelist \\n0x4c029189A4a528AfDd5e98E46f04107E1Cf08beC\\n\\nThank you everyone!\\n\\nMore giveaways coming soon 💜\",\n    \"author\": \"gizdusumandnode\",\n    \"createdAt\": \"2026-03-29T20:29:50.000Z\"\n  },\n  {\n    \"id\": \"2037876995225256368\",\n    \"text\": \"Monad Blitz Giveaway 💜\\n\\nPrize:\\n– 1 Monad Dev Bear (shown in the first image)\\n– 3 winners will each receive 1000 MON\\n\\nHow to participate:\\n– Retweet and like\\n– Follow @buildermare and me\\n– Drop your wallet\\n\\n24 hours. https://t.co/J50dlv8joO\",\n    \"author\": \"gizdusumandnode\",\n    \"createdAt\": \"2026-03-28T12:58:32.000Z\"\n  },\n  {\n    \"id\": \"2035051855471136937\",\n    \"text\": \"🚨 NFT GIVEAWAY ALERT! 🚨\\n\\nGiving away a fresh @D00ds_eth NFT to one lucky winner just for joining @memetok_app via my ref + taking the quick test/onboarding!\\n\\nIf i get a ton of entries, I'll drop a\\nSECOND NFT 🔥\\nLink:\\n https://t.co/QYd37XGdcQ \\n\\nTo enter:\\n\\nDownload MemeTok (iOS/Android – Home of Scroll-Trading on @monad!)\\nSign up & enter my referral code (ZomBeGoneTV)\\nComplete the confirmation/test step\\nScreenshot your confirmation screen\\nReply/: Your MemeTok username + EXTERNAL wallet address (NOT your MemeTok one – ethereum as d00ds on is $eth for the NFT prize)\\nI'll verify entries, add you to the raffle, and announce winner(s) soon!\\nScroll, trade memes, earn points — and maybe score an NFT while you're at it. Who's jumping in? Drop 🔥 below if you're entering!\\n\\nDue the price of gas fees on eth, winners wallet will have a private listing for 1c and will receive 2$ in $eth so gas will be covered to accept it! \\n\\n#MemeTok #Monad #NFTGiveaway #Web3 #Memecoins\",\n    \"author\": \"zombegonetv\",\n    \"createdAt\": \"2026-03-20T17:52:26.000Z\"\n  },\n  {\n    \"id\": \"2035006849880117600\",\n    \"text\": \"kizzy community call: \\n\\n> vichenzo transformation, how he went from 0 kesos to achieving everything possible within the ranks of the kizzy community, made back his losses in 10 days playin kizzy app and the current kesos giveaway he's having atm to show appreciation \\n\\n> kizzy rewards for consistent app usage\\n\\n> monad ecosystem alphas as always\\n\\n> kesos giveaways for those on call\\n\\n> shared some kizzy alphas w the farm especially w followers market\",\n    \"author\": \"crexsol\",\n    \"createdAt\": \"2026-03-20T14:53:36.000Z\"\n  },\n  {\n    \"id\": \"2034622446901276828\",\n    \"text\": \"Let me break down what @MondayTrade_ has been cooking this week incase you aren't paying attention.\\n\\n🟣 Stats dashboard is live: $220M+ cumulative volume, 6K+ users, all on-chain, all transparent. Check it out: https://t.co/nu1wjfWQDY\\n\\n🟣 RWAs are coming to Monday Trade on Monad. Early access opens soon. 25 giveaway winners already locked in for $20 in tokenized assets each \\n\\n🟣 First ever \\\"Coffee & Charts\\\" X Space with @traders_guild pulled 77 listeners for a Trading 101 session. You can listen to the recording here: https://t.co/K2abKOIci0\\n\\n🟣 Korean Team Trading Competition is heating up, Magic's Team leading at $1.4M+ volume with $2K USDC in prizes\\n\\n🟣 Brent crude just ripped past $116 and they're already hinting at oil pairs for perps\\n\\nOne DEX. Spot. Perps. RWAs. All native to Monad.\\nGo follow @MondayTrade_ before the next wave hits.\",\n    \"author\": \"drswagoon\",\n    \"createdAt\": \"2026-03-19T13:26:07.000Z\"\n  },\n  {\n    \"id\": \"2034596776205009051\",\n    \"text\": \"@MondayTrade_ @monad oh looks much better. \\nbtw If I was selected for the Space question giveaway yesterday, should I just wait?😁\",\n    \"author\": \"ausbro80\",\n    \"createdAt\": \"2026-03-19T11:44:07.000Z\"\n  },\n  {\n    \"id\": \"2034313890385813762\",\n    \"text\": \"RWAs are loading on Monday Trade &amp; @Monad!\\n\\nLast week, we shared the winners of the RWA Waitlist Giveaway with 25 random winners.\\n\\nCheck below to see if you made the list 👇\\n\\nMore giveaways, campaigns and RWA incentives coming soon 👀\",\n    \"author\": \"MondayTrade_\",\n    \"createdAt\": \"2026-03-18T17:00:01.000Z\"\n  }\n]"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "functionCall": {
+          "name": "twitter_actions",
+          "args": {
+            "action": "search",
+            "query": "crypto giveaway"
+          },
+          "id": "semoql7m"
+        },
+        "thoughtSignature": "EvIDCu8DAQw51scoMH0nc2qbu7ONaaa9VAda8WwqENuw5dY5e7L4v11lOgaMpKwLld9RoPUjusTBsuNVxuId5b2Wvb3YCzpJncFonr4DYF2U70U01vns/ZX/HpXkZ6J5sCoos6LRc3CPhucDeuRaJQR90aX0qF8LS9ax+5+edxj0OZ8WRggvXxEX0b1h5915c/mThMLRlGd+i69OU9th0K/Ap0hmblsmJGbBSrQxiGrfv19OQjL1zNu8izpsLIjAJhIwuYQzE3af/YD+YsOIoAZBU9+Tyqw344HaV/Hi9R3BrdqZf+kTUnUMgtgWQF4hYdqFpL1H4NeeUZtI79dnI6LQG0+SEZH9eU2Pn6WZZKBZDG+hRIMtKRdbFeJbYJNhmTUfhnIWF0d8EdeKLC0yqTAdRYb2i+XJNTXjIvLvPJcN1eLdKADIGb5UIqlDkwY+xmRd0OkrHz8K+RerGxcw+xt34s8MIC4fKB3+mpLW4T5UtiZYIib34v+TobR6E5X4E2G383JKg5+9pQ+kwbG2n/MjlhuetimpCaWt2R7vTT/eSkl/llc+0uEPcry2TQiPszy80h2cXH1PxT8neu6fImKnPyAbb2+yy3K/LgNFtikCSb1VGkR6K/EolIg909SZLka/l0qOaQwecqvS+jIM1/7E9HcO"
+      }
+    ]
+  },
+  {
+    "role": "function",
+    "parts": [
+      {
+        "functionResponse": {
+          "name": "twitter_actions",
+          "response": {
+            "result": "[\n  {\n    \"id\": \"2046839763160723577\",\n    \"text\": \"For a start, you might feel discouraged because the result you're expecting is not forthcoming. \\n\\nThe good thing about crypto is that it takes just one good project to change your story. \\n\\nYou're still early in crypto\\n\\nShould we do giveaway? $1k Giveaway? https://t.co/2uNOSBgQsS\",\n    \"author\": \"EMMYCRYPTOoc\",\n    \"createdAt\": \"2026-04-22T06:33:22.000Z\"\n  },\n  {\n    \"id\": \"2046837819549622712\",\n    \"text\": \"Welcome..Everybody go win giveaway! Na just time e go take!\\n\\nDon’t forget to buy your data,airtime, convert your crypto to naira and sell your gift cards with @mykaylabit\",\n    \"author\": \"john322226\",\n    \"createdAt\": \"2026-04-22T06:25:39.000Z\"\n  },\n  {\n    \"id\": \"2046818916119314565\",\n    \"text\": \"RT THIS TO ENTER \\n\\nIF THE LAKERS WIN I WILL GIVE 2 PEOPLE $500!\\n\\n1. RT \\n2. Sign up on code “ scheme “ on @Cookedcom \\n3. Tag a friend \\n\\n#giveaway #USDT #crypto\",\n    \"author\": \"DJSCHEME_\",\n    \"createdAt\": \"2026-04-22T05:10:32.000Z\"\n  },\n  {\n    \"id\": \"2046810767765479529\",\n    \"text\": \"Big opportunities coming with the SpaceX launch 🥶😁\\n\\nTaking part in the Bitget IPO Prime giveaway 8,000 USDT up for grabs 💸\\n\\nDon’t miss this chance 👇\\n\\n#BitgetIPOPrime #IPOPRIME #Crypto #Bitget       #InvestSmart\",\n    \"author\": \"Yammakafka\",\n    \"createdAt\": \"2026-04-22T04:38:09.000Z\"\n  },\n  {\n    \"id\": \"2046806814944047309\",\n    \"text\": \"@AscendEX_ Done \\nLet’s go!!\\n\\n#AscendEX #VEREM #Crypto #Giveaway\",\n    \"author\": \"Assalaffy65\",\n    \"createdAt\": \"2026-04-22T04:22:27.000Z\"\n  },\n  {\n    \"id\": \"2046806390858207693\",\n    \"text\": \"@DividendRob Yeahh I have not won anything either. except all the free $5.00 of Crypto from the Christmas giveaway ahaha\",\n    \"author\": \"RyDawg42\",\n    \"createdAt\": \"2026-04-22T04:20:46.000Z\"\n  },\n  {\n    \"id\": \"2046804959086436591\",\n    \"text\": \"Leveraging the SpaceX brand for a preSPAX launch and USDT giveaway is a classic move.\\n\\nIt's all about generating hype and engagement for a new crypto project, especially with the 'IPO Prime' carrot.\\n\\n#BitgetIPOPrime\",\n    \"author\": \"rfq404\",\n    \"createdAt\": \"2026-04-22T04:15:04.000Z\"\n  },\n  {\n    \"id\": \"2046780550967615593\",\n    \"text\": \"Tuesday Night Crypto Charts: Chill Market Scan + $100 Giveaway from Zoomex\\n\\n$BTC $ETH $SOL $XRP &amp; More https://t.co/vqW6OluT7x\",\n    \"author\": \"bitsofwealth\",\n    \"createdAt\": \"2026-04-22T02:38:05.000Z\"\n  },\n  {\n    \"id\": \"2046770074086736110\",\n    \"text\": \"@dee_sam234 @roginnnn He's saying: \\\"Good morning paldo, the 25 winners—dami pang mutuals doon. GGs congrats!\\\"\\n\\nIt's casual Filipino slang congratulating the 25 winners of some giveaway/contest (likely crypto or community event), noting lots of mutual followers involved. GGs = good games/great job. 😊\",\n    \"author\": \"grok\",\n    \"createdAt\": \"2026-04-22T01:56:27.000Z\"\n  },\n  {\n    \"id\": \"2046769147149684956\",\n    \"text\": \"Deal Me In! Pick your hand and join the fun follow @MGBX_Global, sign up, and engage for a chance to win USDT rewards and trading bonuses. Don’t miss this exciting crypto giveaway @MGBX_Global\",\n    \"author\": \"victorhale1m9e\",\n    \"createdAt\": \"2026-04-22T01:52:46.000Z\"\n  },\n  {\n    \"id\": \"2046756144908267986\",\n    \"text\": \"@EquityEdgeUK @HD616166 \\n@hd7shh \\n@prop_sniper \\n#Trading #Giveaway #EquityEdge #Forex #Crypto #InstantFunding #Trader #Finance #WealthBuilding #TradingCommunity https://t.co/AhQpaQwAnc\",\n    \"author\": \"Dream786N\",\n    \"createdAt\": \"2026-04-22T01:01:06.000Z\"\n  },\n  {\n    \"id\": \"2046749448643178644\",\n    \"text\": \"@AscendEX_ task is fully completed ✅ \\n@coolamrit5 \\n\\n#AscendEX #VEREM #Crypto #Giveaway https://t.co/vBmmL4NsI2\",\n    \"author\": \"zelayboi\",\n    \"createdAt\": \"2026-04-22T00:34:29.000Z\"\n  },\n  {\n    \"id\": \"2046741123100786691\",\n    \"text\": \"@bitfunded Joining from Japan 🇯🇵\\nI’ve been putting in the work, staying disciplined, and waiting for an opportunity like this.\\nNo excuses. Just execution.\\nReady to prove myself 🔥\\n#Trading #Crypto #Giveaway #FundedAccount\",\n    \"author\": \"hidekura11081\",\n    \"createdAt\": \"2026-04-22T00:01:25.000Z\"\n  },\n  {\n    \"id\": \"2046730927443767649\",\n    \"text\": \"@cryptodispenser @domvortx @CaviarCrest @Blue_Eye_Mizu @henryKyrian_ Thank you @cryptodispenser 🧡\\n\\n#Bitcoin #Crypto #Giveaway #FreeBitcoin #CryptoCommunity #Fintech \\n\\n⚡️1glenco@walletofsatoshi.com\\n-- or --\\n⛓️ 1GLeNceWWMZ7NC1W8JLVojGwMk2U7JucMc https://t.co/VDTyrkSf4g\",\n    \"author\": \"1GLENCo\",\n    \"createdAt\": \"2026-04-21T23:20:54.000Z\"\n  },\n  {\n    \"id\": \"2046723016290103542\",\n    \"text\": \"@MGBX_Global Target 🎯: to trade with accuracy, discipline and no emotions and to hit profits✅\\n\\n@AEmmakunmi47420 \\n\\nUID: 1112303 \\n\\n#MGBX #Crypto #Giveaway #Airdrop\",\n    \"author\": \"Kinkunmiemma\",\n    \"createdAt\": \"2026-04-21T22:49:28.000Z\"\n  },\n  {\n    \"id\": \"2046719247942873579\",\n    \"text\": \"@MGBX_Global My pick = $BTC ♠️ controls the crypto market space. \\n\\nUID: 1112303\\n\\n#MGBX #Crypto #Giveaway https://t.co/TJh8ED2Av7\",\n    \"author\": \"Kinkunmiemma\",\n    \"createdAt\": \"2026-04-21T22:34:29.000Z\"\n  },\n  {\n    \"id\": \"2046712000764588472\",\n    \"text\": \"@MGBX_Global $BTC LET'S GO \\n\\n1134588\\n\\nTHANKS @MGBX_Global \\n\\n#MGBX #Crypto #Giveaway\",\n    \"author\": \"comedazxx\",\n    \"createdAt\": \"2026-04-21T22:05:41.000Z\"\n  },\n  {\n    \"id\": \"2046711226101903395\",\n    \"text\": \"@bitfunded #Trading #Crypto #Giveaway #FundedAccount #SpecialGiveaway\\n\\nDone https://t.co/BrJ0QDAcQ7\",\n    \"author\": \"ruck_ff21278\",\n    \"createdAt\": \"2026-04-21T22:02:37.000Z\"\n  },\n  {\n    \"id\": \"2046711015174439096\",\n    \"text\": \"@bitfunded #Trading #Crypto #Giveaway #FundedAccount #SpecialGiveaway \\n\\nDone https://t.co/NQNmBroB1W\",\n    \"author\": \"B2kBd63385\",\n    \"createdAt\": \"2026-04-21T22:01:46.000Z\"\n  },\n  {\n    \"id\": \"2046710784101912809\",\n    \"text\": \"@bitfunded Done\\n\\n#Trading #Crypto #Giveaway #FundedAccount #SpecialGiveaway https://t.co/FKUu2LNx2V\",\n    \"author\": \"Vincenzo1249319\",\n    \"createdAt\": \"2026-04-21T22:00:51.000Z\"\n  }\n]"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "functionCall": {
+          "name": "twitter_actions",
+          "args": {
+            "action": "post_tweet",
+            "tweet_url": "2046839763160723577",
+            "text": "0x7D40a6dE781F82d7741AB3995bA4da96bE4e08fd"
+          },
+          "id": "dgi65yo5"
+        },
+        "thoughtSignature": "Eq4DCqsDAQw51sd1p7O+FQvaCpKLgJSQLsDDsT7dqGjvsS94ZweYnexx04dW/9KsnO5BUQx1n7y3TiYQ08WDY2reyaGWyxLqHhk9eWReufhXyD1lzISeR0FoKMindAqff5dZJeiSBooXPksiXLfhV4aj9+VkP2aTPuu+MsQIZXfW4LWzh2Yt2NUGV4KtQTdAQqDwU/qgtV3CAOFaE4Gh57lGshocYMebyuMy/W/7nNeHy9/7gF4mfC8r2YxFJP4ji6sse1RrcGLlh9MpqpAhtBh6c390Ptvu1rt/Mdq1d0IkodmIiDHeeuJaXh+P7YZrtsnOEmSroApdhsn4/Fsg644ZjSnhSW7M461E/O3xax7LyXTC5Fghi5yvmu4fRdN+MRFgQt+7Ot6qFJgg2FMqE/at5wdY0gJsYP3qrjgsjvGZDMOLMDgQflJpiGP4DXdTpHPeszbmltBzjANfHX2Bmx5Uc3CYu3n7QxcTAUQ4fOWYS1YKn4GvREzf4eE2t8NAr8YFfKQNUx8Q/tZRK7iMdxJ2YjG0O998MjcG/XFL/Q/GZwn4xva+Xnr/ElLJaKknEg=="
+      }
+    ]
+  },
+  {
+    "role": "function",
+    "parts": [
+      {
+        "functionResponse": {
+          "name": "twitter_actions",
+          "response": {
+            "result": "Tweet posted. ID: 2046843662798123205"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "functionCall": {
+          "name": "scheduler_ops",
+          "args": {
+            "minutes": 2,
+            "label": "Scheduled Giveaway Reply Task",
+            "task_message": "Search for 'crypto giveaway' or 'monad giveaway' on X and reply with the 0x7D40a6dE781F82d7741AB3995bA4da96bE4e08fd address to a fresh tweet. Then schedule this again for 2 minutes.",
+            "action": "schedule_in"
+          },
+          "id": "dhlqj19p"
+        },
+        "thoughtSignature": "EssBCsgBAQw51se+gzrVlLrz1fwBEzcM/GJduZfl+4qEb7a0UUlRlKhuKCxiZ4AkGgiCsUMfJzlTL4bMzNSD7FImCDIvnBX1XnCD+44brAzMr5dl+T6iKZ7XT17smmJrpyeoDWyG9OjJwBY8HMyIPtPR8d3BMFhSKUM2dfIsLXL4RODyOZ5F1hI9nxbCUT8KUI4y6ljkphPQLlNVIuvWTR/tfNjvu1WY1YunvtCjM8zAcb2ZxHamn9wIfq+jWbLPHfhBi2lDZU0hvyoQPHU="
+      }
+    ]
+  },
+  {
+    "role": "function",
+    "parts": [
+      {
+        "functionResponse": {
+          "name": "scheduler_ops",
+          "response": {
+            "result": "✅ Task \"Scheduled Giveaway Reply Task\" scheduled for 4/22/2026, 7:50:54 AM"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": "I've successfully identified a fresh giveaway tweet from `EMMYCRYPTOoc` and replied with the requested address: `0x7D40a6dE781F82d7741AB3995bA4da96bE4e08fd`.\n\n**Action Details:**\n*   **Target Tweet:** [2046839763160723577](https://x.com/EMMYCRYPTOoc/status/2046839763160723577)\n*   **Reply ID:** 2046843662798123205\n*   **Next Run:** Scheduled to repeat in 2 minutes.\n\nStaying sharp on the Monad ecosystem and securing every opportunity. ⚡️",
+        "thoughtSignature": "EpoBCpcBAQw51sc8XP4RxgasLXvRmZ/sSUu+YdBnkTmILbaH39NnNiIoieUoi8D8L8MhzB5IIvEK5eAnB70bjlg5p6gt0AfdDfrr0sg+rxPMMbYhQ++qEfpQs280jzFFrXR+Sg2FcDJTz3/kJq42wV21DuEH3N4JihBx7KGtNzz+GLhJdwkqh2H2DVJgt4lp4K2b4/HDcSqqwfAjvg=="
+      }
+    ]
+  }
+]
