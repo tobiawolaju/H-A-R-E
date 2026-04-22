@@ -15,27 +15,43 @@ const mailparser = optionalRequire('mailparser');
 
 function ensureSmtpConfig() {
   if (!nodemailer) throw new Error('Missing dependency: nodemailer');
-  if (!config.EMAIL_SMTP_HOST || !config.EMAIL_SMTP_USER || !config.EMAIL_SMTP_PASS) {
-    throw new Error('Missing SMTP config. Set EMAIL_SMTP_HOST, EMAIL_SMTP_USER, and EMAIL_SMTP_PASS.');
+  if (!config.EMAIL_ADDRESS || !config.EMAIL_APP_PASSWORD) {
+    throw new Error('Missing Gmail email config. Set EMAIL_ADDRESS and EMAIL_APP_PASSWORD.');
   }
 }
 
 function ensureImapConfig() {
   if (!imapflow) throw new Error('Missing dependency: imapflow');
-  if (!config.EMAIL_IMAP_HOST || !config.EMAIL_IMAP_USER || !config.EMAIL_IMAP_PASS) {
-    throw new Error('Missing IMAP config. Set EMAIL_IMAP_HOST, EMAIL_IMAP_USER, and EMAIL_IMAP_PASS.');
+  if (!config.EMAIL_ADDRESS || !config.EMAIL_APP_PASSWORD) {
+    throw new Error('Missing Gmail email config. Set EMAIL_ADDRESS and EMAIL_APP_PASSWORD.');
   }
+}
+
+function getEmailUser() {
+  return config.EMAIL_ADDRESS || config.EMAIL_SMTP_USER || config.EMAIL_IMAP_USER;
+}
+
+function getEmailPass() {
+  return config.EMAIL_APP_PASSWORD || config.EMAIL_SMTP_PASS || config.EMAIL_IMAP_PASS;
+}
+
+function getSmtpHost() {
+  return config.EMAIL_SMTP_HOST || 'smtp.gmail.com';
+}
+
+function getImapHost() {
+  return config.EMAIL_IMAP_HOST || 'imap.gmail.com';
 }
 
 function createImapClient() {
   ensureImapConfig();
   return new imapflow.ImapFlow({
-    host: config.EMAIL_IMAP_HOST,
+    host: getImapHost(),
     port: config.EMAIL_IMAP_PORT,
     secure: config.EMAIL_IMAP_SECURE,
     auth: {
-      user: config.EMAIL_IMAP_USER,
-      pass: config.EMAIL_IMAP_PASS
+      user: getEmailUser(),
+      pass: getEmailPass()
     }
   });
 }
@@ -43,12 +59,12 @@ function createImapClient() {
 function createSmtpTransport() {
   ensureSmtpConfig();
   return nodemailer.createTransport({
-    host: config.EMAIL_SMTP_HOST,
+    host: getSmtpHost(),
     port: config.EMAIL_SMTP_PORT,
     secure: config.EMAIL_SMTP_SECURE,
     auth: {
-      user: config.EMAIL_SMTP_USER,
-      pass: config.EMAIL_SMTP_PASS
+      user: getEmailUser(),
+      pass: getEmailPass()
     }
   });
 }
@@ -56,7 +72,7 @@ function createSmtpTransport() {
 async function sendEmail({ to, subject, text, html, cc, bcc, replyTo }) {
   const transport = createSmtpTransport();
   const result = await transport.sendMail({
-    from: config.EMAIL_DEFAULT_FROM,
+    from: config.EMAIL_DEFAULT_FROM || getEmailUser(),
     to,
     subject,
     text,

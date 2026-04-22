@@ -8,6 +8,7 @@ const { skill } = require('../utils/logger');
 const VAULT_DIR = path.join(process.cwd(), '.mini-miles');
 const VAULT_FILE = path.join(VAULT_DIR, 'wallet-vault.json');
 const VAULT_KEY_FILE = path.join(VAULT_DIR, 'wallet-vault.key');
+const MIGRATIONS_FILE = path.join(VAULT_DIR, 'wallet-migrations.json');
 
 const optionalRequire = (name) => {
   try {
@@ -32,7 +33,7 @@ const suiKeypairMod = optionalRequire('@mysten/sui/keypairs/ed25519');
 const EVm_NETWORKS = {
   eth: { name: 'eth', rpcEnv: 'WALLET_RPC_URL_ETH', chainId: 1, symbol: 'ETH' },
   ethereum: { name: 'eth', rpcEnv: 'WALLET_RPC_URL_ETH', chainId: 1, symbol: 'ETH' },
-  monad: { name: 'monad', rpcEnv: 'WALLET_RPC_URL_MONAD', chainId: 10143, symbol: 'MON' },
+  monad: { name: 'monad', rpcEnv: 'WALLET_RPC_URL_MONAD', chainId: 143, symbol: 'MON' },
   base: { name: 'base', rpcEnv: 'WALLET_RPC_URL_BASE', chainId: 8453, symbol: 'ETH' },
   polygon: { name: 'polygon', rpcEnv: 'WALLET_RPC_URL_POLYGON', chainId: 137, symbol: 'MATIC' },
   hyperevm: { name: 'hyperevm', rpcEnv: 'WALLET_RPC_URL_HYPEREVM', chainId: 999, symbol: 'ETH' },
@@ -57,6 +58,9 @@ async function ensureVault() {
   await fs.ensureDir(VAULT_DIR);
   if (!(await fs.pathExists(VAULT_FILE))) {
     await fs.writeJson(VAULT_FILE, { wallets: [] }, { spaces: 2 });
+  }
+  if (!(await fs.pathExists(MIGRATIONS_FILE))) {
+    await fs.writeJson(MIGRATIONS_FILE, { migrations: [] }, { spaces: 2 });
   }
 }
 
@@ -111,6 +115,16 @@ async function readVault() {
 async function writeVault(vault) {
   await ensureVault();
   await fs.writeJson(VAULT_FILE, vault, { spaces: 2 });
+}
+
+async function readMigrations() {
+  await ensureVault();
+  return fs.readJson(MIGRATIONS_FILE);
+}
+
+async function writeMigrations(migrations) {
+  await ensureVault();
+  await fs.writeJson(MIGRATIONS_FILE, migrations, { spaces: 2 });
 }
 
 function getMnemonicFromRecord(record) {
@@ -224,6 +238,16 @@ function getWallet(recordOrId, vault) {
   return record;
 }
 
+function getSourceWallet(recordOrId, vault) {
+  const query = String(recordOrId || '').trim().toLowerCase();
+  if (!query || query === 'current' || query === 'latest' || query === 'most recent') {
+    const ordered = [...vault.wallets].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+    if (ordered.length === 0) throw new Error('No wallets available');
+    return ordered[0];
+  }
+  return getWallet(recordOrId, vault);
+}
+
 function toBigIntAmount(amount, decimals) {
   const value = String(amount || '').trim();
   if (!value) throw new Error('Amount is required');
@@ -240,6 +264,14 @@ function formatWalletRecord(record) {
     chains: record.chains,
     addresses: record.addresses
   };
+}
+
+function formatChainSummary(chains) {
+  return Array.from(new Set((chains || []).map((chain) => normalizeChain(chain)))).sort();
+}
+
+function getAllSupportedMigrationChains() {
+  return ['eth', 'base', 'polygon', 'monad', 'hyperevm', 'solana', 'btc', 'sui'];
 }
 
 async function createWallet({ label, chains }) {
@@ -510,6 +542,133 @@ async function deleteWallet({ walletRef }) {
   return `Wallet removed: ${walletRef}`;
 }
 
+async function startMigration({ sourceWalletRef, chains }) {
+  const vault = await readVault();
+  const source = getSourceWallet(sourceWalletRef, vault);
+  const selectedChains = formatChainSummary(chains && String(chains).trim() ? chains.split(',') : getAllSupportedMigrationChains());
+  const mnemonic = ethers?.Wallet?.createRandom?.().mnemonic?.phrase;
+  if (!mnemonic) {
+    throw new Error('Missing dependency: ethers is required to create the destination wallet');
+  }
+
+  const destinationAddresses = await deriveWalletSnapshot(mnemonic, selectedChains);
+  const destination = {
+    id: crypto.randomUUID(),
+    label: `${source.label || 'wallet'}-migration-${crypto.randomBytes(2).toString('hex')}`,
+    chains: selectedChains,
+    mnemonicEncrypted: encryptText(mnemonic),
+    addresses: destinationAddresses,
+    createdAt: new Date().toISOString()
+  };
+
+  vault.wallets.push(destination);
+  await writeVault(vault);
+
+  const migrations = await readMigrations();
+  const migration = {
+    id: crypto.randomUUID(),
+    sourceWalletId: source.id,
+    sourceWalletLabel: source.label,
+    destinationWalletId: destination.id,
+    destinationWalletLabel: destination.label,
+    chains: selectedChains,
+    status: 'pending_confirmation',
+    createdAt: new Date().toISOString()
+  };
+  migrations.migrations.push(migration);
+  await writeMigrations(migrations);
+
+  return JSON.stringify({
+    migrationId: migration.id,
+    status: migration.status,
+    sourceWallet: formatWalletRecord(source),
+    destinationWallet: formatWalletRecord(destination),
+    confirmation: `Reply with !wallet confirm ${migration.id} to move supported native assets from ${source.label || source.id} to ${destination.label}.`
+  }, null, 2);
+}
+
+async function confirmMigration({ migrationId }) {
+  const migrations = await readMigrations();
+  const migration = migrations.migrations.find((item) => item.id === migrationId);
+  if (!migration) {
+    throw new Error(`Migration not found: ${migrationId}`);
+  }
+  if (migration.status !== 'pending_confirmation') {
+    return JSON.stringify({ migrationId, status: migration.status }, null, 2);
+  }
+
+  const vault = await readVault();
+  const source = vault.wallets.find((item) => item.id === migration.sourceWalletId);
+  const destination = vault.wallets.find((item) => item.id === migration.destinationWalletId);
+  if (!source || !destination) {
+    throw new Error('Source or destination wallet missing from vault');
+  }
+
+  const moves = [];
+  const sourceMnemonic = getMnemonicFromRecord(source);
+  const destinationMnemonic = getMnemonicFromRecord(destination);
+  const destinationSnapshot = await deriveWalletSnapshot(destinationMnemonic, migration.chains);
+
+  for (const chain of migration.chains) {
+    const chainKey = normalizeChain(chain);
+    const destinationAddress = destinationSnapshot[chainKey] || destination.addresses[chainKey];
+    if (!destinationAddress) {
+      moves.push({ chain: chainKey, skipped: true, reason: 'Destination address unavailable' });
+      continue;
+    }
+
+    try {
+      const balance = JSON.parse(await getBalance({ walletRef: source.id, chain: chainKey }));
+      const raw = balance.raw ? BigInt(balance.raw) : 0n;
+      if (raw === 0n) {
+        moves.push({ chain: chainKey, skipped: true, reason: 'No balance' });
+        continue;
+      }
+
+      if (chainKey === 'btc' || chainKey === 'btc-testnet') {
+        const result = JSON.parse(await sendFunds({ walletRef: source.id, chain: chainKey, to: destinationAddress, amount: String(balance.balance) }));
+        moves.push({ chain: chainKey, moved: true, result });
+      } else if (chainKey === 'solana') {
+        const result = JSON.parse(await sendFunds({ walletRef: source.id, chain: chainKey, to: destinationAddress, amount: String(balance.balance) }));
+        moves.push({ chain: chainKey, moved: true, result });
+      } else if (chainKey === 'sui') {
+        const result = JSON.parse(await sendFunds({ walletRef: source.id, chain: chainKey, to: destinationAddress, amount: String(balance.balance) }));
+        moves.push({ chain: chainKey, moved: true, result });
+      } else {
+        const result = JSON.parse(await sendFunds({ walletRef: source.id, chain: chainKey, to: destinationAddress, amount: String(balance.balance) }));
+        moves.push({ chain: chainKey, moved: true, result });
+      }
+    } catch (err) {
+      moves.push({ chain: chainKey, skipped: true, reason: err.message });
+    }
+  }
+
+  const sourceIndex = vault.wallets.findIndex((item) => item.id === source.id);
+  const hasFailure = moves.some((move) => move.skipped && move.reason && !/No balance|Destination address unavailable/i.test(move.reason));
+  if (!hasFailure && sourceIndex >= 0) {
+    vault.wallets.splice(sourceIndex, 1);
+    await writeVault(vault);
+    migration.status = 'confirmed';
+    migration.confirmedAt = new Date().toISOString();
+    migration.sourceDeleted = true;
+  } else {
+    await writeVault(vault);
+    migration.status = 'partial';
+    migration.confirmedAt = new Date().toISOString();
+    migration.sourceDeleted = false;
+  }
+  migration.moves = moves;
+  await writeMigrations(migrations);
+
+  return JSON.stringify({
+    migrationId,
+    status: migration.status,
+    sourceDeleted: Boolean(migration.sourceDeleted),
+    destinationWallet: formatWalletRecord(destination),
+    moves
+  }, null, 2);
+}
+
 async function listSupportedChains() {
   return JSON.stringify({
     evm: Object.values(EVm_NETWORKS).map((item) => item.name).filter((v, idx, arr) => arr.indexOf(v) === idx),
@@ -530,4 +689,7 @@ module.exports = {
   signContract,
   deleteWallet,
   listSupportedChains
+  ,
+  startMigration,
+  confirmMigration
 };

@@ -1,0 +1,41 @@
+# Core app
+DISCORD_MASTER_ID=tobiawolaju
+DISCORD_TOKEN=
+GEMINI_API_KEY=
+GOOGLE_GENAI_API_KEY=
+
+# GitHub
+GITHUB_TOKEN=
+
+# Twitter / social
+TWITTER_AUTH_TOKEN=
+TWITTER_MASTER_USERNAME=omoonchain
+
+# Wallet vault
+# If set, this becomes the encryption passphrase for the local wallet vault.
+# If left empty, the app creates a local vault key file instead.
+WALLET_VAULT_PASSPHRASE=
+
+# EVM RPCs
+# ETH mainnet and Monad usually need a provider URL.
+WALLET_RPC_URL_ETH=
+WALLET_RPC_URL_MONAD=
+
+# These have built-in public defaults, but you can override them here.
+WALLET_RPC_URL_BASE=
+WALLET_RPC_URL_POLYGON=
+WALLET_RPC_URL_HYPEREVM=
+
+# Solana
+SOLANA_RPC_URL=https://api.mainnet-beta.solana.com
+
+# Sui
+SUI_RPC_URL=https://fullnode.mainnet.sui.io:443
+
+# Bitcoin
+BTC_MEMPOOL_BASE_URL=https://mempool.space
+
+# Gmail email
+# Turn on 2-Step Verification in your Google Account, then create an App Password.
+EMAIL_ADDRESS=yourname@gmail.com
+EMAIL_APP_PASSWORD=your_16_character_app_password

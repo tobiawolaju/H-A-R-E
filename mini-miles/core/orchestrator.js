@@ -56,6 +56,14 @@ class Orchestrator {
     return this.skills.get('skills_marketplace');
   }
 
+  _getWalletSkill() {
+    return this.skills.get('wallet_ops');
+  }
+
+  _getEmailSkill() {
+    return this.skills.get('email_ops');
+  }
+
   _getSkillGroups() {
     return [
       {
@@ -132,6 +140,23 @@ class Orchestrator {
       '- `!skills update` Update installed marketplace skills',
       '- `!skills local` List locally loaded JS skills',
       '- `!skills reload` Reload locally loaded JS skills',
+      '- `!wallet create [label] [chains]` Create a protected wallet',
+      '- `!wallet import <mnemonic> [label] [chains]` Import a wallet into the vault',
+      '- `!wallet list` List stored wallets',
+      '- `!wallet chains` List supported chains',
+      '- `!wallet address <wallet> <chain>` Get a wallet address',
+      '- `!wallet balance <wallet> <chain>` Check a balance',
+      '- `!wallet send <wallet> <chain> <to> <amount>` Send funds',
+      '- `!wallet sign <wallet> <chain> <message>` Sign a message',
+      '- `!wallet contract <wallet> <chain> <to> <data> [value]` Sign a contract transaction',
+      '- `!wallet delete <wallet>` Remove a stored wallet',
+      '- `!wallet migrate [wallet]` Create a new wallet and prepare migration',
+      '- `!wallet confirm <migration id>` Confirm a prepared migration',
+      '- `!email send <to> | <subject> | <body>` Send an email',
+      '- `!email read [limit] [mailbox]` Read emails',
+      '- `!email delete <uid> [mailbox]` Delete an email',
+      '- `!email mailboxes` List mailboxes',
+      '- `!email search <json query>` Search emails with IMAP query fields',
       '- `!reply <tweet link> <text>` Reply to a tweet',
       '- `!comment <tweet link> <text>` Alias for `!reply`',
       '- `!quote <tweet link> <text>` Quote a tweet',
@@ -158,6 +183,8 @@ class Orchestrator {
       '- `!skills add vercel-labs/agent-skills`',
       '- `!skills remove vercel-labs/agent-skills@web-design-guidelines`',
       '- `!skills local`',
+      '- `!wallet list`',
+      '- `!email read 5 INBOX`',
       '- `Search Twitter for I follow back`',
       '- `Fetch my GitHub profile and latest repo activity`',
       '',
@@ -383,6 +410,192 @@ class Orchestrator {
     }
   }
 
+  async _handleWalletCommand(text, reply, userId) {
+    const walletSkill = this._getWalletSkill();
+    if (!walletSkill) {
+      await reply('Wallet operations are unavailable because `wallet_ops` is not loaded.');
+      return true;
+    }
+
+    const trimmed = (text || '').trim();
+    if (!trimmed) {
+      await reply('Usage: `!wallet create [label] [chains]`, `!wallet list`, `!wallet balance <wallet> <chain>`, `!wallet send <wallet> <chain> <to> <amount>`, `!wallet sign <wallet> <chain> <message>`, `!wallet contract <wallet> <chain> <to> <data> [value]`, `!wallet delete <wallet>`');
+      return true;
+    }
+
+    const [subcommand, ...rest] = trimmed.split(/\s+/);
+    const remainder = rest.join(' ').trim();
+
+    switch (subcommand.toLowerCase()) {
+      case 'create': {
+        const [label, ...chainParts] = remainder ? remainder.split(/\s+/) : [];
+        const chains = chainParts.join(' ').trim();
+        await reply(await walletSkill.execute(
+          { action: 'create_wallet', label, chains },
+          { userId, masterId: config.MASTER_USER_ID, orchestrator: this }
+        ));
+        return true;
+      }
+      case 'import': {
+        const [mnemonic, label, ...chainParts] = remainder ? remainder.split(/\s+/) : [];
+        const chains = chainParts.join(' ').trim();
+        await reply(await walletSkill.execute(
+          { action: 'import_wallet', mnemonic, label, chains },
+          { userId, masterId: config.MASTER_USER_ID, orchestrator: this }
+        ));
+        return true;
+      }
+      case 'list':
+        await reply(await walletSkill.execute(
+          { action: 'list_wallets' },
+          { userId, masterId: config.MASTER_USER_ID, orchestrator: this }
+        ));
+        return true;
+      case 'chains':
+        await reply(await walletSkill.execute(
+          { action: 'list_supported_chains' },
+          { userId, masterId: config.MASTER_USER_ID, orchestrator: this }
+        ));
+        return true;
+      case 'address': {
+        const [walletRef, chain] = remainder.split(/\s+/);
+        await reply(await walletSkill.execute(
+          { action: 'get_address', walletRef, chain },
+          { userId, masterId: config.MASTER_USER_ID, orchestrator: this }
+        ));
+        return true;
+      }
+      case 'balance': {
+        const [walletRef, chain] = remainder.split(/\s+/);
+        await reply(await walletSkill.execute(
+          { action: 'get_balance', walletRef, chain },
+          { userId, masterId: config.MASTER_USER_ID, orchestrator: this }
+        ));
+        return true;
+      }
+      case 'send': {
+        const [walletRef, chain, to, amount] = remainder.split(/\s+/);
+        await reply(await walletSkill.execute(
+          { action: 'send_funds', walletRef, chain, to, amount },
+          { userId, masterId: config.MASTER_USER_ID, orchestrator: this }
+        ));
+        return true;
+      }
+      case 'sign': {
+        const [walletRef, chain, ...messageParts] = remainder.split(/\s+/);
+        await reply(await walletSkill.execute(
+          { action: 'sign_message', walletRef, chain, message: messageParts.join(' ') },
+          { userId, masterId: config.MASTER_USER_ID, orchestrator: this }
+        ));
+        return true;
+      }
+      case 'contract': {
+        const [walletRef, chain, to, valueOrData, ...restParts] = remainder.split(/\s+/);
+        const maybeValue = restParts.length > 0 ? valueOrData : '';
+        const data = restParts.length > 0 ? restParts.join(' ') : valueOrData;
+        await reply(await walletSkill.execute(
+          { action: 'sign_contract', walletRef, chain, to, data, value: maybeValue },
+          { userId, masterId: config.MASTER_USER_ID, orchestrator: this }
+        ));
+        return true;
+      }
+      case 'delete':
+      case 'remove':
+        await reply(await walletSkill.execute(
+          { action: 'delete_wallet', walletRef: remainder },
+          { userId, masterId: config.MASTER_USER_ID, orchestrator: this }
+        ));
+        return true;
+      case 'migrate': {
+        const sourceWalletRef = remainder || 'current';
+        await reply(await walletSkill.execute(
+          { action: 'migrate_wallet', sourceWalletRef },
+          { userId, masterId: config.MASTER_USER_ID, orchestrator: this }
+        ));
+        return true;
+      }
+      case 'confirm': {
+        await reply(await walletSkill.execute(
+          { action: 'confirm_migration', migrationId: remainder },
+          { userId, masterId: config.MASTER_USER_ID, orchestrator: this }
+        ));
+        return true;
+      }
+      default:
+        await reply('Unknown wallet command. Use `!wallet create`, `!wallet list`, `!wallet balance`, `!wallet send`, `!wallet sign`, `!wallet contract`, `!wallet delete`, `!wallet migrate`, `!wallet confirm`, or `!wallet chains`.');
+        return true;
+    }
+  }
+
+  async _handleEmailCommand(text, reply, userId) {
+    const emailSkill = this._getEmailSkill();
+    if (!emailSkill) {
+      await reply('Email operations are unavailable because `email_ops` is not loaded.');
+      return true;
+    }
+
+    const trimmed = (text || '').trim();
+    if (!trimmed) {
+      await reply('Usage: `!email send <to> | <subject> | <body>`, `!email read [limit] [mailbox]`, `!email delete <uid> [mailbox]`, `!email mailboxes`, or `!email search <json query>`');
+      return true;
+    }
+
+    const [subcommand, ...rest] = trimmed.split(/\s+/);
+    const remainder = rest.join(' ').trim();
+
+    switch (subcommand.toLowerCase()) {
+      case 'send': {
+        const parts = remainder.split('|').map((part) => part.trim());
+        const [to, subject, body] = parts;
+        await reply(await emailSkill.execute(
+          { action: 'send_email', to, subject, text: body },
+          { userId, masterId: config.MASTER_USER_ID, orchestrator: this }
+        ));
+        return true;
+      }
+      case 'read': {
+        const [limitRaw, mailbox] = remainder.split(/\s+/);
+        const limit = limitRaw ? Number(limitRaw) : undefined;
+        await reply(await emailSkill.execute(
+          { action: 'read_emails', limit, mailbox },
+          { userId, masterId: config.MASTER_USER_ID, orchestrator: this }
+        ));
+        return true;
+      }
+      case 'delete': {
+        const [uidRaw, mailbox] = remainder.split(/\s+/);
+        await reply(await emailSkill.execute(
+          { action: 'delete_email', uid: Number(uidRaw), mailbox },
+          { userId, masterId: config.MASTER_USER_ID, orchestrator: this }
+        ));
+        return true;
+      }
+      case 'mailboxes':
+      case 'folders':
+        await reply(await emailSkill.execute(
+          { action: 'list_mailboxes' },
+          { userId, masterId: config.MASTER_USER_ID, orchestrator: this }
+        ));
+        return true;
+      case 'search': {
+        let query = {};
+        try {
+          query = remainder ? JSON.parse(remainder) : {};
+        } catch {
+          query = remainder ? { subject: remainder } : {};
+        }
+        await reply(await emailSkill.execute(
+          { action: 'search_emails', query },
+          { userId, masterId: config.MASTER_USER_ID, orchestrator: this }
+        ));
+        return true;
+      }
+      default:
+        await reply('Unknown email command. Use `!email send`, `!email read`, `!email delete`, `!email mailboxes`, or `!email search`.');
+        return true;
+    }
+  }
+
   async _handleBangCommand(event) {
     const { platform, userId, content, reply } = event;
     const trimmed = content.trim();
@@ -417,6 +630,26 @@ class Orchestrator {
       }
 
       return this._handleSkillsCommand(skillsMatch[1] || '', reply, userId);
+    }
+
+    const walletMatch = trimmed.match(/^!wallet(?:\s+([\s\S]*))?$/i);
+    if (walletMatch) {
+      if (!isMaster) {
+        core(`Ignoring !wallet from ${userId} on ${platform} (Not Master)`);
+        return true;
+      }
+
+      return this._handleWalletCommand(walletMatch[1] || '', reply, userId);
+    }
+
+    const emailMatch = trimmed.match(/^!email(?:\s+([\s\S]*))?$/i);
+    if (emailMatch) {
+      if (!isMaster) {
+        core(`Ignoring !email from ${userId} on ${platform} (Not Master)`);
+        return true;
+      }
+
+      return this._handleEmailCommand(emailMatch[1] || '', reply, userId);
     }
 
     const githubWhoamiMatch = trimmed.match(/^!githubwhoami\s*$/i);

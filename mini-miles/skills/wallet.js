@@ -10,10 +10,12 @@ module.exports = {
       properties: {
         action: {
           type: 'string',
-          enum: ['create_wallet', 'import_wallet', 'list_wallets', 'get_address', 'get_balance', 'send_funds', 'sign_message', 'sign_contract', 'delete_wallet', 'list_supported_chains'],
+          enum: ['create_wallet', 'import_wallet', 'list_wallets', 'get_address', 'get_balance', 'send_funds', 'sign_message', 'sign_contract', 'delete_wallet', 'list_supported_chains', 'migrate_wallet', 'confirm_migration'],
           description: 'Wallet action to perform'
         },
         walletRef: { type: 'string', description: 'Wallet id or label' },
+        sourceWalletRef: { type: 'string', description: 'Wallet id, label, or current/latest for migration' },
+        migrationId: { type: 'string', description: 'Migration id to confirm' },
         label: { type: 'string', description: 'Human-readable wallet label' },
         mnemonic: { type: 'string', description: 'Mnemonic seed phrase for import' },
         chains: { type: 'string', description: 'Comma-separated chain list, for example eth,solana,btc,sui' },
@@ -54,6 +56,10 @@ module.exports = {
           return await wallet.deleteWallet(args);
         case 'list_supported_chains':
           return await wallet.listSupportedChains();
+        case 'migrate_wallet':
+          return await wallet.startMigration(args);
+        case 'confirm_migration':
+          return await wallet.confirmMigration(args);
         default:
           return `Error: Unknown action ${action}`;
       }
