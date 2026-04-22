@@ -219,11 +219,28 @@ body {
 
 /* Specific Tile Customizations */
 .won-tile {
+    position: relative;
     color: #ffffff;
-    background:
-        radial-gradient(circle at top right, rgba(255, 255, 255, 0.18), transparent 38%),
-        linear-gradient(180deg, #a61aff 0%, #7f00d4 100%);
+    background: transparent;
     border-color: rgba(255, 255, 255, 0.16);
+    isolation: isolate;
+}
+
+.won-tile::before {
+    content: "";
+    position: absolute;
+    inset: -20%;
+    background:
+        radial-gradient(circle at 14% 18%, rgba(255, 224, 238, 0.96), transparent 28%),
+        radial-gradient(circle at 82% 16%, rgba(255, 237, 133, 0.78), transparent 26%),
+        radial-gradient(circle at 56% 82%, rgba(141, 82, 255, 0.78), transparent 30%),
+        radial-gradient(circle at 86% 72%, rgba(74, 160, 255, 0.72), transparent 28%),
+        linear-gradient(135deg, #ffe0ee 0%, #ffe58a 24%, #9a5bff 56%, #4ca2ff 78%, #050505 100%);
+    background-size: 180% 180%;
+    filter: saturate(1.08) contrast(1.02);
+    animation: wonGradientShift 22s ease-in-out infinite alternate;
+    z-index: 0;
+    pointer-events: none;
 }
 
 .won-glow {
@@ -233,12 +250,14 @@ body {
         radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.16), transparent 28%),
         radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.12), transparent 24%);
     pointer-events: none;
-    z-index: 0;
+    z-index: 1;
 }
 
 .won-tile .tile-content {
     padding: 1.1rem;
     gap: 0.35rem;
+    position: relative;
+    z-index: 2;
 }
 
 .won-tile .project-name,
@@ -265,11 +284,11 @@ body {
 .project-card {
     display: flex;
     align-items: stretch;
-    gap: 0.55rem;
+    gap: 0.5rem;
     background: rgba(255, 255, 255, 0.1);
     border: 1px solid rgba(255, 255, 255, 0.16);
     border-radius: 16px;
-    padding: 0.45rem 0.55rem;
+    padding: 0.2rem 0.25rem;
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
     backdrop-filter: blur(8px);
 }
@@ -280,11 +299,11 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    gap: 0.15rem;
+    gap: 0.1rem;
 }
 
 .project-title {
-    font-size: 0.92rem;
+    font-size: 0.84rem;
     font-weight: 800;
     letter-spacing: -0.02em;
     line-height: 1.1;
@@ -293,12 +312,33 @@ body {
 .project-card .project-desc {
     margin-bottom: 0;
     color: rgba(255, 255, 255, 0.84);
-    font-size: 0.72rem;
-    line-height: 1.25;
+    font-size: 0.64rem;
+    line-height: 1.18;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
+}
+
+.project-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+}
+
+.tech-tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.18rem 0.42rem;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.14);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    color: #ffffff;
+    font-size: 0.56rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    line-height: 1;
+    white-space: nowrap;
 }
 
 .project-thumb {
@@ -311,6 +351,23 @@ body {
     border: 1px solid rgba(255, 255, 255, 0.18);
     box-shadow: 0 10px 20px rgba(30, 0, 51, 0.22);
     flex-shrink: 0;
+}
+
+@keyframes wonGradientShift {
+    0% {
+        background-position: 0% 40%;
+        transform: scale(1) rotate(0deg);
+    }
+
+    50% {
+        background-position: 100% 55%;
+        transform: scale(1.045) rotate(3deg);
+    }
+
+    100% {
+        background-position: 0% 45%;
+        transform: scale(1.02) rotate(-2deg);
+    }
 }
 
 .light {
