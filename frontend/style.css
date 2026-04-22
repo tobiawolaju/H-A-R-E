@@ -227,16 +227,16 @@ body {
 
 
 .stack-pills {
-    background-color: #000000;
-    border-radius: 10px;
+    background-color: #deacff;
+    border-radius: 25px;
 }
 
 .pill {
-    background-color: #000000;
+    background-color: #deacff;
     border-radius: 50px;
     padding: 8px;
     margin: 8px;
-    color: white;
+    color: rgb(0, 0, 0);
     font-size: 1.5rem;
 }
 
