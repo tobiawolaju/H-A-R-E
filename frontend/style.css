@@ -141,8 +141,8 @@ body {
     flex-direction: row;
     justify-content: space-between;
     align-items: flex-end;
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.12), rgba(250, 246, 239, 0.5));
-    color: var(--text-primary);
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0), rgba(255, 0, 255, 0.3));
+    color: white;
 }
 
 .hero-info {
@@ -150,43 +150,7 @@ body {
     flex-direction: column;
 }
 
-/* Wallet Widget */
-.wallet-widget {
-    background: rgba(255, 255, 255, 0.82);
-    padding: 12px 18px;
-    border-radius: 14px;
-    cursor: pointer;
-    text-align: right;
-    box-shadow: 0 10px 24px rgba(28, 21, 13, 0.08);
-    border: 1px solid rgba(228, 221, 210, 0.9);
-    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease, border 0.2s ease;
-    backdrop-filter: blur(8px);
-}
 
-.wallet-widget:hover {
-    transform: scale(1.05) translateY(-2px);
-    box-shadow: 0 14px 28px rgba(28, 21, 13, 0.12);
-    border: 1px solid rgba(155, 125, 86, 0.35);
-}
-
-.wallet-widget:active {
-    transform: scale(0.95);
-}
-
-.wallet-balance {
-    font-size: 1.5rem;
-    font-weight: 900;
-    line-height: 1.1;
-    color: var(--accent);
-}
-
-.wallet-address {
-    font-size: 0.85rem;
-    color: var(--text-secondary);
-    font-family: monospace;
-    margin-top: 4px;
-    letter-spacing: 0.5px;
-}
 
 .hero-name {
     font-size: 3rem;
@@ -259,6 +223,23 @@ body {
     line-height: 1.6;
     font-weight: 300;
 }
+
+
+
+.stack-pills {
+    background-color: #000000;
+    border-radius: 10px;
+}
+
+.pill {
+    background-color: #000000;
+    border-radius: 50px;
+    padding: 8px;
+    margin: 8px;
+    color: white;
+    font-size: 1.5rem;
+}
+
 
 .community-tile .tile-title {
     font-size: 1.8rem;
