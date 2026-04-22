@@ -14,9 +14,57 @@ async function getFileContent(owner, repo, path, branch = "main") {
   }
 }
 
-async function editFiles(owner, repo, branch, files, commitMessage = "Mini-Miles Update") {
+function buildCommitMessage({ repo, files, action, stack }) {
+  const normalizedFiles = Array.isArray(files) ? files.filter(Boolean) : [];
+  const firstFile = normalizedFiles[0]?.path || '';
+  const firstName = firstFile.split(/[\\/]/).pop() || 'files';
+  const lowerPath = String(firstFile || '').toLowerCase();
+  const allReadmes = normalizedFiles.length > 0 && normalizedFiles.every((file) => String(file.path || '').toLowerCase().endsWith('readme.md'));
+  const isTestFile = /(^|[\\/])(?:tests?|specs?)([\\/]|$)/.test(lowerPath) || /\.(test|spec)\.[^/\\]+$/.test(lowerPath);
+  const isDocFile = /\.(md|txt|rst)$/i.test(firstName) || lowerPath.endsWith('readme.md');
+  const isConfigFile = /\.(json|lock|ya?ml|toml|ini|env|cfg|conf)$/i.test(firstName) || /(^|[\\/])(package\.json|package-lock\.json|pnpm-lock\.yaml|yarn\.lock|composer\.json)$/i.test(lowerPath);
+  const isSourceFile = /\.(js|jsx|ts|tsx|py|go|rb|java|cs|php|rs|c|cc|cpp|h|hpp|kt|swift|dart|mjs|cjs)$/i.test(firstName);
+
+  if (action === 'generate_project') {
+    return stack ? `chore: scaffold ${stack} project` : `chore: scaffold ${repo} project`;
+  }
+
+  if (action === 'update_readme' || action === 'generate_readme' || allReadmes) {
+    return 'docs: update README';
+  }
+
+  if (isDocFile) {
+    return `docs: update ${firstName}`;
+  }
+
+  if (isTestFile) {
+    return `test: update ${firstName}`;
+  }
+
+  if (isConfigFile) {
+    return `chore: update ${firstName}`;
+  }
+
+  if (isSourceFile) {
+    return `feat: update ${firstName}`;
+  }
+
+  return `chore: update ${firstName}`;
+}
+
+async function editFiles(owner, repo, branch, files, commitMessageOrOptions = {}) {
   try {
+    const options = typeof commitMessageOrOptions === 'string'
+      ? { commitMessage: commitMessageOrOptions }
+      : (commitMessageOrOptions || {});
+
     for (const file of files) {
+      const commitMessage = options.commitMessage || buildCommitMessage({
+        repo,
+        files: [file],
+        action: options.action,
+        stack: options.stack
+      });
       let sha;
       try {
         const { data } = await octokit.repos.getContent({ owner, repo, path: file.path, ref: branch });
@@ -85,6 +133,7 @@ async function getAuthenticatedUsername() {
 module.exports = {
   getFileContent,
   editFiles,
+  buildCommitMessage,
   createRepo,
   listUserRepos,
   getAuthenticatedUsername

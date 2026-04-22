@@ -51,7 +51,9 @@ module.exports = {
         case "create_repo":
           return await github.createRepo(repoName, description);
         case "write_files":
-          return await github.editFiles(owner, repoName, 'main', [{ path, content }], "Updated via Mini-Miles");
+          return await github.editFiles(owner, repoName, 'main', [{ path, content }], {
+            action: 'write_files'
+          });
         default:
           return `Error: Unknown action ${action}`;
       }

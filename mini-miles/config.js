@@ -18,3 +18,5 @@ module.exports = {
   TWITTER_AUTH_TOKEN: process.env.TWITTER_AUTH_TOKEN,
   TWITTER_MASTER_USERNAME: process.env.TWITTER_MASTER_USERNAME || 'omoonchain'
 };
+
+

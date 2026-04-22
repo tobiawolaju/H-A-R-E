@@ -50,7 +50,10 @@ async function generateProject({ name, description, stack = 'nextjs', owner = 'o
   }));
 
   // Push all files in one commit
-  await github.editFiles(owner, name, 'main', files, `🚀 Initial hackathon boilerplate: ${stack}`);
+  await github.editFiles(owner, name, 'main', files, {
+    action: 'generate_project',
+    stack
+  });
 
   return `✅ Project "${name}" created!\nRepo: ${repoUrl}\nStack: ${stack}\nFiles pushed: ${files.map(f => f.path).join(', ')}`;
 }

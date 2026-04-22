@@ -84,7 +84,9 @@ module.exports = {
           const readme = kit.generateReadme({ name, description, stack, features: featureArr, demoUrl: demo_url });
           // Write it to the repo if repo is provided
           if (repo) {
-            await github.editFiles(owner, repo, 'main', [{ path: 'README.md', content: readme }], '📝 Update README via Miles');
+            await github.editFiles(owner, repo, 'main', [{ path: 'README.md', content: readme }], {
+              action: 'generate_readme'
+            });
             return `✅ README updated in ${owner}/${repo}`;
           }
           return readme;
@@ -95,7 +97,9 @@ module.exports = {
         case 'update_readme': {
           const featureArr = features ? features.split(',').map(f => f.trim()) : [];
           const readme = kit.generateReadme({ name: name || repo, description, stack, features: featureArr, demoUrl: demo_url });
-          await github.editFiles(owner, repo, 'main', [{ path: 'README.md', content: readme }], '📝 Update README via Miles');
+          await github.editFiles(owner, repo, 'main', [{ path: 'README.md', content: readme }], {
+            action: 'update_readme'
+          });
           return `✅ README updated in ${owner}/${repo}`;
         }
         default:
