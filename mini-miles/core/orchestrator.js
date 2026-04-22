@@ -52,6 +52,10 @@ class Orchestrator {
     return require('../tools/discord-actions');
   }
 
+  _getSkillsMarketplaceTool() {
+    return this.skills.get('skills_marketplace');
+  }
+
   _getSkillGroups() {
     return [
       {
@@ -61,6 +65,10 @@ class Orchestrator {
       {
         title: 'Research / Web',
         names: ['github_operation', 'web_search_and_scrape']
+      },
+      {
+        title: 'Skills Marketplace',
+        names: ['skills_marketplace']
       },
       {
         title: 'Media / Files',
@@ -112,6 +120,14 @@ class Orchestrator {
       '- `!acceptfriend <user>` Accept an incoming friend request',
       '- `!unfriend <user>` Remove a friend or cancel a pending request',
       '- `!githubwhoami` Show the authenticated GitHub login',
+      '- `!skills find <query>` Search skills.sh for skills',
+      '- `!skills list` List installed marketplace skills',
+      '- `!skills add <package>` Install a skill from the marketplace',
+      '- `!skills remove <skill>` Remove an installed marketplace skill',
+      '- `!skills check` Check installed skills for updates',
+      '- `!skills update` Update installed marketplace skills',
+      '- `!skills local` List locally loaded JS skills',
+      '- `!skills reload` Reload locally loaded JS skills',
       '- `!reply <tweet link> <text>` Reply to a tweet',
       '- `!comment <tweet link> <text>` Alias for `!reply`',
       '- `!quote <tweet link> <text>` Quote a tweet',
@@ -133,6 +149,11 @@ class Orchestrator {
       '- `!acceptfriend @someuser`',
       '- `!unfriend @someuser`',
       '- `!githubwhoami`',
+      '- `!skills find react testing`',
+      '- `!skills list`',
+      '- `!skills add vercel-labs/agent-skills`',
+      '- `!skills remove vercel-labs/agent-skills@web-design-guidelines`',
+      '- `!skills local`',
       '- `Search Twitter for I follow back`',
       '- `Fetch my GitHub profile and latest repo activity`',
       '',
@@ -282,6 +303,82 @@ class Orchestrator {
     }
   }
 
+  async _handleSkillsCommand(text, reply, userId) {
+    const marketplaceSkill = this._getSkillsMarketplaceTool();
+    if (!marketplaceSkill) {
+      await reply('Skills marketplace operations are unavailable because `skills_marketplace` is not loaded.');
+      return true;
+    }
+
+    const trimmed = (text || '').trim();
+    if (!trimmed) {
+      await reply('Usage: `!skills find <query>`, `!skills list`, `!skills add <package>`, `!skills remove <skill>`, `!skills check`, or `!skills update`.');
+      return true;
+    }
+
+    const [subcommand, ...rest] = trimmed.split(/\s+/);
+    const remainder = rest.join(' ').trim();
+
+    switch (subcommand.toLowerCase()) {
+      case 'find':
+      case 'search':
+        await reply(await marketplaceSkill.execute(
+          { action: 'find', query: remainder },
+          { userId, masterId: config.MASTER_USER_ID, orchestrator: this }
+        ));
+        return true;
+      case 'list':
+        await reply(await marketplaceSkill.execute(
+          { action: 'list', source: remainder },
+          { userId, masterId: config.MASTER_USER_ID, orchestrator: this }
+        ));
+        return true;
+      case 'add':
+      case 'install':
+        await reply(await marketplaceSkill.execute(
+          { action: 'install', source: remainder },
+          { userId, masterId: config.MASTER_USER_ID, orchestrator: this }
+        ));
+        return true;
+      case 'remove':
+      case 'rm':
+      case 'delete':
+        await reply(await marketplaceSkill.execute(
+          { action: 'remove', source: remainder },
+          { userId, masterId: config.MASTER_USER_ID, orchestrator: this }
+        ));
+        return true;
+      case 'check':
+        await reply(await marketplaceSkill.execute(
+          { action: 'check' },
+          { userId, masterId: config.MASTER_USER_ID, orchestrator: this }
+        ));
+        return true;
+      case 'update':
+        await reply(await marketplaceSkill.execute(
+          { action: 'update' },
+          { userId, masterId: config.MASTER_USER_ID, orchestrator: this }
+        ));
+        return true;
+      case 'list-local':
+      case 'local':
+        await reply(await marketplaceSkill.execute(
+          { action: 'list_local' },
+          { userId, masterId: config.MASTER_USER_ID, orchestrator: this }
+        ));
+        return true;
+      case 'reload':
+        await reply(await marketplaceSkill.execute(
+          { action: 'reload_local' },
+          { userId, masterId: config.MASTER_USER_ID, orchestrator: this }
+        ));
+        return true;
+      default:
+        await reply('Unknown skills command. Use `!skills find`, `!skills list`, `!skills add`, `!skills remove`, `!skills check`, or `!skills update`.');
+        return true;
+    }
+  }
+
   async _handleBangCommand(event) {
     const { platform, userId, content, reply } = event;
     const trimmed = content.trim();
@@ -308,6 +405,16 @@ class Orchestrator {
       return this._handleTweetCommand(trimmed.slice('!tweet'.length), reply, userId);
     }
 
+    const skillsMatch = trimmed.match(/^!skills(?:\s+([\s\S]*))?$/i);
+    if (skillsMatch) {
+      if (!isMaster) {
+        core(`Ignoring !skills from ${userId} on ${platform} (Not Master)`);
+        return true;
+      }
+
+      return this._handleSkillsCommand(skillsMatch[1] || '', reply, userId);
+    }
+
     const githubWhoamiMatch = trimmed.match(/^!githubwhoami\s*$/i);
     if (githubWhoamiMatch) {
       if (!isMaster) {
@@ -321,7 +428,7 @@ class Orchestrator {
         return true;
       }
 
-      await reply(await githubSkill.execute({ action: 'whoami' }, { userId, masterId: config.MASTER_USER_ID }));
+      await reply(await githubSkill.execute({ action: 'whoami' }, { userId, masterId: config.MASTER_USER_ID, orchestrator: this }));
       return true;
     }
 
@@ -433,7 +540,7 @@ class Orchestrator {
               const skill = this.skills.get(call.name);
               if (skill) {
                 core(`Executing skill: ${call.name}`);
-                const result = await skill.execute(call.args, { userId, masterId: config.MASTER_USER_ID });
+                const result = await skill.execute(call.args, { userId, masterId: config.MASTER_USER_ID, orchestrator: this });
                 return { name: call.name, result };
               }
               return { name: call.name, result: 'Error: Tool not found' };
@@ -459,6 +566,16 @@ class Orchestrator {
       error('Orchestrator error:', err.stack);
       await reply(`Error: ${err.message}`);
     }
+  }
+
+  async reloadSkills() {
+    this.skills.clear();
+    await this._loadSkills();
+    return this.getLoadedSkillNames();
+  }
+
+  getLoadedSkillNames() {
+    return Array.from(this.skills.keys()).sort();
   }
 }
 
