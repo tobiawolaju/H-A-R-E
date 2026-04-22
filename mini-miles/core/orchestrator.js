@@ -71,6 +71,10 @@ class Orchestrator {
         names: ['skills_marketplace']
       },
       {
+        title: 'Wallet / Email',
+        names: ['wallet_ops', 'email_ops']
+      },
+      {
         title: 'Media / Files',
         names: ['file_manager', 'video_ops']
       },
