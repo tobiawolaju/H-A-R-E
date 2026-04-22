@@ -58,7 +58,7 @@ body {
     animation: tileEntrance 0.6s ease forwards;
     box-shadow: var(--tile-shadow);
     border: 1px solid var(--border-color);
-    backdrop-filter: blur(12px);
+    contain: paint;
 }
 
 .tile:hover {
@@ -128,13 +128,12 @@ body {
     background-image: url('miles.jpg');
     background-size: cover;
     background-position: center;
-    filter: brightness(0.96) saturate(0.95) contrast(1.02);
-    transition: transform 0.8s ease, filter 0.5s ease;
     z-index: 0;
+    transition: transform 0.5s ease;
 }
 
 .hero-tile:hover .hero-bg {
-    filter: brightness(0.93) saturate(1);
+    transform: scale(1.02);
 }
 
 .hero-content {
@@ -236,11 +235,11 @@ body {
         radial-gradient(circle at 56% 82%, rgba(141, 82, 255, 0.78), transparent 30%),
         radial-gradient(circle at 86% 72%, rgba(74, 160, 255, 0.72), transparent 28%),
         linear-gradient(135deg, #ffe0ee 0%, #ffe58a 24%, #9a5bff 56%, #4ca2ff 78%, #050505 100%);
-    background-size: 180% 180%;
-    filter: saturate(1.08) contrast(1.02);
-    animation: wonGradientShift 22s ease-in-out infinite alternate;
+    background-size: 140% 140%;
+    animation: wonGradientShift 28s linear infinite;
     z-index: 0;
     pointer-events: none;
+    will-change: transform;
 }
 
 .won-glow {
@@ -290,7 +289,6 @@ body {
     border-radius: 16px;
     padding: 0.2rem 0.25rem;
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
-    backdrop-filter: blur(8px);
 }
 
 .project-copy {
@@ -349,24 +347,21 @@ body {
     object-fit: cover;
     border-radius: 16px;
     border: 1px solid rgba(255, 255, 255, 0.18);
-    box-shadow: 0 10px 20px rgba(30, 0, 51, 0.22);
+    box-shadow: 0 8px 16px rgba(30, 0, 51, 0.16);
     flex-shrink: 0;
 }
 
 @keyframes wonGradientShift {
     0% {
-        background-position: 0% 40%;
-        transform: scale(1) rotate(0deg);
+        transform: translate3d(-1%, -1%, 0) scale(1.03);
     }
 
     50% {
-        background-position: 100% 55%;
-        transform: scale(1.045) rotate(3deg);
+        transform: translate3d(1.2%, 0.8%, 0) scale(1.06);
     }
 
     100% {
-        background-position: 0% 45%;
-        transform: scale(1.02) rotate(-2deg);
+        transform: translate3d(-0.5%, 1%, 0) scale(1.04);
     }
 }
 
@@ -452,6 +447,27 @@ body {
     border-color: rgba(155, 125, 86, 0.38);
     transform: translateY(-2px);
     box-shadow: 0 10px 22px rgba(28, 21, 13, 0.08);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .tile,
+    .hero-bg,
+    .won-tile::before,
+    .social-btn {
+        animation: none !important;
+        transition: none !important;
+    }
+
+    .tile {
+        opacity: 1;
+        transform: none;
+    }
+
+    .tile:hover,
+    .hero-tile:hover .hero-bg,
+    .social-btn:hover {
+        transform: none;
+    }
 }
 
 .unified-handle {
