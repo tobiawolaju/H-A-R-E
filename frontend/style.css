@@ -218,6 +218,91 @@ body {
 }
 
 /* Specific Tile Customizations */
+.won-tile {
+    color: #ffffff;
+    background:
+        radial-gradient(circle at top right, rgba(255, 255, 255, 0.18), transparent 38%),
+        linear-gradient(180deg, #a61aff 0%, #7f00d4 100%);
+    border-color: rgba(255, 255, 255, 0.16);
+}
+
+.won-glow {
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.16), transparent 28%),
+        radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.12), transparent 24%);
+    pointer-events: none;
+    z-index: 0;
+}
+
+.won-tile .tile-content {
+    gap: 0.55rem;
+}
+
+.won-tile .project-name,
+.won-tile .project-title,
+.won-tile .project-desc {
+    color: #ffffff;
+}
+
+.project-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+}
+
+.project-card {
+    display: flex;
+    align-items: stretch;
+    gap: 0.7rem;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 16px;
+    padding: 0.6rem 0.7rem;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(8px);
+}
+
+.project-copy {
+    flex: 1 1 auto;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.25rem;
+}
+
+.project-title {
+    font-size: 1rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+}
+
+.project-card .project-desc {
+    margin-bottom: 0;
+    color: rgba(255, 255, 255, 0.84);
+    font-size: 0.8rem;
+    line-height: 1.35;
+}
+
+.project-thumb {
+    width: 64px;
+    min-width: 64px;
+    height: 64px;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    box-shadow: 0 10px 20px rgba(30, 0, 51, 0.22);
+    flex-shrink: 0;
+}
+
+.light {
+    color: inherit;
+}
+
 .about-tile p {
     font-size: 1.15rem;
     line-height: 1.6;
@@ -399,4 +484,5 @@ body {
         min-height: 52px;
         font-size: 1.25rem;
     }
+
 }
