@@ -13,8 +13,8 @@ const twitter = require('../tools/twitter');
 const { EventEmitter } = require('events');
 
 const rootDir = path.resolve(__dirname, '..');
-const dataDir = path.join(rootDir, '.mini-miles', 'data');
-const tasksFile = path.join(rootDir, '.mini-miles', 'scheduled_tasks.json');
+const dataDir = path.join(rootDir, '.hare', 'data');
+const tasksFile = path.join(rootDir, '.hare', 'scheduled_tasks.json');
 const outputDir = path.join(rootDir, 'output');
 
 const results = [];
@@ -457,7 +457,7 @@ async function testVideoDirector() {
       {
         segments: [
           {
-            text: 'Mini-Miles smoke test',
+            text: 'HARE smoke test',
             duration: 1,
             bgColor: '0x102a43'
           }
@@ -477,7 +477,7 @@ async function testVideoDirector() {
 }
 
 async function main() {
-  console.log('Mini-Miles tool smoke test');
+  console.log('HARE tool smoke test');
 
   await runStep('file-parser', testFileParser);
   await runStep('scraper', testScraper);

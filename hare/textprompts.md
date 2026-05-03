@@ -1,6 +1,6 @@
-# Mini-Miles Comprehensive Feature Tests
+# HARE Comprehensive Feature Tests
 
-Use these prompts to verify all tools and skills currently integrated into Mini-Miles.
+Use these prompts to verify all tools and skills currently integrated into HARE.
 
 ## 🤖 Core Commands (Discord/Telegram Only)
 - `!help`
@@ -12,7 +12,7 @@ Use these prompts to verify all tools and skills currently integrated into Mini-
 ### Gateway (Master Only)
 - Mention the bot account from `@tobiawolaju`:
   - "Search for latest Monad alpha"
-  - "Post a tweet: Mini-Miles is scaling! 🚀"
+  - "Post a tweet: HARE is scaling! 🚀"
 
 ### Skills (via any gateway)
 - "What is @elonmusk's follower count?"
@@ -63,7 +63,7 @@ Use these prompts to verify all tools and skills currently integrated into Mini-
 ## 💻 Tech & Dev Tools
 ### GitHub
 - "List all my repositories on GitHub"
-- "Create a new issue in 'mini-miles': 'Implement media support for Twitter'"
+- "Create a new issue in 'hare': 'Implement media support for Twitter'"
 
 ### Video Ops
 - "Merge all clips in the 'recap' folder into a single video"

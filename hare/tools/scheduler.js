@@ -9,7 +9,7 @@ const fsSync = require('fs');
 const path = require('path');
 const { log, error } = require('../utils/logger');
 
-const TASKS_FILE = path.resolve('./.mini-miles/scheduled_tasks.json');
+const TASKS_FILE = path.resolve('./.hare/scheduled_tasks.json');
 const tasks = new Map(); // id -> { id, label, runAt, action, args, done }
 let orchestratorRef = null;
 

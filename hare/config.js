@@ -13,7 +13,7 @@ module.exports = {
   LLM_MODEL: 'gemini-3-flash-preview',
   MAX_HISTORY: 15,
   HEARTBEAT_INTERVAL: 60000, // 1 minute
-  STORAGE_DIR: './.mini-miles/sessions',
+  STORAGE_DIR: './.hare/sessions',
   SPOTIFY_PLAYLIST_PATH: path.join(__dirname, 'spotify_playlist.json'),
   TWITTER_AUTH_TOKEN: process.env.TWITTER_AUTH_TOKEN,
   TWITTER_MASTER_USERNAME: process.env.TWITTER_MASTER_USERNAME || 'omoonchain',

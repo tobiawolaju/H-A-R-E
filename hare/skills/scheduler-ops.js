@@ -28,7 +28,7 @@ module.exports = {
         },
         task_message: {
           type: 'string',
-          description: 'The message/instruction to run when the timer fires (will be sent back to Miles as a command)'
+          description: 'The message/instruction to run when the timer fires (will be sent back to HARE as a command)'
         },
         platform: {
           type: 'string',

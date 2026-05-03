@@ -18,7 +18,7 @@ class VideoDirector {
    * Render a Motion Graphics video (v2.1)
    * @param {Object} script - { segments: [], bgMusic }
    */
-  async render(script, filename = `miles_motion_${Date.now()}.mp4`) {
+  async render(script, filename = `hare_motion_${Date.now()}.mp4`) {
     const segments = script.segments || script;
     const bgMusic = script.bgMusic;
     const outputPath = path.join(OUTPUT_DIR, filename);

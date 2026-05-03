@@ -1,25 +1,17 @@
-# Mini-Miles 🌟
+# HARE
+### Headless Autonomous Relay Engine
 
-A lightweight, API-efficient, and modular rewrite of the Miles Orchestrator. 
+> Small, fast, always running.
 
-## 🏗️ Architecture
+HARE is a modular AI agent that operates headlessly in the background — monitoring signals, reasoning with Gemini Flash, and executing actions across Discord, Telegram, and X without manual intervention.
 
-Mini-Miles is built on a **Modular Gateway-Skill** architecture. It prioritizes low-latency response and minimal token usage by using a single high-context Master Agent instead of a multi-agent hierarchy.
+Built as infrastructure, not a chatbot. No UI. Just execution.
 
-### System Diagram
-
-```mermaid
-graph TD
-    User([User]) <-->|Message/Event| Gateway[Gateways: Discord/Telegram]
-    Gateway <-->|Universal Format| Orchestrator[Core: Orchestrator]
-    Orchestrator <-->|Reasoning| LLM[LLM Wrapper: Gemini Flash]
-    Orchestrator <-->|Execution| Skills[Skills: GitHub/Search/Memory]
-    
-    subgraph Survival
-    Heartbeat[Heartbeat Loop] -->|Presence/Health| Gateway
-    Heartbeat -->|Housekeeping| Orchestrator
-    end
-```
+## Architecture
+- **Gateways** — Discord, Telegram (inbound/outbound message routing)
+- **Skills** — GitHub integration, web search, long-term memory
+- **Heartbeat** — autonomous loop that drives scheduled posting and monitoring
+- **Reasoning** — Gemini Flash as the core inference layer (ElizaOS v2 swap-ready)
 
 ## 📁 Project Structure
 

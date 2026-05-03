@@ -9,7 +9,7 @@ const { skill } = require('../utils/logger');
 const fs = require('fs-extra');
 const path = require('path');
 
-const JOBS_FILE = path.join(process.cwd(), '.mini-miles', 'jobs.json');
+const JOBS_FILE = path.join(process.cwd(), '.hare', 'jobs.json');
 
 module.exports = {
   definition: {
