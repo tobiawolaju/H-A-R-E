@@ -5,7 +5,7 @@ const fs = require('fs-extra');
 const config = require('../config');
 const { skill } = require('../utils/logger');
 
-const VAULT_DIR = path.join(process.cwd(), '.mini-miles');
+const VAULT_DIR = path.join(process.cwd(), '.hare');
 const VAULT_FILE = path.join(VAULT_DIR, 'wallet-vault.json');
 const VAULT_KEY_FILE = path.join(VAULT_DIR, 'wallet-vault.key');
 const MIGRATIONS_FILE = path.join(VAULT_DIR, 'wallet-migrations.json');

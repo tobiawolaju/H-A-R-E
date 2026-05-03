@@ -1,5 +1,5 @@
 {
-  "name": "mini-miles",
+  "name": "hare",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
@@ -36,5 +36,7 @@
     "tweetnacl": "^1.0.3",
     "tiny-secp256k1": "^2.2.4",
     "telegram": "^2.26.22"
-  }
+  },
+  "description": "HARE \u2014 Headless Autonomous Relay Engine. A modular, headless AI agent for autonomous monitoring, reasoning, and posting.",
+  "bin": "hare"
 }

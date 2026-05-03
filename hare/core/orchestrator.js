@@ -116,7 +116,7 @@ class Orchestrator {
 
   _getHelpMessage() {
     const lines = [
-      'Mini-Miles Commands & Tools',
+      'HARE Commands & Tools',
       '',
       'Core commands',
       '- `!help` Show this help message',

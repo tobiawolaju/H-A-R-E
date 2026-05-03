@@ -9,7 +9,7 @@ const { skill } = require('../utils/logger');
 module.exports = {
   definition: {
     name: 'file_manager',
-    description: 'Read, write, list, or generate CSV/JSON/TXT files from disk. Use this to: load a CSV of contacts for DM campaigns, save research results to a file, generate a CSV after researching who to contact. Files are stored in .mini-miles/data/.',
+    description: 'Read, write, list, or generate CSV/JSON/TXT files from disk. Use this to: load a CSV of contacts for DM campaigns, save research results to a file, generate a CSV after researching who to contact. Files are stored in .hare/data/.',
     parameters: {
       type: 'object',
       properties: {

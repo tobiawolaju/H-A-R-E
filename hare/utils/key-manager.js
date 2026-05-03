@@ -7,7 +7,7 @@ class KeyManager {
   constructor() {
     this.keys = [];
     this.currentIndex = 0;
-    this.statePath = path.resolve('./.mini-miles/state.json');
+    this.statePath = path.resolve('./.hare/state.json');
     this._loadKeys();
     this._loadState();
   }

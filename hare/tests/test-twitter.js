@@ -72,12 +72,12 @@ async function test() {
     });
 
     await runStep('Testing Reply Tweet (tweet link)', async () => {
-      const result = await twitter.replyToTweet(tweetLink, `Test reply from mini-miles (${new Date().toISOString()})`);
+      const result = await twitter.replyToTweet(tweetLink, `Test reply from hare (${new Date().toISOString()})`);
       console.log('Reply success:', result);
     });
 
     await runStep('Testing Quote Tweet (tweet link)', async () => {
-      const result = await twitter.quoteTweet(tweetLink, `Test quote from mini-miles (${new Date().toISOString()})`);
+      const result = await twitter.quoteTweet(tweetLink, `Test quote from hare (${new Date().toISOString()})`);
       console.log('Quote success:', result);
     });
 

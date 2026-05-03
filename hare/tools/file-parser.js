@@ -7,7 +7,7 @@ const fs = require('fs/promises');
 const fsSync = require('fs');
 const path = require('path');
 
-const DATA_DIR = path.resolve('./.mini-miles/data');
+const DATA_DIR = path.resolve('./.hare/data');
 
 // Ensure data directory exists
 if (!fsSync.existsSync(DATA_DIR)) {

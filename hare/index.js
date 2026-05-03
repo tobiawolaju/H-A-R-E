@@ -5,7 +5,7 @@ const heartbeat = require('./core/heartbeat');
 const { log, error } = require('./utils/logger');
 
 async function main() {
-  log('🚀 Starting Mini-Miles...');
+  log('🚀 Starting HARE...');
 
   try {
     // 1. Initialize Gateways
@@ -17,7 +17,7 @@ async function main() {
     // 2. Start Heartbeat
     heartbeat.start([discord, telegram, twitter]);
 
-    log('✅ Mini-Miles is online and running.');
+    log('✅ HARE is online and running.');
     
     // Simple process error handling
     process.on('uncaughtException', (err) => {

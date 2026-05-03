@@ -5,7 +5,7 @@ async function scrape(url) {
   if (!url) return "No URL provided.";
   try {
     const { data } = await axios.get(url, {
-      headers: { "User-Agent": "Mozilla/5.0 Mini-Miles/1.0" },
+      headers: { "User-Agent": "Mozilla/5.0 HARE/1.0" },
       timeout: 10000
     });
     const $ = cheerio.load(data);
