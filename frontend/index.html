@@ -1,1 +1,292 @@
-<p> Hare 🐇 </p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>H-A-R-E | Autonomous Agent Framework</title>
+  <style>
+    :root {
+      --bg: #0b1020;
+      --card: #141b34;
+      --muted: #9ea9d3;
+      --text: #f4f7ff;
+      --accent: #6ee7ff;
+      --accent-2: #8b5cf6;
+      --border: #2b3766;
+      --ok: #22c55e;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Inter, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+      background: radial-gradient(circle at top right, #17214a 0%, var(--bg) 45%);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    .container {
+      width: min(1100px, 92vw);
+      margin: 0 auto;
+    }
+
+    header {
+      padding: 72px 0 44px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr;
+      gap: 32px;
+      align-items: center;
+    }
+
+    .badge {
+      display: inline-block;
+      font-size: 0.8rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--accent);
+      border: 1px solid #3b4b82;
+      background: rgba(110, 231, 255, 0.08);
+      border-radius: 999px;
+      padding: 6px 12px;
+      margin-bottom: 16px;
+    }
+
+    h1 {
+      font-size: clamp(2rem, 4vw, 3.4rem);
+      line-height: 1.15;
+      margin-bottom: 16px;
+    }
+
+    .lead {
+      color: var(--muted);
+      font-size: 1.05rem;
+      margin-bottom: 24px;
+      max-width: 60ch;
+    }
+
+    .cta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 10px 16px;
+      border-radius: 10px;
+      text-decoration: none;
+      font-weight: 600;
+      border: 1px solid transparent;
+      transition: 0.2s ease;
+    }
+
+    .btn-primary {
+      color: #071122;
+      background: linear-gradient(90deg, var(--accent), #b9f6ff);
+    }
+
+    .btn-secondary {
+      color: var(--text);
+      border-color: #41518b;
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .panel {
+      background: linear-gradient(180deg, rgba(20, 27, 52, 0.95), rgba(20, 27, 52, 0.7));
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+    }
+
+    .quick-list {
+      list-style: none;
+      display: grid;
+      gap: 10px;
+    }
+
+    .quick-list li {
+      color: var(--muted);
+      display: flex;
+      gap: 10px;
+      align-items: start;
+    }
+
+    .quick-list li span {
+      color: var(--ok);
+      font-weight: 700;
+    }
+
+    main {
+      padding: 42px 0 72px;
+      display: grid;
+      gap: 26px;
+    }
+
+    section {
+      background: rgba(10, 16, 34, 0.55);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+    }
+
+    h2 {
+      font-size: 1.4rem;
+      margin-bottom: 10px;
+    }
+
+    p.section-note {
+      color: var(--muted);
+      margin-bottom: 14px;
+    }
+
+    .grid {
+      display: grid;
+      gap: 16px;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px;
+    }
+
+    .card h3 {
+      margin-bottom: 8px;
+      font-size: 1.05rem;
+    }
+
+    .card p,
+    .card li,
+    ol li,
+    ul li {
+      color: var(--muted);
+      font-size: 0.96rem;
+    }
+
+    code,
+    pre {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+
+    pre {
+      background: #0a0f21;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px;
+      overflow-x: auto;
+      margin-top: 10px;
+      color: #d7e2ff;
+    }
+
+    footer {
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      padding: 28px 0 46px;
+      text-align: center;
+    }
+
+    @media (max-width: 850px) {
+      .hero {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container hero">
+      <div>
+        <div class="badge">H-A-R-E Framework</div>
+        <h1>Build, run, and evolve autonomous workflows with H-A-R-E.</h1>
+        <p class="lead">
+          H-A-R-E is a modular agent system for orchestration, memory, skills, and tool-driven execution.
+          Start quickly, wire in your own integrations, and iterate toward production-grade agent behavior.
+        </p>
+        <div class="cta-row">
+          <a class="btn btn-primary" href="#setup">Get Started</a>
+          <a class="btn btn-secondary" href="#future-plans">See Future Plans</a>
+        </div>
+      </div>
+      <aside class="panel">
+        <h3 style="margin-bottom: 10px;">Why teams use H-A-R-E</h3>
+        <ul class="quick-list">
+          <li><span>✓</span> Modular architecture for skills, tools, and gateways.</li>
+          <li><span>✓</span> Lightweight setup with Node.js and script-based workflows.</li>
+          <li><span>✓</span> Ready for social, messaging, scheduler, and automation use cases.</li>
+          <li><span>✓</span> Easy to extend with your domain logic.</li>
+        </ul>
+      </aside>
+    </div>
+  </header>
+
+  <main class="container">
+    <section id="setup">
+      <h2>Setup Guide</h2>
+      <p class="section-note">Follow these steps to run H-A-R-E locally.</p>
+      <ol>
+        <li>Clone the repository and enter the project directory.</li>
+        <li>Install dependencies with your package manager.</li>
+        <li>Create your environment configuration for keys and tokens.</li>
+        <li>Start the orchestrator to run your agent workflow.</li>
+      </ol>
+      <pre><code>git clone &lt;your-repo-url&gt;
+cd hare
+pnpm install
+cp .env.example .env
+pnpm start</code></pre>
+    </section>
+
+    <section id="usage">
+      <h2>Usage Overview</h2>
+      <p class="section-note">A quick map of how to work with the project after setup.</p>
+      <div class="grid">
+        <article class="card">
+          <h3>Core Runtime</h3>
+          <p>Use the orchestrator and heartbeat modules to drive recurring or event-based agent tasks.</p>
+        </article>
+        <article class="card">
+          <h3>Skills</h3>
+          <p>Implement feature-specific logic in the <code>skills/</code> directory (email, scraping, wallet, scheduling, and more).</p>
+        </article>
+        <article class="card">
+          <h3>Tools & Gateways</h3>
+          <p>Connect external APIs and channels through <code>tools/</code> and <code>gateways/</code> modules.</p>
+        </article>
+        <article class="card">
+          <h3>Testing</h3>
+          <p>Run project tests and script checks while iterating on new skills and integrations.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="future-plans">
+      <h2>Future Plans</h2>
+      <p class="section-note">Planned roadmap themes for the H-A-R-E ecosystem.</p>
+      <ul>
+        <li><strong>Visual workflow builder:</strong> A UI to define and monitor multi-step agent pipelines.</li>
+        <li><strong>Skill marketplace hardening:</strong> Versioned skill packages and trust/scoring signals.</li>
+        <li><strong>Observability:</strong> Better tracing, run metrics, and debug timelines per workflow.</li>
+        <li><strong>Deployment templates:</strong> One-click deploy paths for cloud and self-hosted environments.</li>
+        <li><strong>Safety controls:</strong> Configurable guardrails for action limits, approval policies, and audits.</li>
+      </ul>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      Built with ❤️ for autonomous builders — H-A-R-E
+    </div>
+  </footer>
+</body>
+</html>
