@@ -3,290 +3,198 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>H-A-R-E | Autonomous Agent Framework</title>
+  <title>HARE 🐇 | AI Dev PR & Ops Agent</title>
   <style>
     :root {
-      --bg: #0b1020;
-      --card: #141b34;
-      --muted: #9ea9d3;
-      --text: #f4f7ff;
-      --accent: #6ee7ff;
-      --accent-2: #8b5cf6;
-      --border: #2b3766;
-      --ok: #22c55e;
+      --bg: #050507;
+      --bg2: #0b0d14;
+      --panel: #10131b;
+      --ink: #e7ebff;
+      --muted: #9aa3c7;
+      --line: #232942;
+      --green: #75ffb2;
+      --pink: #ff6ecf;
+      --blue: #64d8ff;
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    * { box-sizing: border-box; }
 
     body {
-      font-family: Inter, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
-      background: radial-gradient(circle at top right, #17214a 0%, var(--bg) 45%);
-      color: var(--text);
-      line-height: 1.6;
+      margin: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 12% 8%, rgba(255, 110, 207, 0.1), transparent 34%),
+        radial-gradient(circle at 88% 18%, rgba(100, 216, 255, 0.12), transparent 30%),
+        linear-gradient(180deg, var(--bg2), var(--bg));
+      font-family: "Press Start 2P", "VT323", "Courier New", monospace;
+      letter-spacing: 0.3px;
+      min-height: 100vh;
     }
 
-    .container {
-      width: min(1100px, 92vw);
+    .shell {
+      width: min(1120px, 94vw);
       margin: 0 auto;
-    }
-
-    header {
-      padding: 72px 0 44px;
-      border-bottom: 1px solid var(--border);
+      padding: 36px 0 48px;
     }
 
     .hero {
-      display: grid;
-      grid-template-columns: 1.5fr 1fr;
-      gap: 32px;
-      align-items: center;
+      border: 2px solid var(--line);
+      background: rgba(16, 19, 27, 0.88);
+      padding: 28px;
+      box-shadow: 0 0 0 3px rgba(117, 255, 178, 0.08), 0 24px 60px rgba(0, 0, 0, 0.45);
     }
 
-    .badge {
+    .tag {
       display: inline-block;
-      font-size: 0.8rem;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      color: var(--accent);
-      border: 1px solid #3b4b82;
-      background: rgba(110, 231, 255, 0.08);
-      border-radius: 999px;
-      padding: 6px 12px;
+      color: #06100a;
+      background: var(--green);
+      padding: 8px 10px;
       margin-bottom: 16px;
+      font-size: 0.62rem;
+      line-height: 1.4;
     }
 
     h1 {
-      font-size: clamp(2rem, 4vw, 3.4rem);
-      line-height: 1.15;
-      margin-bottom: 16px;
+      margin: 0 0 16px;
+      line-height: 1.35;
+      font-size: clamp(1rem, 3.2vw, 1.8rem);
+      text-transform: uppercase;
+      text-shadow: 0 0 18px rgba(117, 255, 178, 0.2);
     }
 
     .lead {
       color: var(--muted);
-      font-size: 1.05rem;
-      margin-bottom: 24px;
-      max-width: 60ch;
+      font-size: 0.68rem;
+      line-height: 1.9;
+      max-width: 92ch;
     }
 
-    .cta-row {
+    .cta {
+      margin-top: 18px;
       display: flex;
+      gap: 10px;
       flex-wrap: wrap;
-      gap: 12px;
     }
 
     .btn {
-      display: inline-block;
-      padding: 10px 16px;
-      border-radius: 10px;
       text-decoration: none;
-      font-weight: 600;
-      border: 1px solid transparent;
-      transition: 0.2s ease;
+      border: 2px solid var(--line);
+      padding: 10px 12px;
+      font-size: 0.58rem;
+      color: var(--ink);
+      background: #0d1017;
     }
 
-    .btn-primary {
-      color: #071122;
-      background: linear-gradient(90deg, var(--accent), #b9f6ff);
-    }
-
-    .btn-secondary {
-      color: var(--text);
-      border-color: #41518b;
-      background: rgba(255, 255, 255, 0.02);
-    }
-
-    .panel {
-      background: linear-gradient(180deg, rgba(20, 27, 52, 0.95), rgba(20, 27, 52, 0.7));
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 20px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
-    }
-
-    .quick-list {
-      list-style: none;
-      display: grid;
-      gap: 10px;
-    }
-
-    .quick-list li {
-      color: var(--muted);
-      display: flex;
-      gap: 10px;
-      align-items: start;
-    }
-
-    .quick-list li span {
-      color: var(--ok);
-      font-weight: 700;
-    }
-
-    main {
-      padding: 42px 0 72px;
-      display: grid;
-      gap: 26px;
-    }
-
-    section {
-      background: rgba(10, 16, 34, 0.55);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 24px;
-    }
-
-    h2 {
-      font-size: 1.4rem;
-      margin-bottom: 10px;
-    }
-
-    p.section-note {
-      color: var(--muted);
-      margin-bottom: 14px;
+    .btn.primary {
+      border-color: var(--green);
+      color: var(--green);
+      box-shadow: inset 0 0 0 1px rgba(117, 255, 178, 0.3);
     }
 
     .grid {
+      margin-top: 18px;
       display: grid;
-      gap: 16px;
-      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 14px;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
     }
 
     .card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 14px;
+      border: 2px solid var(--line);
+      background: rgba(11, 14, 21, 0.88);
+      padding: 18px;
     }
 
-    .card h3 {
-      margin-bottom: 8px;
-      font-size: 1.05rem;
+    h2 {
+      margin: 0 0 12px;
+      font-size: 0.8rem;
+      color: var(--blue);
+      text-transform: uppercase;
     }
 
-    .card p,
-    .card li,
-    ol li,
-    ul li {
+    ul {
+      margin: 0;
+      padding-left: 18px;
       color: var(--muted);
-      font-size: 0.96rem;
+      font-size: 0.62rem;
+      line-height: 1.9;
     }
 
-    code,
-    pre {
-      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    .value {
+      color: var(--green);
     }
 
-    pre {
-      background: #0a0f21;
-      border: 1px solid var(--border);
-      border-radius: 10px;
+    .remote {
+      margin-top: 18px;
+      border: 2px dashed #30406d;
       padding: 14px;
-      overflow-x: auto;
-      margin-top: 10px;
-      color: #d7e2ff;
+      font-size: 0.62rem;
+      color: #cfd7ff;
+      background: rgba(7, 9, 15, 0.95);
+      line-height: 1.9;
     }
 
-    footer {
-      border-top: 1px solid var(--border);
-      color: var(--muted);
-      padding: 28px 0 46px;
+    .remote strong { color: var(--pink); }
+
+    .footer {
+      margin-top: 14px;
+      color: #8089ab;
+      font-size: 0.55rem;
       text-align: center;
-    }
-
-    @media (max-width: 850px) {
-      .hero {
-        grid-template-columns: 1fr;
-      }
     }
   </style>
 </head>
 <body>
-  <header>
-    <div class="container hero">
-      <div>
-        <div class="badge">H-A-R-E Framework</div>
-        <h1>Build, run, and evolve autonomous workflows with H-A-R-E.</h1>
-        <p class="lead">
-          H-A-R-E is a modular agent system for orchestration, memory, skills, and tool-driven execution.
-          Start quickly, wire in your own integrations, and iterate toward production-grade agent behavior.
-        </p>
-        <div class="cta-row">
-          <a class="btn btn-primary" href="#setup">Get Started</a>
-          <a class="btn btn-secondary" href="#future-plans">See Future Plans</a>
-        </div>
+  <main class="shell">
+    <section class="hero">
+      <div class="tag">HARE // DEV AGENT // REMOTE-FIRST 🐇</div>
+      <h1>HARE is like a clawbot for engineering teams — but built for PR execution, dev assistance, and shipping momentum.</h1>
+      <p class="lead">
+        HARE autonomously supports senior software workflows: opening and reviewing pull requests, coordinating multi-step coding tasks,
+        tracking context, and operating across GitHub, X, Discord, Telegram, and web browsing pipelines from one programmable runtime.
+      </p>
+      <div class="cta">
+        <a class="btn primary" href="#capabilities">VIEW CAPABILITIES</a>
+        <a class="btn" href="#why-hare">WHY HARE FOR TEAMS + HR</a>
       </div>
-      <aside class="panel">
-        <h3 style="margin-bottom: 10px;">Why teams use H-A-R-E</h3>
-        <ul class="quick-list">
-          <li><span>✓</span> Modular architecture for skills, tools, and gateways.</li>
-          <li><span>✓</span> Lightweight setup with Node.js and script-based workflows.</li>
-          <li><span>✓</span> Ready for social, messaging, scheduler, and automation use cases.</li>
-          <li><span>✓</span> Easy to extend with your domain logic.</li>
+    </section>
+
+    <section class="grid" id="capabilities">
+      <article class="card">
+        <h2>Core Mission</h2>
+        <ul>
+          <li><span class="value">PR-native execution:</span> turns tasks into committed code changes.</li>
+          <li><span class="value">Senior-level assistance:</span> architecture thinking + implementation speed.</li>
+          <li><span class="value">Agentic flow:</span> orchestrator, memory, skills, tools, and gateways working together.</li>
         </ul>
-      </aside>
-    </div>
-  </header>
+      </article>
 
-  <main class="container">
-    <section id="setup">
-      <h2>Setup Guide</h2>
-      <p class="section-note">Follow these steps to run H-A-R-E locally.</p>
-      <ol>
-        <li>Clone the repository and enter the project directory.</li>
-        <li>Install dependencies with your package manager.</li>
-        <li>Create your environment configuration for keys and tokens.</li>
-        <li>Start the orchestrator to run your agent workflow.</li>
-      </ol>
-      <pre><code>git clone &lt;your-repo-url&gt;
-cd hare
-pnpm install
-cp .env.example .env
-pnpm start</code></pre>
+      <article class="card">
+        <h2>Integrated Surfaces</h2>
+        <ul>
+          <li>GitHub operations for repos, issue context, and PR flow.</li>
+          <li>X + Discord + Telegram selfbot-style automation surfaces.</li>
+          <li>Web browsing and scraping support for live research tasks.</li>
+          <li>Extensible modules for product, growth, and operations teams.</li>
+        </ul>
+      </article>
+
+      <article class="card" id="why-hare">
+        <h2>Why It Impresses</h2>
+        <ul>
+          <li>Shows end-to-end ownership from idea → code → review-ready PR.</li>
+          <li>Demonstrates remote collaboration readiness and async execution discipline.</li>
+          <li>Signals high-leverage engineering impact with AI-first tooling mindset.</li>
+        </ul>
+      </article>
     </section>
 
-    <section id="usage">
-      <h2>Usage Overview</h2>
-      <p class="section-note">A quick map of how to work with the project after setup.</p>
-      <div class="grid">
-        <article class="card">
-          <h3>Core Runtime</h3>
-          <p>Use the orchestrator and heartbeat modules to drive recurring or event-based agent tasks.</p>
-        </article>
-        <article class="card">
-          <h3>Skills</h3>
-          <p>Implement feature-specific logic in the <code>skills/</code> directory (email, scraping, wallet, scheduling, and more).</p>
-        </article>
-        <article class="card">
-          <h3>Tools & Gateways</h3>
-          <p>Connect external APIs and channels through <code>tools/</code> and <code>gateways/</code> modules.</p>
-        </article>
-        <article class="card">
-          <h3>Testing</h3>
-          <p>Run project tests and script checks while iterating on new skills and integrations.</p>
-        </article>
-      </div>
+    <section class="remote">
+      <strong>Remote-ready pitch:</strong>
+      HARE helps a senior engineer deliver faster from anywhere by automating repetitive loops, preserving reasoning trails,
+      and keeping every delivery path connected across code, comms, and live web context.
     </section>
 
-    <section id="future-plans">
-      <h2>Future Plans</h2>
-      <p class="section-note">Planned roadmap themes for the H-A-R-E ecosystem.</p>
-      <ul>
-        <li><strong>Visual workflow builder:</strong> A UI to define and monitor multi-step agent pipelines.</li>
-        <li><strong>Skill marketplace hardening:</strong> Versioned skill packages and trust/scoring signals.</li>
-        <li><strong>Observability:</strong> Better tracing, run metrics, and debug timelines per workflow.</li>
-        <li><strong>Deployment templates:</strong> One-click deploy paths for cloud and self-hosted environments.</li>
-        <li><strong>Safety controls:</strong> Configurable guardrails for action limits, approval policies, and audits.</li>
-      </ul>
-    </section>
+    <div class="footer">HARE // High-Agency Remote Engineering 🐇</div>
   </main>
-
-  <footer>
-    <div class="container">
-      Built with ❤️ for autonomous builders — H-A-R-E
-    </div>
-  </footer>
 </body>
 </html>
