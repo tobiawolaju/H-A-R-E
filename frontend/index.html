@@ -3,22 +3,19 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>HARE 🐇 | AI Dev PR & Ops Agent</title>
+  <title>HARE | AI Dev PR & Ops Agent</title>
   <style>
     @import url("https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@500;600;700&display=swap");
 
     :root {
-      --bg: #050507;
-      --bg2: #0b0d14;
-      --panel: #10131b;
-      --ink: #f1f4ff;
-      --muted: #c4cbf2;
-      --line: #2d3557;
-      --green: #75ffb2;
-      --pink: #ff6ecf;
-      --blue: #64d8ff;
-      --yellow: #ffea70;
-      --shadow: rgba(0, 0, 0, 0.48);
+      --bg: #000;
+      --bg2: #050505;
+      --panel: #0b0b0b;
+      --ink: #fff;
+      --muted: #d9d9d9;
+      --line: #fff;
+      --ear: #ff6ecf;
+      --ear-deep: #5c153f;
     }
 
     * { box-sizing: border-box; }
@@ -32,12 +29,10 @@
       margin: 0;
       color: var(--ink);
       background:
-        linear-gradient(rgba(117, 255, 178, 0.035) 2px, transparent 2px),
-        linear-gradient(90deg, rgba(100, 216, 255, 0.03) 2px, transparent 2px),
-        radial-gradient(circle at 12% 8%, rgba(255, 110, 207, 0.16), transparent 34%),
-        radial-gradient(circle at 88% 18%, rgba(100, 216, 255, 0.18), transparent 30%),
+        linear-gradient(rgba(255, 255, 255, 0.055) 2px, transparent 2px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.04) 2px, transparent 2px),
         linear-gradient(180deg, var(--bg2), var(--bg));
-      background-size: 32px 32px, 32px 32px, auto, auto, auto;
+      background-size: 32px 32px, 32px 32px, auto;
       font-family: "Pixelify Sans", "Press Start 2P", "VT323", "Courier New", monospace;
       letter-spacing: 0.8px;
       min-height: 100vh;
@@ -55,12 +50,12 @@
       align-items: center;
       gap: 14px;
       margin-bottom: 18px;
-      color: var(--green);
+      color: var(--ink);
       font-size: clamp(2.4rem, 8vw, 5.8rem);
       font-weight: 700;
       line-height: 0.9;
       text-transform: uppercase;
-      text-shadow: 5px 5px 0 #17231c, 0 0 30px rgba(117, 255, 178, 0.28);
+      text-shadow: 5px 5px 0 #000, 0 0 22px rgba(255, 255, 255, 0.22);
     }
 
     .bunny-icon {
@@ -68,7 +63,7 @@
       width: clamp(54px, 10vw, 92px);
       height: clamp(58px, 10vw, 100px);
       display: inline-block;
-      filter: drop-shadow(4px 4px 0 rgba(255, 110, 207, 0.34));
+      filter: drop-shadow(4px 4px 0 rgba(255, 255, 255, 0.2));
       transform: translateY(-2px);
     }
 
@@ -79,21 +74,21 @@
       top: 0;
       width: 26%;
       height: 70%;
-      border: 4px solid var(--pink);
-      background: linear-gradient(180deg, #fff6fb 0 18%, var(--pink) 19% 100%);
+      border: 4px solid var(--ear);
+      background: linear-gradient(180deg, #fff 0 18%, var(--ear) 19% 100%);
       image-rendering: pixelated;
     }
 
     .bunny-icon::before {
       left: 20%;
       transform: rotate(-14deg);
-      box-shadow: inset 0 0 0 5px #33182b;
+      box-shadow: inset 0 0 0 5px var(--ear-deep);
     }
 
     .bunny-icon::after {
       right: 20%;
       transform: rotate(14deg);
-      box-shadow: inset 0 0 0 5px #33182b;
+      box-shadow: inset 0 0 0 5px var(--ear-deep);
     }
 
     .bunny-head {
@@ -102,16 +97,16 @@
       right: 18%;
       bottom: 4%;
       height: 43%;
-      border: 4px solid var(--pink);
-      background: #0b0d14;
-      box-shadow: inset 0 0 0 5px #ffb8e8, 4px 4px 0 #33182b;
+      border: 4px solid var(--ink);
+      background: var(--bg);
+      box-shadow: inset 0 0 0 5px var(--panel), 4px 4px 0 #fff;
     }
 
     .hero,
     .overlap-panel {
       border: 3px solid var(--line);
-      background: rgba(16, 19, 27, 0.92);
-      box-shadow: 0 0 0 5px rgba(117, 255, 178, 0.08), 0 28px 70px var(--shadow);
+      background: rgba(0, 0, 0, 0.94);
+      box-shadow: 0 0 0 5px rgba(255, 255, 255, 0.08), 0 28px 70px rgba(0, 0, 0, 0.86);
       position: sticky;
       top: 22px;
     }
@@ -127,13 +122,13 @@
     .tag {
       display: inline-block;
       width: fit-content;
-      color: #06100a;
-      background: var(--green);
+      color: var(--bg);
+      background: var(--ink);
       padding: 10px 14px;
       margin-bottom: 20px;
       font-size: clamp(1rem, 1.8vw, 1.35rem);
       line-height: 1.2;
-      box-shadow: 5px 5px 0 rgba(255, 110, 207, 0.42);
+      box-shadow: 5px 5px 0 rgba(255, 255, 255, 0.2);
     }
 
     h1 {
@@ -141,7 +136,7 @@
       line-height: 1.05;
       font-size: clamp(2rem, 5.8vw, 5rem);
       text-transform: uppercase;
-      text-shadow: 5px 5px 0 #131827, 0 0 24px rgba(117, 255, 178, 0.22);
+      text-shadow: 5px 5px 0 #000, 0 0 24px rgba(255, 255, 255, 0.2);
     }
 
     .lead {
@@ -164,7 +159,7 @@
       padding: 13px 17px;
       font-size: clamp(1rem, 1.6vw, 1.25rem);
       color: var(--ink);
-      background: #0d1017;
+      background: var(--bg);
       box-shadow: 5px 5px 0 rgba(0, 0, 0, 0.42);
       transition: transform 160ms ease, box-shadow 160ms ease;
     }
@@ -175,9 +170,10 @@
     }
 
     .btn.primary {
-      border-color: var(--green);
-      color: var(--green);
-      box-shadow: inset 0 0 0 2px rgba(117, 255, 178, 0.28), 5px 5px 0 rgba(0, 0, 0, 0.42);
+      border-color: var(--ink);
+      color: var(--bg);
+      background: var(--ink);
+      box-shadow: inset 0 0 0 2px var(--bg), 5px 5px 0 rgba(255, 255, 255, 0.18);
     }
 
     .scroll-stack {
@@ -196,12 +192,13 @@
     }
 
     .overlap-panel:nth-child(1) { z-index: 2; top: 34px; }
-    .overlap-panel:nth-child(2) { z-index: 3; top: 46px; border-color: rgba(255, 110, 207, 0.62); }
-    .overlap-panel:nth-child(3) { z-index: 4; top: 58px; border-color: rgba(100, 216, 255, 0.64); }
+    .overlap-panel:nth-child(2) { z-index: 3; top: 46px; border-color: var(--line); }
+    .overlap-panel:nth-child(3) { z-index: 4; top: 58px; border-color: var(--line); }
     .overlap-panel:nth-child(4) { z-index: 5; top: 70px; border-style: dashed; }
+    .overlap-panel:nth-child(5) { z-index: 6; top: 82px; }
 
     .panel-kicker {
-      color: var(--yellow);
+      color: var(--ink);
       font-size: clamp(1rem, 1.7vw, 1.35rem);
       margin-bottom: 12px;
       text-transform: uppercase;
@@ -211,9 +208,9 @@
       margin: 0 0 16px;
       font-size: clamp(2rem, 4.4vw, 4.1rem);
       line-height: 1;
-      color: var(--blue);
+      color: var(--ink);
       text-transform: uppercase;
-      text-shadow: 4px 4px 0 #13202a;
+      text-shadow: 4px 4px 0 #000;
     }
 
     ul {
@@ -227,38 +224,71 @@
     li + li { margin-top: 12px; }
 
     .value {
-      color: var(--green);
+      color: var(--ink);
     }
 
     .remote-copy {
       font-size: clamp(1.25rem, 2.4vw, 1.8rem);
-      color: #dce3ff;
+      color: var(--muted);
       line-height: 1.38;
       max-width: 66ch;
     }
 
-    .remote-copy strong { color: var(--pink); }
+    .remote-copy strong { color: var(--ink); }
+
+    .usage-guide {
+      margin-top: 22px;
+      border: 3px solid var(--line);
+      background: var(--bg);
+      padding: clamp(18px, 4vw, 34px);
+      box-shadow: 6px 6px 0 rgba(255, 255, 255, 0.16);
+    }
+
+    .usage-guide ol {
+      margin: 0;
+      padding-left: 30px;
+      color: var(--muted);
+      font-size: clamp(1.15rem, 2vw, 1.55rem);
+      line-height: 1.45;
+    }
+
+    .usage-guide li + li { margin-top: 12px; }
+
+    code {
+      color: var(--bg);
+      background: var(--ink);
+      padding: 2px 6px;
+    }
+
 
     .footer {
       margin-top: 20px;
-      color: #a9b1d4;
+      color: var(--muted);
       font-size: clamp(1rem, 1.5vw, 1.25rem);
       text-align: center;
     }
 
     @media (max-width: 720px) {
+      html { scroll-padding-top: 8px; }
       body { font-size: 18px; }
+      .shell { width: min(100% - 18px, 1160px); padding-top: 14px; }
       .hero,
       .overlap-panel {
-        position: relative;
-        top: auto !important;
-        min-height: auto;
+        position: sticky;
+        min-height: 82vh;
+        padding: 22px;
       }
+      .hero { top: 8px; }
       .scroll-stack {
-        margin-top: -36px;
-        padding-bottom: 20px;
+        margin-top: -26vh;
+        padding-bottom: 36vh;
       }
-      .overlap-panel { margin-top: -22px; }
+      .overlap-panel { margin-top: -20vh; }
+      .overlap-panel:nth-child(1) { top: 18px; }
+      .overlap-panel:nth-child(2) { top: 28px; }
+      .overlap-panel:nth-child(3) { top: 38px; }
+      .overlap-panel:nth-child(4) { top: 48px; }
+      .overlap-panel:nth-child(5) { top: 58px; }
     }
   </style>
 </head>
@@ -278,6 +308,7 @@
       <div class="cta">
         <a class="btn primary" href="#capabilities">VIEW CAPABILITIES</a>
         <a class="btn" href="#why-hare">WHY HARE FOR TEAMS + HR</a>
+        <a class="btn" href="#usage-guide">USAGE GUIDE</a>
       </div>
     </section>
 
@@ -321,9 +352,22 @@
           and keeping every delivery path connected across code, comms, and live web context.
         </p>
       </section>
+
+      <section class="overlap-panel" id="usage-guide">
+        <p class="panel-kicker">05 // Usage Guide</p>
+        <h2>Run HARE</h2>
+        <div class="usage-guide">
+          <ol>
+            <li>Install dependencies with <code>pnpm install</code> from the <code>hare/</code> workspace.</li>
+            <li>Set runtime secrets in <code>.env</code>, including Gemini, GitHub, and gateway tokens for the surfaces you enable.</li>
+            <li>Start the headless agent with <code>pnpm start</code> and watch gateway logs for connection status.</li>
+            <li>Add or tune skills in <code>skills/</code>, then restart HARE so the orchestrator can load the new tool surface.</li>
+          </ol>
+        </div>
+      </section>
     </div>
 
-    <div class="footer">HARE // High-Agency Remote Engineering 🐇</div>
+    <div class="footer">HARE // High-Agency Remote Engineering</div>
   </main>
 </body>
 </html>
