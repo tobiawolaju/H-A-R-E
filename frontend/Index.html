@@ -358,10 +358,11 @@
         <h2>Run HARE</h2>
         <div class="usage-guide">
           <ol>
-            <li>Install dependencies with <code>pnpm install</code> from the <code>hare/</code> workspace.</li>
-            <li>Set runtime secrets in <code>.env</code>, including Gemini, GitHub, and gateway tokens for the surfaces you enable.</li>
-            <li>Start the headless agent with <code>pnpm start</code> and watch gateway logs for connection status.</li>
-            <li>Add or tune skills in <code>skills/</code>, then restart HARE so the orchestrator can load the new tool surface.</li>
+            <li>From the repo root, run <code>cd src</code>, then install dependencies with <code>pnpm install</code>.</li>
+            <li>Set runtime secrets in <code>src/.env</code>, including Gemini, GitHub, and gateway tokens for the surfaces you enable.</li>
+            <li>Start the headless agent from <code>src/</code> with <code>pnpm start</code> and watch gateway logs for connection status.</li>
+            <li>Preview this static frontend by opening <code>frontend/index.html</code>; no frontend build step is required.</li>
+            <li>Add or tune skills in <code>src/skills/</code>, then restart HARE so the orchestrator can load the new tool surface.</li>
           </ol>
         </div>
       </section>
