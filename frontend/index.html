@@ -104,9 +104,9 @@
 
     .hero,
     .overlap-panel {
-      border: 3px solid var(--line);
-      background: rgba(0, 0, 0, 0.94);
-      box-shadow: 0 0 0 5px rgba(255, 255, 255, 0.08), 0 28px 70px rgba(0, 0, 0, 0.86);
+      border: 0;
+      background: var(--bg);
+      box-shadow: 0 28px 70px rgba(0, 0, 0, 0.72);
       position: sticky;
       top: 22px;
     }
@@ -191,11 +191,25 @@
       margin-top: -5vh;
     }
 
-    .overlap-panel:nth-child(1) { z-index: 2; top: 34px; }
-    .overlap-panel:nth-child(2) { z-index: 3; top: 46px; border-color: var(--line); }
-    .overlap-panel:nth-child(3) { z-index: 4; top: 58px; border-color: var(--line); }
-    .overlap-panel:nth-child(4) { z-index: 5; top: 70px; border-style: dashed; }
-    .overlap-panel:nth-child(5) { z-index: 6; top: 82px; }
+    .overlap-panel:nth-child(1) { z-index: 2; top: 34px; background: #000; }
+    .overlap-panel:nth-child(2) { z-index: 3; top: 46px; background: #b76cff; color: #000; }
+    .overlap-panel:nth-child(3) { z-index: 4; top: 58px; background: #ffe66d; color: #000; }
+    .overlap-panel:nth-child(4) { z-index: 5; top: 70px; background: #ff9f1c; color: #000; }
+    .overlap-panel:nth-child(5) { z-index: 6; top: 82px; background: #fff; color: #000; }
+
+    .overlap-panel:nth-child(n + 2) .panel-kicker,
+    .overlap-panel:nth-child(n + 2) h2,
+    .overlap-panel:nth-child(n + 2) ul,
+    .overlap-panel:nth-child(n + 2) .value,
+    .overlap-panel:nth-child(n + 2) .remote-copy,
+    .overlap-panel:nth-child(n + 2) .remote-copy strong,
+    .overlap-panel:nth-child(n + 2) .usage-guide ol {
+      color: #000;
+    }
+
+    .overlap-panel:nth-child(n + 2) h2 {
+      text-shadow: none;
+    }
 
     .panel-kicker {
       color: var(--ink);
@@ -238,10 +252,10 @@
 
     .usage-guide {
       margin-top: 22px;
-      border: 3px solid var(--line);
-      background: var(--bg);
+      border: 0;
+      background: #f2f2f2;
       padding: clamp(18px, 4vw, 34px);
-      box-shadow: 6px 6px 0 rgba(255, 255, 255, 0.16);
+      box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.22);
     }
 
     .usage-guide ol {
