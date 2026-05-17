@@ -5,7 +5,7 @@
 
 HARE is a modular AI agent that operates headlessly in the background — monitoring signals, reasoning with Gemini Flash, and executing actions across Discord, Telegram, and X without manual intervention.
 
-Built as infrastructure, not a chatbot. No UI. Just execution.
+Built as runtime infrastructure, not a chatbot. The agent runs headlessly, while the separate `frontend/` directory provides a static landing page for presenting the project.
 
 ## Architecture
 - **Gateways** — Discord, Telegram (inbound/outbound message routing)
@@ -14,6 +14,13 @@ Built as infrastructure, not a chatbot. No UI. Just execution.
 - **Reasoning** — Gemini Flash as the core inference layer (ElizaOS v2 swap-ready)
 
 ## 📁 Project Structure
+
+From the repository root:
+
+- **`src/`**: Headless HARE agent runtime and package workspace.
+- **`frontend/`**: Static landing page you can open locally or deploy to any static host.
+
+Inside `src/`:
 
 - **`core/`**: The central logic.
     - `orchestrator.js`: Manages message flow and tool loading.
@@ -42,18 +49,18 @@ Built as infrastructure, not a chatbot. No UI. Just execution.
 
 ## Usage Guide
 
-### 1. Install
+### 1. Install the agent runtime
 
-From the repository root, enter the runtime workspace and install dependencies:
+From the repository root, enter the `src/` runtime workspace and install dependencies:
 
 ```bash
-cd hare
+cd src
 pnpm install
 ```
 
 ### 2. Configure secrets
 
-Create a `.env` file in `hare/` and add the credentials for only the gateways and skills you plan to run. Typical values include:
+Create a `.env` file in `src/` and add the credentials for only the gateways and skills you plan to run. Typical values include:
 
 ```bash
 GEMINI_API_KEY=your_gemini_key
@@ -68,7 +75,7 @@ Leave unused gateway values blank or omit them so you can bring HARE online one 
 
 ### 3. Start the agent
 
-Run the headless process from `hare/`:
+Run the headless process from `src/`:
 
 ```bash
 pnpm start
@@ -90,14 +97,24 @@ Twitter/X-specific behavior has a separate test command:
 pnpm test:twitter
 ```
 
-### 5. Add or tune capabilities
+### 5. Preview the frontend
+
+The frontend is a static HTML landing page. From the repository root, open it directly in a browser:
+
+```bash
+open frontend/index.html
+```
+
+If your environment does not support `open`, serve the repository with any static file server and visit `frontend/index.html`. No frontend build step is required.
+
+### 6. Add or tune capabilities
 
 - Add action modules in `skills/` when HARE needs a new capability.
 - Add platform adapters in `gateways/` when HARE needs a new inbound or outbound surface.
 - Keep shared helpers in `utils/` and orchestration changes in `core/`.
 - Restart the agent after changing skills or gateways so the runtime loads the new behavior.
 
-### 6. Operate safely
+### 7. Operate safely
 
 - Start with a minimal set of tokens and enable one gateway at a time.
 - Watch logs during the first run of any new skill.
